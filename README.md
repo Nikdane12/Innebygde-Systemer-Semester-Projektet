@@ -32,3 +32,4 @@
 - [ ] Vannkraftverk-modell
 - [x] Kamera som følger et objekt
 - [x] Globalt posisjoneringssystem med teleskop
+- [ ] Arm dispenser
