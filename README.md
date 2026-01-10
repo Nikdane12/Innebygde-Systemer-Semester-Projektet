@@ -34,4 +34,4 @@
 - [x] Globalt posisjoneringssystem med teleskop
 - [x] Arm drink dispenser
 - [x] Self-leveling table
-- [ ] 
+- [ ] auto solder dispenser
