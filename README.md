@@ -32,3 +32,6 @@
 - [ ] Vannkraftverk-modell
 - [x] Kamera som følger et objekt
 - [x] Globalt posisjoneringssystem med teleskop
+- [x] Arm drink dispenser
+- [x] Self-leveling table
+- [ ] 
