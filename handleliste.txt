@@ -1,0 +1,7 @@
+Trykksensor analog: https://www.electrokit.com/tryck-sensor-grove-modul-analog-ut
+Trykksensor: https://www.electrokit.com/lastcell-5kg
+Trykksensor: https://www.electrokit.com/lastcell-50kg
+
+Servo 180 stor: https://www.electrokit.com/servo-stort
+
+Pumpe:https://www.electrokit.com/vattenpump-12v-240l/h
