@@ -2,7 +2,14 @@ Visualiser hele prosjeketet
 armen trenger:
     en dc motor,
     3 servo motorer,
-    pwm styrelse
-    strøm kilde
-    pumpe
-    Vek
+    pwm styrelse,
+    strøm kilde,
+
+pumpe delen:
+    pumpe,
+    motor,
+
+sensor:
+    leds
+    vekt sensor
+
