@@ -1,7 +1,13 @@
-Trykksensor analog: https://www.electrokit.com/tryck-sensor-grove-modul-analog-ut
+Trykksensor: https://www.electrokit.com/tryck-sensor-grove-modul-analog-ut
 Trykksensor: https://www.electrokit.com/lastcell-5kg
 Trykksensor: https://www.electrokit.com/lastcell-50kg
 
-Servo 180 stor: https://www.electrokit.com/servo-stort
+Servo: https://www.electrokit.com/servo-stort
+Servo: https://www.electrokit.com/servo-fs5103b-fb-med-aterkoppling 
+Servo: https://www.electrokit.com/hs-422-standard-servo-0.4nm
 
 Pumpe:https://www.electrokit.com/vattenpump-12v-240l/h
+
+Color sensor: https://www.electrokit.com/kolorimeter-fargsensormodul-tcs3200
+
+PSU: https://www.elkjop.no/product/gaming/pc-komponenter/psu-stromforsyning-til-pc/psu/corsair-cx550-stromforsyningsenhet-550-w/842501 
