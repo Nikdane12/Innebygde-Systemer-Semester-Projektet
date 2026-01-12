@@ -4,8 +4,12 @@ armen trenger:
     3 servo motorer,
     pwm styrelse,
     strøm kilde,
-    Vek,
+
 pumpe delen:
     pumpe,
     motor,
+
+sensor:
+    leds
+    vekt sensor
 

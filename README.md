@@ -35,3 +35,13 @@
 - [x] Arm drink dispenser
 - [x] Self-leveling table
 - [ ] auto solder dispenser
+
+kamera
+uv detektor
+supersonic sensor
+predefined
+    vekt/trykk sensor
+        mål drikke vekt
+    magnetsensor
+    lyssensor
+    
