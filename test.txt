@@ -5,4 +5,4 @@ armen trenger:
     pwm styrelse
     strøm kilde
     pumpe
-    
+    Vek
