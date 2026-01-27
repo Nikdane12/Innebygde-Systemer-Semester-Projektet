@@ -1,0 +1,7 @@
+Hydrering er viktig!
+
+Helt greit, fin skisse. Kunne kanskje vært litt større... Forslag til kommunikasjon til pumpe kan være PWM. Hvis det ikke skal kommuniseres med PSU, er ikke denne vesentlig å ha med på Deployment-diagrammet.
+
+Noen av risikofaktorene er gode. Det kan være vanskelig å beregne akkurat hva som trengs, spssielt når man har et begrenset budsjett, og kanskje lever litt i grenseland.
+
+Jeg savner litt mer spesifikt på suksess angående funksjonaitet. Noen tall hva angår nøyaktighet, releabilitet, og kanskje nooe om hvor lang tid det skal ta. Det kan også handle om hvor nøyaktige sensorene er osv.Tidsplanen ser bra ut!
