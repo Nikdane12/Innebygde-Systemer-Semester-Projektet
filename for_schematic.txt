@@ -1,0 +1,1 @@
+PWM pumpe: H-bru, extern eller intern
