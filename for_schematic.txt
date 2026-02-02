@@ -1,1 +1,2 @@
 PWM pumpe: H-bru, extern eller intern
+Extern: https://www.fibel.no/product/mini-dobbel-h-bridge/
