@@ -13,3 +13,5 @@ sensor:
     leds
     vekt sensor
     farge sensor
+
+Februar 22 version 2 av kretskort for prosjeketet

@@ -1,3 +1,13 @@
 https://github.com/mezger/customizable-servo-arm
 
 https://howtomechatronics.com/tutorials/arduino/diy-arduino-robot-arm-with-smartphone-control/
+
+Pumpe pwm: https://forum.arduino.cc/t/controlling-dc-water-pump-with-pwm/702223
+
+Loadcell: https://www.massload.com/how-to-read-load-cell-output-signals/
+Loadcell: https://www.fibossensor.com/how-to-measure-output-from-a-load-cell.html
+Loadcell: https://www.dwyeromega.com/en-us/resources/load-cell-troubleshooting
+Loadcell: https://www.scalesplus.com/blog/ultimate-load-cell-guide/
+Loadcell: https://www.instructables.com/How-to-Connect-Load-Cell/
+Loadcell: https://www.fibossensor.com/how-to-put-a-load-cell-on-a-schematic.html
+Loadcell: https://www.loadstarsensors.com/connectingwitharduino.html

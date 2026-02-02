@@ -2,15 +2,6 @@ Trykksensor: https://www.electrokit.com/tryck-sensor-grove-modul-analog-ut
 Trykksensor: https://www.electrokit.com/lastcell-5kg
 Trykksensor: https://www.electrokit.com/lastcell-50kg
 
-Servo: https://www.electrokit.com/servo-stort
-Servo: https://www.electrokit.com/servo-fs5103b-fb-med-aterkoppling 
-Servo: https://www.electrokit.com/hs-422-standard-servo-0.4nm
-https://www.aliexpress.com/item/1005010136735265.html?spm=a2g0o.productlist.main.1.33e157b5zC74tB&algo_pvid=c40aa3b1-57df-4678-8ac5-a562387a3036&algo_exp_id=c40aa3b1-57df-4678-8ac5-a562387a3036-0&pdp_ext_f=%7B%22order%22%3A%222%22%2C%22eval%22%3A%221%22%2C%22fromPage%22%3A%22search%22%7D&pdp_npi=6%40dis%21NOK%21250.23%2194.27%21%21%21168.72%2163.56%21%40210384cc17682572625953001e4ea0%2112000051279045381%21sea%21NO%210%21ABX%211%210%21n_tag%3A-29910%3Bd%3Af060f90e%3Bm03_new_user%3A-29895%3BpisId%3A5000000197845417&curPageLogUid=HKj7YWEuy4qG&utparam-url=scene%3Asearch%7Cquery_from%3A%7Cx_object_id%3A1005010136735265%7C_p_origin_prod%3A
-https://www.aliexpress.com/item/1005005819557315.html?spm=a2g0o.productlist.main.16.33e157b5zC74tB&aem_p4p_detail=202601121434221413589071543510000923460&algo_pvid=c40aa3b1-57df-4678-8ac5-a562387a3036&algo_exp_id=c40aa3b1-57df-4678-8ac5-a562387a3036-15&pdp_ext_f=%7B%22order%22%3A%22613%22%2C%22eval%22%3A%221%22%2C%22fromPage%22%3A%22search%22%7D&pdp_npi=6%40dis%21NOK%21948.13%21236.20%21%21%21639.29%21159.26%21%40210384cc17682572625953001e4ea0%2112000034466260994%21sea%21NO%210%21ABX%211%210%21n_tag%3A-29910%3Bd%3Af060f90e%3Bm03_new_user%3A-29895%3BpisId%3A5000000197845474&curPageLogUid=Fjjdz4reBOaM&utparam-url=scene%3Asearch%7Cquery_from%3A%7Cx_object_id%3A1005005819557315%7C_p_origin_prod%3A&search_p4p_id=202601121434221413589071543510000923460_4
-https://www.aliexpress.com/item/1005005197002029.html?spm=a2g0o.productlist.main.14.33e157b5zC74tB&algo_pvid=c40aa3b1-57df-4678-8ac5-a562387a3036&algo_exp_id=c40aa3b1-57df-4678-8ac5-a562387a3036-13&pdp_ext_f=%7B%22order%22%3A%2280%22%2C%22eval%22%3A%221%22%2C%22fromPage%22%3A%22search%22%7D&pdp_npi=6%40dis%21NOK%21195.95%2145.24%21%21%21132.12%2130.50%21%40210384cc17682572625953001e4ea0%2112000032096421156%21sea%21NO%210%21ABX%211%210%21n_tag%3A-29910%3Bd%3Af060f90e%3Bm03_new_user%3A-29895%3BpisId%3A5000000197845398&curPageLogUid=Wi8jxeq4Liae&utparam-url=scene%3Asearch%7Cquery_from%3A%7Cx_object_id%3A1005005197002029%7C_p_origin_prod%3A
-
 Pumpe:https://www.electrokit.com/vattenpump-12v-240l/h
 
 Color sensor: https://www.electrokit.com/kolorimeter-fargsensormodul-tcs3200
-
-PSU: https://www.elkjop.no/product/gaming/pc-komponenter/psu-stromforsyning-til-pc/psu/corsair-cx550-stromforsyningsenhet-550-w/842501 
