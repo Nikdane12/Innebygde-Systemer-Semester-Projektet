@@ -1,2 +1,6 @@
 PWM pumpe: H-bru, extern eller intern
 Extern: https://www.fibel.no/product/mini-dobbel-h-bridge/
+
+Loadcell: extern eller intern
+
+Usb veit ikke: https://hackaday.com/2023/08/07/all-about-usb-c-example-circuits/
