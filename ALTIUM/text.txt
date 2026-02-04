@@ -1,0 +1,9 @@
+It should be noted that, unlike the USB-C port method, there is no regulation or fuse protection on the GPIO to protect from over-voltage or current spikes
+
+If an incorrect voltage is applied, or a current spike occurs on the line you can permanently damage your Raspberry Pi. At best, you’ll “burn out” some or all of the GPIO pins, at worst you can fry your Pi!
+
+To power via GPIO, you only need to connect two pins:
+
+1) Connect a 5V source to Pin #2 (5V)
+
+2) Connect the ground of that source to Pin #6 (GND)

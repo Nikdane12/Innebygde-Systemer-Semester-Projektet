@@ -3,6 +3,7 @@ https://github.com/mezger/customizable-servo-arm
 https://howtomechatronics.com/tutorials/arduino/diy-arduino-robot-arm-with-smartphone-control/
 
 Pumpe pwm: https://forum.arduino.cc/t/controlling-dc-water-pump-with-pwm/702223
+skematikk: https://components101.com/modules/mx1508-dc-motor-driver-pinout-features-datasheet
 
 Loadcell: https://www.massload.com/how-to-read-load-cell-output-signals/
 Loadcell: https://www.fibossensor.com/how-to-measure-output-from-a-load-cell.html
