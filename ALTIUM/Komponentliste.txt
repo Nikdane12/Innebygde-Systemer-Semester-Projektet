@@ -1,0 +1,3 @@
+6V servo: https://www.pololu.com/file/0J730/HD-6001HB.pdf
+Loadcell: https://www.electrokit.com/upload/quick/e8/9b/da2b_41032778-tds.pdf, Converter https://cdn.sparkfun.com/datasheets/Sensors/ForceFlex/hx711_english.pdf
+Pumpe: https://www.electrokit.com/vattenpump-12v
