@@ -417,5 +417,5 @@ FodyWeavers.xsd
 *.msm
 *.msp
 
-./ALTIUM/AUT2606_Semester_Prosjekt/History/
-.ALTIUM/AUT2606_Semester_Prosjekt/__Previews/
+ALTIUM/AUT2606_Semester_Prosjekt/History/
+ALTIUM/AUT2606_Semester_Prosjekt/__Previews/
