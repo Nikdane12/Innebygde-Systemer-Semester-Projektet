@@ -1,2 +1,3 @@
-Record=TopLevelDocument|FileName=MX1508.SchDoc|SheetNumber=2
-Record=NoMainPathDocument|SourceDocument=MX1508.SchDoc|FileName=RasberryPi5.SchDoc|SheetNumber=1
+Record=TopLevelDocument|FileName=HX711.SchDoc|SheetNumber=3
+Record=NoMainPathDocument|SourceDocument=HX711.SchDoc|FileName=RasberryPi5.SchDoc|SheetNumber=1
+Record=NoMainPathDocument|SourceDocument=HX711.SchDoc|FileName=TC1508.SchDoc|SheetNumber=2
