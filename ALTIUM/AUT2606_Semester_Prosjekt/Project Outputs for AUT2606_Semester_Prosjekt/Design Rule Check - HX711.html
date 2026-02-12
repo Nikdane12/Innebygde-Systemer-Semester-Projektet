@@ -1,0 +1,449 @@
+<html>
+<head>
+<META http-equiv="Content-Type" content="text/html">
+<style type="text/css">
+		h1, h2, h3, h4, h5, h6 {
+			font-family : segoe ui;
+			color : black;
+			background-color : #EDE7D9;
+			padding: 0.3em;
+		}
+
+		h1 {
+			font-size: 1.2em;
+		}		
+
+		h2 {
+			font-size: 1.2em;
+		}
+
+		body {
+			font-family : segoe ui;
+		}
+
+		td, th {
+			padding: 0.5em;
+			text-align : left;
+			width: 10em;
+		}
+		th {
+			background-color : #EEEEEE;
+
+		}
+		th.column1, td.column1 {
+			text-align: left;
+			width : auto;
+		}
+		table {
+			width : 100%;
+			font-size: 0.9em;
+		}
+
+		.DRC_summary_header {
+			padding-bottom : 0.1em;
+			border : 0px solid black;
+			width: 100%;
+			align: left;
+		}
+
+		.DRC_summary_header_col1,
+		.DRC_summary_header_col2, 
+		.DRC_summary_header_col3 {
+			color : black;
+			font-size:100%;
+			padding : 0em;
+			padding-top : 0.2em;
+			padding-bottom 0.2em;
+			border : 0px solid black;
+			vertical-align: top;
+			text-align: left;
+		}
+
+		.DRC_summary_header_col1 {
+			font-weight: bold;
+			width: 9em;
+		}
+
+		.DRC_summary_header_col2 {
+			width: 0.1em;
+		
+		}
+
+		.DRC_summary_header_col3 {
+			width : auto;
+		}
+
+		.header_holder {
+		    Width = 100%;
+		    border = 0px solid green;
+		    padding = 0;
+		}
+
+
+		.front_matter, .front_matter_column1, .front_matter_column2, .front_matter_column3
+		{
+			left : 0;
+			top : 0;
+			padding: 0em;
+			padding-top : 0.1em;
+			border : 0px solid black;
+			width : 100%;
+			vertical-align: top;
+			text-align: left;
+		}
+
+		.front_matter_column1 {
+			width : 8em;
+			font-weight: bold;
+		}
+
+		.front_matter_column2 {
+			width: 0.1em;
+		}
+
+		.front_matter_column3 {
+			width : auto;
+		}
+
+		.total_column1, .total_column {
+			font-weight : bold;
+		}
+		.total_column1 {
+			text-align : left;
+		}
+		.warning, .error {
+			color : red;
+			font-weight : bold;
+		}
+		tr.onmouseout_odd {
+			background-color : #white;
+		}
+		tr.onmouseout_even { 
+			background-color : #FAFAFA;
+		}
+		tr.onmouseover_odd, tr.onmouseover_even { 
+			background-color : #EEEEEE;
+		} 
+		a:link, a:visited, .q a:link,.q a:active,.q {
+			color: #21489e; 
+		}
+		a:link.callback, a:visited.callback { 
+			color: #21489e;
+		}
+		a:link.customize, a:visited.customize {
+			color: #C0C0C0;
+			position: absolute; 
+			right: 10px;
+		}	
+		p.contents_level1 {
+			font-weight : bold;
+			font-size : 110%;
+			margin : 0.5em;
+		}
+		p.contents_level2 {
+			position : relative;
+			left : 20px;
+			margin : 0.5em;
+		}
+	</style><script type="text/javascript">
+		function coordToMils(coord) {
+			var number = coord / 10000;
+			
+			if (number != number.toFixed(3))
+				number = number.toFixed(3);
+
+			return number + 'mil'
+		}
+
+		function coordToMM(coord) {
+			var number = 0.0254 * coord / 10000;
+			
+			if (number != number.toFixed(4))
+				number = number.toFixed(4);
+			
+			return number + 'mm'
+		}
+	
+		function convertCoord(coordNode, units) {
+			for (var i = 0; i < coordNode.childNodes.length; i++) {
+				coordNode.removeChild(coordNode.childNodes[i]);
+			}
+
+			var coord = coordNode.getAttribute('value');
+			if (coord != null) {
+				if (units == 'mm') {
+					textNode = document.createTextNode(coordToMM(coord));
+					coordNode.appendChild(textNode);
+				} else if (units == 'mil') {
+					textNode = document.createTextNode(coordToMils(coord));		
+					coordNode.appendChild(textNode);	
+				}
+			}
+		}
+	
+		function convertUnits(unitNode, units) {
+			for (var i = 0; i < unitNode.childNodes.length; i++) {
+				unitNode.removeChild(unitNode.childNodes[i]);		
+			}
+		
+			textNode = document.createTextNode(units); 
+			unitNode.appendChild(textNode);
+		}
+	
+		function changeUnits(radio_input, units) {
+			if (radio_input.checked) {
+			
+				var elements = document.getElementsByName('coordinate');
+				if (elements) {
+					for (var i = 0; i < elements.length; i++) {
+						convertCoord(elements[i], units);
+					}
+				}
+	
+				var elements = document.getElementsByName('units');
+				if (elements) {
+					for (var i = 0; i < elements.length; i++) {
+						convertUnits(elements[i], units);
+					}
+				}
+			}
+		}
+	</script><title>Design Rule Verification Report</title>
+</head>
+<body onload=""><img ALT="Altium" src="
+			file://C:\Users\Public\Documents\Altium\AD25\Templates\AD_logo.png
+		"><h1>Design Rule Verification Report</h1>
+<table class="header_holder">
+<td class="column1">
+<table class="front_matter">
+<tr class="front_matter">
+<td class="front_matter_column1">Date:</td>
+<td class="front_matter_column2"></td>
+<td class="front_matter_column3">12.02.2026</td>
+</tr>
+<tr class="front_matter">
+<td class="front_matter_column1">Time:</td>
+<td class="front_matter_column2"></td>
+<td class="front_matter_column3">21:24:50</td>
+</tr>
+<tr class="front_matter">
+<td class="front_matter_column1">Elapsed Time:</td>
+<td class="front_matter_column2"></td>
+<td class="front_matter_column3">00:00:00</td>
+</tr>
+<tr class="front_matter">
+<td class="front_matter_column1">Filename:</td>
+<td class="front_matter_column2"></td>
+<td class="front_matter_column3"><a href="file:///C:\Local\Nikolai\UIT\Y2\2_Semester\AUT-2606_Innebygde_Systemer\SemesterProjektet\Innebygde-Systemer-Semester-Projektet\ALTIUM\AUT2606_Semester_Prosjekt\HX711.PcbDoc" class="file"><acronym title="C:\Local\Nikolai\UIT\Y2\2_Semester\AUT-2606_Innebygde_Systemer\SemesterProjektet\Innebygde-Systemer-Semester-Projektet\ALTIUM\AUT2606_Semester_Prosjekt\HX711.PcbDoc">C:\Local\Nikolai\UIT\Y2\2_Semester\AUT-2606_Innebygde_Systemer\SemesterProjektet\Innebygde-Systemer-Semester-Projektet\ALTIUM\AUT2606_Semester_Prosjekt\HX711.PcbDoc</acronym></a></td>
+</tr>
+</table>
+</td>
+<td class="column2">
+<table class="DRC_summary_header">
+<tr>
+<td class="DRC_summary_header_col1">Warnings:</td>
+<td class="DRC_summary_header_col2"></td>
+<td class="DRC_summary_header_col3">0</td></tr>
+<tr>
+<td class="DRC_summary_header_col1">Rule Violations:</td>
+<td class="DRC_summary_header_col2"></td>
+<td class="DRC_summary_header_col3" style="color : red">31</td></tr>
+</table>
+</td>
+</table><a name="IDXNSITUG0QW0EDEA31YSA0V5B4DILNNEOS455IDDWX1YBS0JRUS2I"><h2>Summary</h2></a><table>
+<tr>
+<th class="column1">Warnings</th>
+<th class="column2">Count</th>
+</tr>
+<tr>
+<td style="font-weight : bold; text-align : right" class="column1">Total</td>
+<td style="font-weight : bold" class="column2">0</td>
+</tr>
+</table><br><table>
+<tr>
+<th class="column1">Rule Violations</th>
+<th class="column2">Count</th>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDQLPRCONRUDRID2CCG3DDG243MDEWJLCD4FYSVKM2TJQWYBMGLEYF">Clearance Constraint (Gap=5mil) (All),(All)</a></td>
+<td class="column2">9</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDAUIV4BDNUXEZRKG12MOS1TBYCQJZBVFKXBOWHLDGUE4FPAHEVCO">Short-Circuit Constraint (Allowed=No) (All),(All)</a></td>
+<td class="column2">9</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDJC0LXVVSJMHVH5MXIHBNBYCDBO1HYWIGSPHG0QMXCGFTZDFUJ0KI">Un-Routed Net Constraint ( (All) )</a></td>
+<td class="column2">4</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDO3MQZNJNERBVMJWJ5GADJZGJIJCQL52FE5HWSHD0YYU5Y3U55XNP">Modified Polygon (Allow modified: No), (Allow shelved: No)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDEOINSM105BF5PQVPAP0FHUOFZH4JVGOW4I303IO2N0I5SID5P0PG">Width Constraint (Min=5mil) (Max=1000mil) (Preferred=5mil) (All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDT42HOO3SWREJLSXG2PGP3V12HGL0URW2CAPJCCGJTJGZYZLZ0SYH">Routing Topology Rule(Topology=Shortest) (All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDQSIUPHQFSJEALSDEO5BKTAG4GL1JEHLJRYATCQBSYN3RXIT5SF2H">Power Plane Connect Rule(Direct Connect )(Expansion=20mil) (Conductor Width=10mil) (Air Gap=10mil) (Entries=4) (InPadClass('PowerPads'))</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDNZB3P245QKMFCHHPVWZZ1L4ACVPFCWXL0CKLFFPRHMCZF4ZCPPB">Power Plane Connect Rule(Relief Connect )(Expansion=11.811mil) (Conductor Width=5mil) (Air Gap=5mil) (Entries=4) (All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDIL4HBQMOSZYCNF3NITNZIRRMPNDCE2AABUU2MPPF4SEM1POBIEIC">Minimum Annular Ring (Minimum=3mil) (All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#ID3GOOWVR5RHJSPGF4OMAXJ4UCLNHNGE5T51SREUKVQGAE10TQE50D">Hole Size Constraint (Min=11.811mil) (Max=248.031mil) (All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#ID23MF4IO00XA1BY42VXNMQYETYD2NU2SISYWJ4XCNKRQICM02CNZM">Hole To Hole Clearance (Gap=9.842mil) (All),(All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDRQYXPXRGORQFBEAWXMQVWF43RCD3RS03RIEJ5ANRYYUW5YR1PZOI">Minimum Solder Mask Sliver (Gap=0mil) (All),(All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDGCO3L03YCEH1EB2WSVIMPT5Y3DBOOXZKKJJYR5FPUXMNP2FMJVDN">Silk To Solder Mask (Clearance=5mil) (IsPad),(All)</a></td>
+<td class="column2">9</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDKAUAJTJ2N4GAIDYMNMXLU4UWUCU4FQVXZFR5B5OWELPTH2HAAZLG">Silk to Silk (Clearance=0mil) (All),(All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#ID1BY2W15U1TGCHK2TSRI3MEZF1MDIT3M5YGCKG5C5J5FB4ZJAHG0K">Net Antennae (Tolerance=0mil) (All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="#IDTO1ASIZ2REJTHRJDDBJUO0TJNDWVJVM12KOHXXLI22SARRMFHGZD">Board Clearance Constraint (Gap=0mil) (All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="#IDFBIIMEZ1H0PXL0D4DTTY0LWL5ET3WPYVPX4L03G4KX5UAG03TIRG">Height Constraint (Min=0mil) (Max=71497.938mil) (Prefered=500mil) (All)</a></td>
+<td class="column2">0</td>
+</tr>
+<tr>
+<td style="font-weight : bold; text-align : right" class="column1">Total</td>
+<td style="font-weight : bold" class="column2">31</td>
+</tr>
+</table><br><a name="IDQLPRCONRUDRID2CCG3DDG243MDEWJLCD4FYSVKM2TJQWYBMGLEYF"><table>
+<tr>
+<th style="text-align : left" colspan="1" class="rule">Clearance Constraint (Gap=5mil) (All),(All)</th>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Local\Nikolai\UIT\Y2\2_Semester\AUT-2606_Innebygde_Systemer\SemesterProjektet\Innebygde-Systemer-Semester-Projektet\ALTIUM\AUT2606_Semester_Prosjekt\HX711.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=270.432mil|Location2.X=274.765mil|Location1.Y=753.109mil|Location2.Y=757.442mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Local\Nikolai\UIT\Y2\2_Semester\AUT-2606_Innebygde_Systemer\SemesterProjektet\Innebygde-Systemer-Semester-Projektet\ALTIUM\AUT2606_Semester_Prosjekt\HX711.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=270.432mil|Location2.X=274.765mil|Location1.Y=753.109mil|Location2.Y=757.442mil|Absolute=True">Clearance Constraint: (Collision &lt; 5mil) Between Pad J3-1(241.693mil,786.181mil) on Multi-Layer And Polygon Region (30 hole(s)) Bottom Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Local\Nikolai\UIT\Y2\2_Semester\AUT-2606_Innebygde_Systemer\SemesterProjektet\Innebygde-Systemer-Semester-Projektet\ALTIUM\AUT2606_Semester_Prosjekt\HX711.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=239.526mil|Location2.X=243.86mil|Location1.Y=584.014mil|Location2.Y=588.348mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Local\Nikolai\UIT\Y2\2_Semester\AUT-2606_Innebygde_Systemer\SemesterProjektet\Innebygde-Systemer-Semester-Projektet\ALTIUM\AUT2606_Semester_Prosjekt\HX711.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=239.526mil|Location2.X=243.86mil|Location1.Y=584.014mil|Location2.Y=588.348mil|Absolute=True">Clearance Constraint: (Collision &lt; 5mil) Between Pad J3-3(241.693mil,586.181mil) on Multi-Layer And Polygon Region (30 hole(s)) Bottom Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Local\Nikolai\UIT\Y2\2_Semester\AUT-2606_Innebygde_Systemer\SemesterProjektet\Innebygde-Systemer-Semester-Projektet\ALTIUM\AUT2606_Semester_Prosjekt\HX711.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=239.526mil|Location2.X=243.86mil|Location1.Y=484.014mil|Location2.Y=488.348mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Local\Nikolai\UIT\Y2\2_Semester\AUT-2606_Innebygde_Systemer\SemesterProjektet\Innebygde-Systemer-Semester-Projektet\ALTIUM\AUT2606_Semester_Prosjekt\HX711.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=239.526mil|Location2.X=243.86mil|Location1.Y=484.014mil|Location2.Y=488.348mil|Absolute=True">Clearance Constraint: (Collision &lt; 5mil) Between Pad J3-4(241.693mil,486.181mil) on Multi-Layer And Polygon Region (30 hole(s)) Bottom Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Local\Nikolai\UIT\Y2\2_Semester\AUT-2606_Innebygde_Systemer\SemesterProjektet\Innebygde-Systemer-Semester-Projektet\ALTIUM\AUT2606_Semester_Prosjekt\HX711.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1833.581mil|Location2.X=1837.915mil|Location1.Y=752.558mil|Location2.Y=756.891mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Local\Nikolai\UIT\Y2\2_Semester\AUT-2606_Innebygde_Systemer\SemesterProjektet\Innebygde-Systemer-Semester-Projektet\ALTIUM\AUT2606_Semester_Prosjekt\HX711.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1833.581mil|Location2.X=1837.915mil|Location1.Y=752.558mil|Location2.Y=756.891mil|Absolute=True">Clearance Constraint: (Collision &lt; 5mil) Between Pad J4-1(1804.842mil,785.63mil) on Multi-Layer And Polygon Region (30 hole(s)) Bottom Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Local\Nikolai\UIT\Y2\2_Semester\AUT-2606_Innebygde_Systemer\SemesterProjektet\Innebygde-Systemer-Semester-Projektet\ALTIUM\AUT2606_Semester_Prosjekt\HX711.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1802.676mil|Location2.X=1807.009mil|Location1.Y=583.463mil|Location2.Y=587.797mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Local\Nikolai\UIT\Y2\2_Semester\AUT-2606_Innebygde_Systemer\SemesterProjektet\Innebygde-Systemer-Semester-Projektet\ALTIUM\AUT2606_Semester_Prosjekt\HX711.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1802.676mil|Location2.X=1807.009mil|Location1.Y=583.463mil|Location2.Y=587.797mil|Absolute=True">Clearance Constraint: (Collision &lt; 5mil) Between Pad J4-3(1804.842mil,585.63mil) on Multi-Layer And Polygon Region (30 hole(s)) Bottom Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Local\Nikolai\UIT\Y2\2_Semester\AUT-2606_Innebygde_Systemer\SemesterProjektet\Innebygde-Systemer-Semester-Projektet\ALTIUM\AUT2606_Semester_Prosjekt\HX711.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1802.676mil|Location2.X=1807.009mil|Location1.Y=483.463mil|Location2.Y=487.796mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Local\Nikolai\UIT\Y2\2_Semester\AUT-2606_Innebygde_Systemer\SemesterProjektet\Innebygde-Systemer-Semester-Projektet\ALTIUM\AUT2606_Semester_Prosjekt\HX711.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1802.676mil|Location2.X=1807.009mil|Location1.Y=483.463mil|Location2.Y=487.796mil|Absolute=True">Clearance Constraint: (Collision &lt; 5mil) Between Pad J4-4(1804.842mil,485.63mil) on Multi-Layer And Polygon Region (30 hole(s)) Bottom Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Local\Nikolai\UIT\Y2\2_Semester\AUT-2606_Innebygde_Systemer\SemesterProjektet\Innebygde-Systemer-Semester-Projektet\ALTIUM\AUT2606_Semester_Prosjekt\HX711.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=996.77mil|Location2.X=1001.104mil|Location1.Y=819.526mil|Location2.Y=823.86mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Local\Nikolai\UIT\Y2\2_Semester\AUT-2606_Innebygde_Systemer\SemesterProjektet\Innebygde-Systemer-Semester-Projektet\ALTIUM\AUT2606_Semester_Prosjekt\HX711.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=996.77mil|Location2.X=1001.104mil|Location1.Y=819.526mil|Location2.Y=823.86mil|Absolute=True">Clearance Constraint: (Collision &lt; 5mil) Between Pad J5-1(1020mil,790.787mil) on Multi-Layer And Polygon Region (30 hole(s)) Bottom Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Local\Nikolai\UIT\Y2\2_Semester\AUT-2606_Innebygde_Systemer\SemesterProjektet\Innebygde-Systemer-Semester-Projektet\ALTIUM\AUT2606_Semester_Prosjekt\HX711.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1017.833mil|Location2.X=1022.167mil|Location1.Y=588.621mil|Location2.Y=592.954mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Local\Nikolai\UIT\Y2\2_Semester\AUT-2606_Innebygde_Systemer\SemesterProjektet\Innebygde-Systemer-Semester-Projektet\ALTIUM\AUT2606_Semester_Prosjekt\HX711.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1017.833mil|Location2.X=1022.167mil|Location1.Y=588.621mil|Location2.Y=592.954mil|Absolute=True">Clearance Constraint: (Collision &lt; 5mil) Between Pad J5-3(1020mil,590.787mil) on Multi-Layer And Polygon Region (30 hole(s)) Bottom Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Local\Nikolai\UIT\Y2\2_Semester\AUT-2606_Innebygde_Systemer\SemesterProjektet\Innebygde-Systemer-Semester-Projektet\ALTIUM\AUT2606_Semester_Prosjekt\HX711.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1017.833mil|Location2.X=1022.167mil|Location1.Y=488.621mil|Location2.Y=492.954mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Local\Nikolai\UIT\Y2\2_Semester\AUT-2606_Innebygde_Systemer\SemesterProjektet\Innebygde-Systemer-Semester-Projektet\ALTIUM\AUT2606_Semester_Prosjekt\HX711.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1017.833mil|Location2.X=1022.167mil|Location1.Y=488.621mil|Location2.Y=492.954mil|Absolute=True">Clearance Constraint: (Collision &lt; 5mil) Between Pad J5-4(1020mil,490.787mil) on Multi-Layer And Polygon Region (30 hole(s)) Bottom Layer </acronym></a><br></td>
+</tr>
+</table></a><hr color="#EEEEEE"><a href="#top" style="font-size: 0.9em">Back to top</a><br><br><a name="IDAUIV4BDNUXEZRKG12MOS1TBYCQJZBVFKXBOWHLDGUE4FPAHEVCO"><table>
+<tr>
+<th style="text-align : left" colspan="1" class="rule">Short-Circuit Constraint (Allowed=No) (All),(All)</th>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Local\Nikolai\UIT\Y2\2_Semester\AUT-2606_Innebygde_Systemer\SemesterProjektet\Innebygde-Systemer-Semester-Projektet\ALTIUM\AUT2606_Semester_Prosjekt\HX711.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=209.187mil|Location2.X=274.199mil|Location1.Y=725.269mil|Location2.Y=790.282mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Local\Nikolai\UIT\Y2\2_Semester\AUT-2606_Innebygde_Systemer\SemesterProjektet\Innebygde-Systemer-Semester-Projektet\ALTIUM\AUT2606_Semester_Prosjekt\HX711.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=209.187mil|Location2.X=274.199mil|Location1.Y=725.269mil|Location2.Y=790.282mil|Absolute=True">Short-Circuit Constraint: Between Pad J3-1(241.693mil,786.181mil) on Multi-Layer And Polygon Region (30 hole(s)) Bottom Layer Location : [X = 241.693mil][Y = 757.776mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Local\Nikolai\UIT\Y2\2_Semester\AUT-2606_Innebygde_Systemer\SemesterProjektet\Innebygde-Systemer-Semester-Projektet\ALTIUM\AUT2606_Semester_Prosjekt\HX711.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=210.447mil|Location2.X=272.938mil|Location1.Y=533.182mil|Location2.Y=595.673mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Local\Nikolai\UIT\Y2\2_Semester\AUT-2606_Innebygde_Systemer\SemesterProjektet\Innebygde-Systemer-Semester-Projektet\ALTIUM\AUT2606_Semester_Prosjekt\HX711.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=210.447mil|Location2.X=272.938mil|Location1.Y=533.182mil|Location2.Y=595.673mil|Absolute=True">Short-Circuit Constraint: Between Pad J3-3(241.693mil,586.181mil) on Multi-Layer And Polygon Region (30 hole(s)) Bottom Layer Location : [X = 241.693mil][Y = 564.427mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Local\Nikolai\UIT\Y2\2_Semester\AUT-2606_Innebygde_Systemer\SemesterProjektet\Innebygde-Systemer-Semester-Projektet\ALTIUM\AUT2606_Semester_Prosjekt\HX711.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=210.447mil|Location2.X=272.938mil|Location1.Y=433.182mil|Location2.Y=495.673mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Local\Nikolai\UIT\Y2\2_Semester\AUT-2606_Innebygde_Systemer\SemesterProjektet\Innebygde-Systemer-Semester-Projektet\ALTIUM\AUT2606_Semester_Prosjekt\HX711.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=210.447mil|Location2.X=272.938mil|Location1.Y=433.182mil|Location2.Y=495.673mil|Absolute=True">Short-Circuit Constraint: Between Pad J3-4(241.693mil,486.181mil) on Multi-Layer And Polygon Region (30 hole(s)) Bottom Layer Location : [X = 241.693mil][Y = 464.427mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Local\Nikolai\UIT\Y2\2_Semester\AUT-2606_Innebygde_Systemer\SemesterProjektet\Innebygde-Systemer-Semester-Projektet\ALTIUM\AUT2606_Semester_Prosjekt\HX711.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1772.437mil|Location2.X=1837.248mil|Location1.Y=722.398mil|Location2.Y=787.209mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Local\Nikolai\UIT\Y2\2_Semester\AUT-2606_Innebygde_Systemer\SemesterProjektet\Innebygde-Systemer-Semester-Projektet\ALTIUM\AUT2606_Semester_Prosjekt\HX711.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1772.437mil|Location2.X=1837.248mil|Location1.Y=722.398mil|Location2.Y=787.209mil|Absolute=True">Short-Circuit Constraint: Between Pad J4-1(1804.842mil,785.63mil) on Multi-Layer And Polygon Region (30 hole(s)) Bottom Layer Location : [X = 1804.842mil][Y = 754.803mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Local\Nikolai\UIT\Y2\2_Semester\AUT-2606_Innebygde_Systemer\SemesterProjektet\Innebygde-Systemer-Semester-Projektet\ALTIUM\AUT2606_Semester_Prosjekt\HX711.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1794.097mil|Location2.X=1843.373mil|Location1.Y=545.569mil|Location2.Y=594.844mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Local\Nikolai\UIT\Y2\2_Semester\AUT-2606_Innebygde_Systemer\SemesterProjektet\Innebygde-Systemer-Semester-Projektet\ALTIUM\AUT2606_Semester_Prosjekt\HX711.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1794.097mil|Location2.X=1843.373mil|Location1.Y=545.569mil|Location2.Y=594.844mil|Absolute=True">Short-Circuit Constraint: Between Pad J4-3(1804.842mil,585.63mil) on Multi-Layer And Polygon Region (30 hole(s)) Bottom Layer Location : [X = 1818.735mil][Y = 570.206mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Local\Nikolai\UIT\Y2\2_Semester\AUT-2606_Innebygde_Systemer\SemesterProjektet\Innebygde-Systemer-Semester-Projektet\ALTIUM\AUT2606_Semester_Prosjekt\HX711.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1794.097mil|Location2.X=1843.373mil|Location1.Y=445.569mil|Location2.Y=494.844mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Local\Nikolai\UIT\Y2\2_Semester\AUT-2606_Innebygde_Systemer\SemesterProjektet\Innebygde-Systemer-Semester-Projektet\ALTIUM\AUT2606_Semester_Prosjekt\HX711.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1794.097mil|Location2.X=1843.373mil|Location1.Y=445.569mil|Location2.Y=494.844mil|Absolute=True">Short-Circuit Constraint: Between Pad J4-4(1804.842mil,485.63mil) on Multi-Layer And Polygon Region (30 hole(s)) Bottom Layer Location : [X = 1818.735mil][Y = 470.206mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Local\Nikolai\UIT\Y2\2_Semester\AUT-2606_Innebygde_Systemer\SemesterProjektet\Innebygde-Systemer-Semester-Projektet\ALTIUM\AUT2606_Semester_Prosjekt\HX711.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=961.221mil|Location2.X=1026.811mil|Location1.Y=757.993mil|Location2.Y=823.582mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Local\Nikolai\UIT\Y2\2_Semester\AUT-2606_Innebygde_Systemer\SemesterProjektet\Innebygde-Systemer-Semester-Projektet\ALTIUM\AUT2606_Semester_Prosjekt\HX711.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=961.221mil|Location2.X=1026.811mil|Location1.Y=757.993mil|Location2.Y=823.582mil|Absolute=True">Short-Circuit Constraint: Between Pad J5-1(1020mil,790.787mil) on Multi-Layer And Polygon Region (30 hole(s)) Bottom Layer Location : [X = 994.016mil][Y = 790.787mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Local\Nikolai\UIT\Y2\2_Semester\AUT-2606_Innebygde_Systemer\SemesterProjektet\Innebygde-Systemer-Semester-Projektet\ALTIUM\AUT2606_Semester_Prosjekt\HX711.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=971.238mil|Location2.X=1044.514mil|Location1.Y=552.785mil|Location2.Y=626.061mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Local\Nikolai\UIT\Y2\2_Semester\AUT-2606_Innebygde_Systemer\SemesterProjektet\Innebygde-Systemer-Semester-Projektet\ALTIUM\AUT2606_Semester_Prosjekt\HX711.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=971.238mil|Location2.X=1044.514mil|Location1.Y=552.785mil|Location2.Y=626.061mil|Absolute=True">Short-Circuit Constraint: Between Pad J5-3(1020mil,590.787mil) on Multi-Layer And Polygon Region (30 hole(s)) Bottom Layer Location : [X = 1007.876mil][Y = 589.423mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Local\Nikolai\UIT\Y2\2_Semester\AUT-2606_Innebygde_Systemer\SemesterProjektet\Innebygde-Systemer-Semester-Projektet\ALTIUM\AUT2606_Semester_Prosjekt\HX711.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=971.238mil|Location2.X=1044.514mil|Location1.Y=452.785mil|Location2.Y=526.061mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Local\Nikolai\UIT\Y2\2_Semester\AUT-2606_Innebygde_Systemer\SemesterProjektet\Innebygde-Systemer-Semester-Projektet\ALTIUM\AUT2606_Semester_Prosjekt\HX711.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=971.238mil|Location2.X=1044.514mil|Location1.Y=452.785mil|Location2.Y=526.061mil|Absolute=True">Short-Circuit Constraint: Between Pad J5-4(1020mil,490.787mil) on Multi-Layer And Polygon Region (30 hole(s)) Bottom Layer Location : [X = 1007.876mil][Y = 489.423mil]</acronym></a><br></td>
+</tr>
+</table></a><hr color="#EEEEEE"><a href="#top" style="font-size: 0.9em">Back to top</a><br><br><a name="IDJC0LXVVSJMHVH5MXIHBNBYCDBO1HYWIGSPHG0QMXCGFTZDFUJ0KI"><table>
+<tr>
+<th style="text-align : left" colspan="1" class="rule">Un-Routed Net Constraint ( (All) )</th>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Local\Nikolai\UIT\Y2\2_Semester\AUT-2606_Innebygde_Systemer\SemesterProjektet\Innebygde-Systemer-Semester-Projektet\ALTIUM\AUT2606_Semester_Prosjekt\HX711.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1376.068mil|Location2.X=1596.772mil|Location1.Y=603.076mil|Location2.Y=605mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Local\Nikolai\UIT\Y2\2_Semester\AUT-2606_Innebygde_Systemer\SemesterProjektet\Innebygde-Systemer-Semester-Projektet\ALTIUM\AUT2606_Semester_Prosjekt\HX711.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1376.068mil|Location2.X=1596.772mil|Location1.Y=603.076mil|Location2.Y=605mil|Absolute=True">Un-Routed Net Constraint: Net GND Between Track (1476.068mil,703.076mil)(1478.15mil,705.158mil) on Top Layer And Pad HX711-10(1496.772mil,505mil) on Top Layer [Unplated] </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Local\Nikolai\UIT\Y2\2_Semester\AUT-2606_Innebygde_Systemer\SemesterProjektet\Innebygde-Systemer-Semester-Projektet\ALTIUM\AUT2606_Semester_Prosjekt\HX711.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1689.764mil|Location2.X=2164.993mil|Location1.Y=-3.15mil|Location2.Y=900mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Local\Nikolai\UIT\Y2\2_Semester\AUT-2606_Innebygde_Systemer\SemesterProjektet\Innebygde-Systemer-Semester-Projektet\ALTIUM\AUT2606_Semester_Prosjekt\HX711.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1689.764mil|Location2.X=2164.993mil|Location1.Y=-3.15mil|Location2.Y=900mil|Absolute=True">Un-Routed Net Constraint: Net 5V Between Pad J7-1(1789.764mil,96.85mil) on Multi-Layer And Track (2064.993mil,800mil)(2066.115mil,801.122mil) on Top Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Local\Nikolai\UIT\Y2\2_Semester\AUT-2606_Innebygde_Systemer\SemesterProjektet\Innebygde-Systemer-Semester-Projektet\ALTIUM\AUT2606_Semester_Prosjekt\HX711.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=383.465mil|Location2.X=1364.606mil|Location1.Y=703.385mil|Location2.Y=905.158mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Local\Nikolai\UIT\Y2\2_Semester\AUT-2606_Innebygde_Systemer\SemesterProjektet\Innebygde-Systemer-Semester-Projektet\ALTIUM\AUT2606_Semester_Prosjekt\HX711.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=383.465mil|Location2.X=1364.606mil|Location1.Y=703.385mil|Location2.Y=905.158mil|Absolute=True">Un-Routed Net Constraint: Net 5V Between Track (483.465mil,803.385mil)(558.327mil,878.247mil) on Top Layer And Track (1264.606mil,805.158mil)(1296.575mil,805.158mil) on Top Layer </acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Local\Nikolai\UIT\Y2\2_Semester\AUT-2606_Innebygde_Systemer\SemesterProjektet\Innebygde-Systemer-Semester-Projektet\ALTIUM\AUT2606_Semester_Prosjekt\HX711.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1380.532mil|Location2.X=2164.993mil|Location1.Y=705mil|Location2.Y=900mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Local\Nikolai\UIT\Y2\2_Semester\AUT-2606_Innebygde_Systemer\SemesterProjektet\Innebygde-Systemer-Semester-Projektet\ALTIUM\AUT2606_Semester_Prosjekt\HX711.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1380.532mil|Location2.X=2164.993mil|Location1.Y=705mil|Location2.Y=900mil|Absolute=True">Un-Routed Net Constraint: Net 5V Between Track (1474.252mil,811.28mil)(1480.532mil,805mil) on Top Layer And Track (2064.993mil,800mil)(2066.115mil,801.122mil) on Top Layer </acronym></a><br></td>
+</tr>
+</table></a><hr color="#EEEEEE"><a href="#top" style="font-size: 0.9em">Back to top</a><br><br><a name="IDGCO3L03YCEH1EB2WSVIMPT5Y3DBOOXZKKJJYR5FPUXMNP2FMJVDN"><table>
+<tr>
+<th style="text-align : left" colspan="1" class="rule">Silk To Solder Mask (Clearance=5mil) (IsPad),(All)</th>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Local\Nikolai\UIT\Y2\2_Semester\AUT-2606_Innebygde_Systemer\SemesterProjektet\Innebygde-Systemer-Semester-Projektet\ALTIUM\AUT2606_Semester_Prosjekt\HX711.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1919.499mil|Location2.X=1925.749mil|Location1.Y=479.195mil|Location2.Y=485.445mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Local\Nikolai\UIT\Y2\2_Semester\AUT-2606_Innebygde_Systemer\SemesterProjektet\Innebygde-Systemer-Semester-Projektet\ALTIUM\AUT2606_Semester_Prosjekt\HX711.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1919.499mil|Location2.X=1925.749mil|Location1.Y=479.195mil|Location2.Y=485.445mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (3.863mil &lt; 5mil) Between Pad C11-2(1920mil,499.016mil) on Top Layer And Text "C11" (1885.89mil,443.903mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [3.863mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Local\Nikolai\UIT\Y2\2_Semester\AUT-2606_Innebygde_Systemer\SemesterProjektet\Innebygde-Systemer-Semester-Projektet\ALTIUM\AUT2606_Semester_Prosjekt\HX711.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1121.537mil|Location2.X=1127.787mil|Location1.Y=484.353mil|Location2.Y=490.603mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Local\Nikolai\UIT\Y2\2_Semester\AUT-2606_Innebygde_Systemer\SemesterProjektet\Innebygde-Systemer-Semester-Projektet\ALTIUM\AUT2606_Semester_Prosjekt\HX711.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1121.537mil|Location2.X=1127.787mil|Location1.Y=484.353mil|Location2.Y=490.603mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (3.863mil &lt; 5mil) Between Pad C3-2(1135.157mil,504.173mil) on Top Layer And Text "C3" (1108.919mil,449.06mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [3.863mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Local\Nikolai\UIT\Y2\2_Semester\AUT-2606_Innebygde_Systemer\SemesterProjektet\Innebygde-Systemer-Semester-Projektet\ALTIUM\AUT2606_Semester_Prosjekt\HX711.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=343.23mil|Location2.X=349.48mil|Location1.Y=479.747mil|Location2.Y=485.997mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Local\Nikolai\UIT\Y2\2_Semester\AUT-2606_Innebygde_Systemer\SemesterProjektet\Innebygde-Systemer-Semester-Projektet\ALTIUM\AUT2606_Semester_Prosjekt\HX711.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=343.23mil|Location2.X=349.48mil|Location1.Y=479.747mil|Location2.Y=485.997mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (3.863mil &lt; 5mil) Between Pad C9-2(356.85mil,499.567mil) on Top Layer And Text "C9" (330.612mil,444.454mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [3.863mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Local\Nikolai\UIT\Y2\2_Semester\AUT-2606_Innebygde_Systemer\SemesterProjektet\Innebygde-Systemer-Semester-Projektet\ALTIUM\AUT2606_Semester_Prosjekt\HX711.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1914.251mil|Location2.X=1920.501mil|Location1.Y=615.022mil|Location2.Y=621.272mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Local\Nikolai\UIT\Y2\2_Semester\AUT-2606_Innebygde_Systemer\SemesterProjektet\Innebygde-Systemer-Semester-Projektet\ALTIUM\AUT2606_Semester_Prosjekt\HX711.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1914.251mil|Location2.X=1920.501mil|Location1.Y=615.022mil|Location2.Y=621.272mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (3.863mil &lt; 5mil) Between Pad R10-1(1920mil,634.842mil) on Top Layer And Text "R10" (1880.642mil,579.73mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [3.863mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Local\Nikolai\UIT\Y2\2_Semester\AUT-2606_Innebygde_Systemer\SemesterProjektet\Innebygde-Systemer-Semester-Projektet\ALTIUM\AUT2606_Semester_Prosjekt\HX711.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1897.19mil|Location2.X=1903.44mil|Location1.Y=772.502mil|Location2.Y=778.752mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Local\Nikolai\UIT\Y2\2_Semester\AUT-2606_Innebygde_Systemer\SemesterProjektet\Innebygde-Systemer-Semester-Projektet\ALTIUM\AUT2606_Semester_Prosjekt\HX711.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1897.19mil|Location2.X=1903.44mil|Location1.Y=772.502mil|Location2.Y=778.752mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (3.863mil &lt; 5mil) Between Pad R1-1(1920mil,792.323mil) on Top Layer And Text "R1" (1899.009mil,737.21mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [3.863mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Local\Nikolai\UIT\Y2\2_Semester\AUT-2606_Innebygde_Systemer\SemesterProjektet\Innebygde-Systemer-Semester-Projektet\ALTIUM\AUT2606_Semester_Prosjekt\HX711.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=351.102mil|Location2.X=357.352mil|Location1.Y=773.053mil|Location2.Y=779.303mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Local\Nikolai\UIT\Y2\2_Semester\AUT-2606_Innebygde_Systemer\SemesterProjektet\Innebygde-Systemer-Semester-Projektet\ALTIUM\AUT2606_Semester_Prosjekt\HX711.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=351.102mil|Location2.X=357.352mil|Location1.Y=773.053mil|Location2.Y=779.303mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (3.863mil &lt; 5mil) Between Pad R13-1(356.85mil,792.874mil) on Top Layer And Text "R13" (317.493mil,737.761mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [3.863mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Local\Nikolai\UIT\Y2\2_Semester\AUT-2606_Innebygde_Systemer\SemesterProjektet\Innebygde-Systemer-Semester-Projektet\ALTIUM\AUT2606_Semester_Prosjekt\HX711.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=351.102mil|Location2.X=357.352mil|Location1.Y=615.573mil|Location2.Y=621.823mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Local\Nikolai\UIT\Y2\2_Semester\AUT-2606_Innebygde_Systemer\SemesterProjektet\Innebygde-Systemer-Semester-Projektet\ALTIUM\AUT2606_Semester_Prosjekt\HX711.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=351.102mil|Location2.X=357.352mil|Location1.Y=615.573mil|Location2.Y=621.823mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (3.863mil &lt; 5mil) Between Pad R14-1(356.85mil,635.394mil) on Top Layer And Text "R14" (317.493mil,580.281mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [3.863mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_even" onmouseover="className = 'onmouseover_even'" onmouseout="className = 'onmouseout_even'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Local\Nikolai\UIT\Y2\2_Semester\AUT-2606_Innebygde_Systemer\SemesterProjektet\Innebygde-Systemer-Semester-Projektet\ALTIUM\AUT2606_Semester_Prosjekt\HX711.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1129.409mil|Location2.X=1135.659mil|Location1.Y=777.66mil|Location2.Y=783.91mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Local\Nikolai\UIT\Y2\2_Semester\AUT-2606_Innebygde_Systemer\SemesterProjektet\Innebygde-Systemer-Semester-Projektet\ALTIUM\AUT2606_Semester_Prosjekt\HX711.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1129.409mil|Location2.X=1135.659mil|Location1.Y=777.66mil|Location2.Y=783.91mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (3.863mil &lt; 5mil) Between Pad R17-1(1135.157mil,797.48mil) on Top Layer And Text "R17" (1095.8mil,742.367mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [3.863mil]</acronym></a><br></td>
+</tr>
+<tr class="onmouseout_odd" onmouseover="className = 'onmouseover_odd'" onmouseout="className = 'onmouseout_odd'">
+<td class="column1"><a href="dxpprocess://PCB:Zoom?document=C:\Local\Nikolai\UIT\Y2\2_Semester\AUT-2606_Innebygde_Systemer\SemesterProjektet\Innebygde-Systemer-Semester-Projektet\ALTIUM\AUT2606_Semester_Prosjekt\HX711.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1129.409mil|Location2.X=1135.659mil|Location1.Y=620.179mil|Location2.Y=626.429mil|Absolute=True" class="callback"><acronym title="dxpprocess://PCB:Zoom?document=C:\Local\Nikolai\UIT\Y2\2_Semester\AUT-2606_Innebygde_Systemer\SemesterProjektet\Innebygde-Systemer-Semester-Projektet\ALTIUM\AUT2606_Semester_Prosjekt\HX711.PcbDoc;viewname=PCBEditor;Action=AREA_DYNAMICZOOM|Location1.X=1129.409mil|Location2.X=1135.659mil|Location1.Y=620.179mil|Location2.Y=626.429mil|Absolute=True">Silk To Solder Mask Clearance Constraint: (3.863mil &lt; 5mil) Between Pad R18-1(1135.157mil,640mil) on Top Layer And Text "R18" (1095.8mil,584.887mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [3.863mil]</acronym></a><br></td>
+</tr>
+</table></a><hr color="#EEEEEE"><a href="#top" style="font-size: 0.9em">Back to top</a><br><br></body>
+</html>

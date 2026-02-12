@@ -1,0 +1,91 @@
+Protel Design System Design Rule Check
+PCB File : C:\Local\Nikolai\UIT\Y2\2_Semester\AUT-2606_Innebygde_Systemer\SemesterProjektet\Innebygde-Systemer-Semester-Projektet\ALTIUM\AUT2606_Semester_Prosjekt\HX711.PcbDoc
+Date     : 12.02.2026
+Time     : 21:24:50
+
+Processing Rule : Clearance Constraint (Gap=5mil) (All),(All)
+   Violation between Clearance Constraint: (Collision < 5mil) Between Pad J3-1(241.693mil,786.181mil) on Multi-Layer And Polygon Region (30 hole(s)) Bottom Layer 
+   Violation between Clearance Constraint: (Collision < 5mil) Between Pad J3-3(241.693mil,586.181mil) on Multi-Layer And Polygon Region (30 hole(s)) Bottom Layer 
+   Violation between Clearance Constraint: (Collision < 5mil) Between Pad J3-4(241.693mil,486.181mil) on Multi-Layer And Polygon Region (30 hole(s)) Bottom Layer 
+   Violation between Clearance Constraint: (Collision < 5mil) Between Pad J4-1(1804.842mil,785.63mil) on Multi-Layer And Polygon Region (30 hole(s)) Bottom Layer 
+   Violation between Clearance Constraint: (Collision < 5mil) Between Pad J4-3(1804.842mil,585.63mil) on Multi-Layer And Polygon Region (30 hole(s)) Bottom Layer 
+   Violation between Clearance Constraint: (Collision < 5mil) Between Pad J4-4(1804.842mil,485.63mil) on Multi-Layer And Polygon Region (30 hole(s)) Bottom Layer 
+   Violation between Clearance Constraint: (Collision < 5mil) Between Pad J5-1(1020mil,790.787mil) on Multi-Layer And Polygon Region (30 hole(s)) Bottom Layer 
+   Violation between Clearance Constraint: (Collision < 5mil) Between Pad J5-3(1020mil,590.787mil) on Multi-Layer And Polygon Region (30 hole(s)) Bottom Layer 
+   Violation between Clearance Constraint: (Collision < 5mil) Between Pad J5-4(1020mil,490.787mil) on Multi-Layer And Polygon Region (30 hole(s)) Bottom Layer 
+Rule Violations :9
+
+Processing Rule : Short-Circuit Constraint (Allowed=No) (All),(All)
+   Violation between Short-Circuit Constraint: Between Pad J3-1(241.693mil,786.181mil) on Multi-Layer And Polygon Region (30 hole(s)) Bottom Layer Location : [X = 241.693mil][Y = 757.776mil]
+   Violation between Short-Circuit Constraint: Between Pad J3-3(241.693mil,586.181mil) on Multi-Layer And Polygon Region (30 hole(s)) Bottom Layer Location : [X = 241.693mil][Y = 564.427mil]
+   Violation between Short-Circuit Constraint: Between Pad J3-4(241.693mil,486.181mil) on Multi-Layer And Polygon Region (30 hole(s)) Bottom Layer Location : [X = 241.693mil][Y = 464.427mil]
+   Violation between Short-Circuit Constraint: Between Pad J4-1(1804.842mil,785.63mil) on Multi-Layer And Polygon Region (30 hole(s)) Bottom Layer Location : [X = 1804.842mil][Y = 754.803mil]
+   Violation between Short-Circuit Constraint: Between Pad J4-3(1804.842mil,585.63mil) on Multi-Layer And Polygon Region (30 hole(s)) Bottom Layer Location : [X = 1818.735mil][Y = 570.206mil]
+   Violation between Short-Circuit Constraint: Between Pad J4-4(1804.842mil,485.63mil) on Multi-Layer And Polygon Region (30 hole(s)) Bottom Layer Location : [X = 1818.735mil][Y = 470.206mil]
+   Violation between Short-Circuit Constraint: Between Pad J5-1(1020mil,790.787mil) on Multi-Layer And Polygon Region (30 hole(s)) Bottom Layer Location : [X = 994.016mil][Y = 790.787mil]
+   Violation between Short-Circuit Constraint: Between Pad J5-3(1020mil,590.787mil) on Multi-Layer And Polygon Region (30 hole(s)) Bottom Layer Location : [X = 1007.876mil][Y = 589.423mil]
+   Violation between Short-Circuit Constraint: Between Pad J5-4(1020mil,490.787mil) on Multi-Layer And Polygon Region (30 hole(s)) Bottom Layer Location : [X = 1007.876mil][Y = 489.423mil]
+Rule Violations :9
+
+Processing Rule : Un-Routed Net Constraint ( (All) )
+   Violation between Un-Routed Net Constraint: Net GND Between Track (1476.068mil,703.076mil)(1478.15mil,705.158mil) on Top Layer And Pad HX711-10(1496.772mil,505mil) on Top Layer [Unplated] 
+   Violation between Un-Routed Net Constraint: Net 5V Between Pad J7-1(1789.764mil,96.85mil) on Multi-Layer And Track (2064.993mil,800mil)(2066.115mil,801.122mil) on Top Layer 
+   Violation between Un-Routed Net Constraint: Net 5V Between Track (483.465mil,803.385mil)(558.327mil,878.247mil) on Top Layer And Track (1264.606mil,805.158mil)(1296.575mil,805.158mil) on Top Layer 
+   Violation between Un-Routed Net Constraint: Net 5V Between Track (1474.252mil,811.28mil)(1480.532mil,805mil) on Top Layer And Track (2064.993mil,800mil)(2066.115mil,801.122mil) on Top Layer 
+Rule Violations :4
+
+Processing Rule : Modified Polygon (Allow modified: No), (Allow shelved: No)
+Rule Violations :0
+
+Processing Rule : Width Constraint (Min=5mil) (Max=1000mil) (Preferred=5mil) (All)
+Rule Violations :0
+
+Processing Rule : Routing Topology Rule(Topology=Shortest) (All)
+Rule Violations :0
+
+Processing Rule : Power Plane Connect Rule(Direct Connect )(Expansion=20mil) (Conductor Width=10mil) (Air Gap=10mil) (Entries=4) (InPadClass('PowerPads'))
+Rule Violations :0
+
+Processing Rule : Power Plane Connect Rule(Relief Connect )(Expansion=11.811mil) (Conductor Width=5mil) (Air Gap=5mil) (Entries=4) (All)
+Rule Violations :0
+
+Processing Rule : Minimum Annular Ring (Minimum=3mil) (All)
+Rule Violations :0
+
+Processing Rule : Hole Size Constraint (Min=11.811mil) (Max=248.031mil) (All)
+Rule Violations :0
+
+Processing Rule : Hole To Hole Clearance (Gap=9.842mil) (All),(All)
+Rule Violations :0
+
+Processing Rule : Minimum Solder Mask Sliver (Gap=0mil) (All),(All)
+Rule Violations :0
+
+Processing Rule : Silk To Solder Mask (Clearance=5mil) (IsPad),(All)
+   Violation between Silk To Solder Mask Clearance Constraint: (3.863mil < 5mil) Between Pad C11-2(1920mil,499.016mil) on Top Layer And Text "C11" (1885.89mil,443.903mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [3.863mil]
+   Violation between Silk To Solder Mask Clearance Constraint: (3.863mil < 5mil) Between Pad C3-2(1135.157mil,504.173mil) on Top Layer And Text "C3" (1108.919mil,449.06mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [3.863mil]
+   Violation between Silk To Solder Mask Clearance Constraint: (3.863mil < 5mil) Between Pad C9-2(356.85mil,499.567mil) on Top Layer And Text "C9" (330.612mil,444.454mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [3.863mil]
+   Violation between Silk To Solder Mask Clearance Constraint: (3.863mil < 5mil) Between Pad R10-1(1920mil,634.842mil) on Top Layer And Text "R10" (1880.642mil,579.73mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [3.863mil]
+   Violation between Silk To Solder Mask Clearance Constraint: (3.863mil < 5mil) Between Pad R1-1(1920mil,792.323mil) on Top Layer And Text "R1" (1899.009mil,737.21mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [3.863mil]
+   Violation between Silk To Solder Mask Clearance Constraint: (3.863mil < 5mil) Between Pad R13-1(356.85mil,792.874mil) on Top Layer And Text "R13" (317.493mil,737.761mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [3.863mil]
+   Violation between Silk To Solder Mask Clearance Constraint: (3.863mil < 5mil) Between Pad R14-1(356.85mil,635.394mil) on Top Layer And Text "R14" (317.493mil,580.281mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [3.863mil]
+   Violation between Silk To Solder Mask Clearance Constraint: (3.863mil < 5mil) Between Pad R17-1(1135.157mil,797.48mil) on Top Layer And Text "R17" (1095.8mil,742.367mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [3.863mil]
+   Violation between Silk To Solder Mask Clearance Constraint: (3.863mil < 5mil) Between Pad R18-1(1135.157mil,640mil) on Top Layer And Text "R18" (1095.8mil,584.887mil) on Top Overlay [Top Overlay] to [Top Solder] clearance [3.863mil]
+Rule Violations :9
+
+Processing Rule : Silk to Silk (Clearance=0mil) (All),(All)
+Rule Violations :0
+
+Processing Rule : Net Antennae (Tolerance=0mil) (All)
+Rule Violations :0
+
+Processing Rule : Board Clearance Constraint (Gap=0mil) (All)
+Rule Violations :0
+
+Processing Rule : Height Constraint (Min=0mil) (Max=71497.938mil) (Prefered=500mil) (All)
+Rule Violations :0
+
+
+Violations Detected : 31
+Waived Violations : 0
+Time Elapsed        : 00:00:00
