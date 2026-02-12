@@ -7,3 +7,5 @@ To power via GPIO, you only need to connect two pins:
 1) Connect a 5V source to Pin #2 (5V)
 
 2) Connect the ground of that source to Pin #6 (GND)
+
+Du har lagt ut GND-baner, og deler viar til GND. Bruk en via fra hver pinne til GND så fremt det er plass. Du kan bruke mindre viaer. prøver du ctrl+shift+scroll mens du legger ut banene får du trolig opp en mye mindre via enn når du velger fra GUI-menyen.
