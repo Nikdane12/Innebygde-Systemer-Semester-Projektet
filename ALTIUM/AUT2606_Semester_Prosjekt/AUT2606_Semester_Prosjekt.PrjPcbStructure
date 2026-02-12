@@ -1,4 +1,5 @@
-Record=TopLevelDocument|FileName=HX711.SchDoc|SheetNumber=3
-Record=NoMainPathDocument|SourceDocument=HX711.SchDoc|FileName=RasberryPi5.SchDoc|SheetNumber=1
-Record=NoMainPathDocument|SourceDocument=HX711.SchDoc|FileName=TC1508.SchDoc|SheetNumber=2
-Record=NoMainPathDocument|SourceDocument=HX711.SchDoc|FileName=Volatage_regulator.SchDoc|SheetNumber=4
+Record=TopLevelDocument|FileName=Main.SchDoc|SheetNumber=1
+Record=SheetSymbol|SourceDocument=Main.SchDoc|Designator=Designator|SchDesignator=Designator|FileName=HX711_3.SchDoc|SheetNumber=5|SymbolType=Normal|RawFileName=HX711_3.SchDoc|DesignItemId= |SourceLibraryName= |ObjectKind=Sheet Symbol|RevisionGUID= |ItemGUID= |VaultGUID= 
+Record=SheetSymbol|SourceDocument=Main.SchDoc|Designator=Designator|SchDesignator=Designator|FileName=HX711_2.SchDoc|SheetNumber=4|SymbolType=Normal|RawFileName=HX711_2.SchDoc|DesignItemId= |SourceLibraryName= |ObjectKind=Sheet Symbol|RevisionGUID= |ItemGUID= |VaultGUID= 
+Record=SheetSymbol|SourceDocument=Main.SchDoc|Designator=Designator|SchDesignator=Designator|FileName=RasberryPi5.SchDoc|SheetNumber=2|SymbolType=Normal|RawFileName=RasberryPi5.SchDoc|DesignItemId= |SourceLibraryName= |ObjectKind=Sheet Symbol|RevisionGUID= |ItemGUID= |VaultGUID= 
+Record=SheetSymbol|SourceDocument=Main.SchDoc|Designator=Designator|SchDesignator=Designator|FileName=HX711_1.SchDoc|SheetNumber=3|SymbolType=Normal|RawFileName=HX711_1.SchDoc|DesignItemId= |SourceLibraryName= |ObjectKind=Sheet Symbol|RevisionGUID= |ItemGUID= |VaultGUID= 
