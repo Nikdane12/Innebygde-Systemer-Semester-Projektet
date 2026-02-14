@@ -1,0 +1,83 @@
+# README – Kretskort for robotarm (væskefylling)
+
+## 1. Kort beskrivelse
+Dette kretskortet er en del av et system for en **robotarm som kan navigere til predefinerte posisjoner og fylle glass med væske**.  
+Kortet brukes som grensesnitt mellom Raspberry Pi, servoer, pumpe og sensorer, og muliggjør styring samt innhenting av måledata.
+
+---
+
+## 2. Systemfunksjon
+Systemet skal:
+- Styre flere servoer synkronisert
+- Styre en pumpe som leverer væske i kontrollerte mengder
+- Måle vekt ved hjelp av loadcell for å avgjøre når et glass trenger påfyll
+- Kommunisere med Raspberry Pi via I²C og digitale signaler
+
+---
+
+## 3. Grunnlinjefunksjonalitet
+- Robotarmen kan bevege seg til en forhåndsdefinert posisjon  
+- Servoene beveger seg koordinert og jevnt  
+- Pumpen leverer en repeterbar mengde væske  
+- Systemet kan avgjøre når et glass trenger mer væske basert på vekt  
+
+### Ønsket ekstrafunksjonalitet
+- Kamera for økt presisjon (ikke implementert på dette kretskortet)
+
+---
+
+## 4. Kretskortets rolle
+Kretskortet fungerer som et **styre- og grensesnittkort** mellom Raspberry Pi og følgende moduler:
+- PWM-servo-driver (PCA9685)
+- Vektsensor-forsterker (HX711)
+- Ekstern pumpe-driver (TC1508-modul)
+
+---
+
+## 5. Komponenter (BOM – oversikt)
+Viktige komponenter på kretskortet:
+- **HX711** – ADC/forsterker for loadcell
+- **Loadcell 1 kg** – Vektmåling
+- **Servo-tilkoblinger** – 3 kraftservoer + 1 mikroservo
+- **Pumpe-tilkobling** – Styring via ekstern H-bridge
+
+### Standard / No BOM
+
+- HX711
+- PCA9685
+- Loadcells
+- Servo motorer
+- Pumpe
+
+---
+
+## 6. Multiplisitet
+- Det bestilles 2 kort (Hoved og HX711)
+- Alle komponentantall i BOM er oppgitt
+
+---
+
+## 7. PCB- og mekaniske begrensninger
+- Maks størrelse: **60 mm × 30 mm**
+- 2-lags PCB
+- Kompatibel med **JLCPCB design rules**
+- Hovedsakelig SMD-komponenter på **Top Layer**
+- Testpunkter, tydelig silketrykk og innfesting er inkludert der det er relevant
+
+---
+
+## 8. Bring-up (kortversjon)
+1. Verifiser I²C-kommunikasjon mellom Raspberry Pi og PCA9685  
+2. Test styring av én servo  
+3. Test HX711 med last på loadcell  
+4. Test start/stopp av pumpe  
+5. Integrer vektmåling og pumpe i lukket sløyfe  
+
+---
+
+## 9. Designerinformasjon
+**Navn:** Nikolai A. Dickens  
+**Kontakt:** nidic4105@uit.no
+
+**Navn:** Olav A. Sødal  
+**Kontakt:** olsod5888@uit.no
