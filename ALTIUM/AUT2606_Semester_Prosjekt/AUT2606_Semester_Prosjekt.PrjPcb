@@ -84,7 +84,7 @@ GenerateClassCluster=0
 DocumentUniqueId=OEGKQALK
 
 [Document3]
-DocumentPath=Main.PcbDoc
+DocumentPath=RobotArm_Olav_Nikolai.PcbDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
 AnnotationIndexControlEnabled=0
@@ -101,7 +101,7 @@ GenerateClassCluster=0
 DocumentUniqueId=VHRPWATT
 
 [Document4]
-DocumentPath=HX711.PcbDoc
+DocumentPath=RobotArm_HX711_Olav_Nikolai.PcbDoc
 AnnotationEnabled=1
 AnnotateStartValue=1
 AnnotationIndexControlEnabled=0
