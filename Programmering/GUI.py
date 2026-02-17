@@ -7,7 +7,7 @@ root.geometry("350x300")
 CENTER_US = 1500
 US_PER_DEG = 1000 / 90   # ±90° → ±1000 µs
 
-# -------- Midje --------
+#Midje
 Label(root, text="Midje").pack()
 
 midje_label = Label(root, text="Angle: +0° | Pulse: 1500 µs")
@@ -23,7 +23,7 @@ midje_scale = Scale(root, from_=-90, to=90, orient=HORIZONTAL, command=set_midje
 midje_scale.set(0)
 midje_scale.pack(fill="x", padx=20)
 
-# -------- Skulder --------
+#Skulder
 Label(root, text="Skulder").pack()
 
 skulder_label = Label(root, text="Angle: +0° | Pulse: 1500 µs")
@@ -39,7 +39,7 @@ skulder_scale = Scale(root, from_=-90, to=90, orient=HORIZONTAL, command=set_sku
 skulder_scale.set(0)
 skulder_scale.pack(fill="x", padx=20)
 
-# -------- Reset --------
+#Reset
 def reset_all():
     midje_scale.set(0)
     skulder_scale.set(0)
