@@ -1,8 +1,19 @@
 from tkinter import *
+from gpiozero import Servo
+from time import sleep
+
+servo1 = Servo(18)  # GPIO 18 (pin 12)
+servo2 = Servo(19)  # GPIO 19 (pin 35)
 
 root = Tk()
 root.title("Benchmark")
 root.geometry("500x700")
+
+def angle_to_servo_value(angle):
+    v = angle / 90.0
+    if v > 1: v = 1
+    if v < -1: v = -1
+    return v
 
 CENTER_US = 1500
 US_PER_DEG = 1000 / 90   # ±90° → ±1000 µs
@@ -19,9 +30,11 @@ midje_label.pack()
 def set_midje(value):
     angle = int(value)
     pulse = int(CENTER_US + angle * US_PER_DEG)
-    
+
+    servo1.value = angle_to_servo_value(angle)   # <-- THIS moves the servo
+
     midje_label.config(text=f"Angle: {angle}° | Pulse: {pulse} µs")
-    print(f"[MIDJE] Angle={angle}, Pulse={pulse}")
+    print(f"[MIDJE] Angle={angle}, Pulse={pulse} µs, servo1.value={servo1.value:.2f}")
 
 midje_scale = Scale(root, from_=-90, to=90, orient=HORIZONTAL, command=set_midje)
 midje_scale.set(0)
@@ -40,8 +53,11 @@ def set_skulder(value):
     angle = int(value)
     pulse = int(CENTER_US + angle * US_PER_DEG)
 
+    servo2.value = angle_to_servo_value(angle)   # <-- THIS moves the servo
+
     skulder_label.config(text=f"Angle: {angle}° | Pulse: {pulse} µs")
-    print(f"[SKULDER] Angle={angle}, Pulse={pulse}")
+    print(f"[SKULDER] Angle={angle}, Pulse={pulse} µs, servo2.value={servo2.value:.2f}")
+
 
 skulder_scale = Scale(root, from_=-90, to=90, orient=HORIZONTAL, command=set_skulder)
 skulder_scale.set(0)
