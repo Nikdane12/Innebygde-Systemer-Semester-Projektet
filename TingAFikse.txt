@@ -6,10 +6,6 @@ HX711
 Hoved
     Rotere header
     kan koble 5V to pinen to å gi strøm til pien
-
-
-Pi-hat
-kommer til å henge ut fra siden på pien. Hva med /OE inngangen på led-kontrolleren? Knappene er ikke koblet riktig, 1-2 må brukes. Kan Pi-en levere nok strøm til å drive servoer? Vær forsiktig med mulig spenningsspiker fra servoer som kan drepe pien. Det er lurt å drive servoene fra annen forsyning eller bruke "ideell diodekrets" som beskyttelse.
-
-For å berge Pi-en må det kanskje gjøres noe med supply til load-cell kort
-
+    kommer til å henge ut fra siden på pien.
+    Knappene er ikke koblet riktig, 1-2 må brukes
+    Hva med /OE inngangen på led-kontrolleren?
