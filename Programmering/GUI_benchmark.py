@@ -1,144 +1,149 @@
 from tkinter import *
 from gpiozero import Servo
-from time import sleep
 
-servo1 = Servo(18)  # GPIO 18 (pin 12)
-servo2 = Servo(19)  # GPIO 19 (pin 35)
+# ---------------- Servo setup (gpiozero only, NO pigpio) ----------------
+# HD-6001HB: wider usable range using ~800–2200 µs
+servo1 = Servo(18, min_pulse_width=0.8/1000, max_pulse_width=2.2/1000)  # Midje (GPIO18)
+servo2 = Servo(19, min_pulse_width=0.8/1000, max_pulse_width=2.2/1000)  # Skulder (GPIO19)
 
+# If you later add more servos:
+# servo3 = Servo(<pin>, min_pulse_width=0.8/1000, max_pulse_width=2.2/1000)
+# servo4 = Servo(<pin>, min_pulse_width=0.8/1000, max_pulse_width=2.2/1000)
+
+# Slider angle mapping:
+# HD-6001HB lists ~165° travel over 800–2200 µs, so half-range ≈ 82.5°
+SERVO_MAX_DEG = 82.5
+
+def angle_to_servo_value(angle_deg: int) -> float:
+    v = angle_deg / SERVO_MAX_DEG
+    if v > 1.0:
+        v = 1.0
+    if v < -1.0:
+        v = -1.0
+    return v
+
+# ---------------- Tkinter setup ----------------
 root = Tk()
 root.title("Benchmark")
 root.geometry("500x700")
 
-def angle_to_servo_value(angle):
-    v = angle / 90.0
-    if v > 1: v = 1
-    if v < -1: v = -1
-    return v
-
 CENTER_US = 1500
-US_PER_DEG = 1000 / 90   # ±90° → ±1000 µs
+US_PER_DEG = 1000 / 90   # display only (kept from your code)
 
-gap_label = Label(root)
-gap_label.pack()
+def gap():
+    Label(root, text="").pack()
 
-#Midje
+# ---------------- Midje ----------------
 Label(root, text="Midje").pack()
-
 midje_label = Label(root, text="Angle: 0° | Pulse: 1500 µs")
 midje_label.pack()
 
 def set_midje(value):
-    angle = int(value)
+    angle = int(float(value))
     pulse = int(CENTER_US + angle * US_PER_DEG)
 
-    servo1.value = angle_to_servo_value(angle)   # <-- THIS moves the servo
+    servo1.value = angle_to_servo_value(angle)
 
-    midje_label.config(text=f"Angle: {angle}° | Pulse: {pulse} µs")
+    midje_label.config(text=f"Angle: {angle:+d}° | Pulse: {pulse} µs")
     print(f"[MIDJE] Angle={angle}, Pulse={pulse} µs, servo1.value={servo1.value:.2f}")
 
 midje_scale = Scale(root, from_=-90, to=90, orient=HORIZONTAL, command=set_midje)
 midje_scale.set(0)
 midje_scale.pack(fill="x", padx=20)
 
-gap_label = Label(root)
-gap_label.pack()
+gap()
 
-#Skulder
+# ---------------- Skulder ----------------
 Label(root, text="Skulder").pack()
-
 skulder_label = Label(root, text="Angle: 0° | Pulse: 1500 µs")
 skulder_label.pack()
 
 def set_skulder(value):
-    angle = int(value)
+    angle = int(float(value))
     pulse = int(CENTER_US + angle * US_PER_DEG)
 
-    servo2.value = angle_to_servo_value(angle)   # <-- THIS moves the servo
+    servo2.value = angle_to_servo_value(angle)
 
-    skulder_label.config(text=f"Angle: {angle}° | Pulse: {pulse} µs")
+    skulder_label.config(text=f"Angle: {angle:+d}° | Pulse: {pulse} µs")
     print(f"[SKULDER] Angle={angle}, Pulse={pulse} µs, servo2.value={servo2.value:.2f}")
-
 
 skulder_scale = Scale(root, from_=-90, to=90, orient=HORIZONTAL, command=set_skulder)
 skulder_scale.set(0)
 skulder_scale.pack(fill="x", padx=20)
 
-gap_label = Label(root)
-gap_label.pack()
+gap()
 
-#Albue
-Label(root, text="Albue").pack()
-
+# ---------------- Albue (GUI only for now) ----------------
+Label(root, text="Albue (GUI only)").pack()
 albue_label = Label(root, text="Angle: 0° | Pulse: 1500 µs")
 albue_label.pack()
 
 def set_albue(value):
-    angle = int(value)
+    angle = int(float(value))
     pulse = int(CENTER_US + angle * US_PER_DEG)
-
-    albue_label.config(text=f"Angle: {angle}° | Pulse: {pulse} µs")
-    print(f"[Albue] Angle={angle}, Pulse={pulse}")
+    albue_label.config(text=f"Angle: {angle:+d}° | Pulse: {pulse} µs")
+    print(f"[ALBUE] Angle={angle}, Pulse={pulse} µs")
 
 albue_scale = Scale(root, from_=-90, to=90, orient=HORIZONTAL, command=set_albue)
 albue_scale.set(0)
 albue_scale.pack(fill="x", padx=20)
 
-gap_label = Label(root)
-gap_label.pack()
+gap()
 
-#Wrist
-Label(root, text="Wrist").pack()
-
+# ---------------- Wrist (GUI only for now) ----------------
+Label(root, text="Wrist (GUI only)").pack()
 wrist_label = Label(root, text="Angle: 0° | Pulse: 1500 µs")
 wrist_label.pack()
 
 def set_wrist(value):
-    angle = int(value)
+    angle = int(float(value))
     pulse = int(CENTER_US + angle * US_PER_DEG)
-
-    wrist_label.config(text=f"Angle: {angle}° | Pulse: {pulse} µs")
-    print(f"[Wrist] Angle={angle}, Pulse={pulse}")
+    wrist_label.config(text=f"Angle: {angle:+d}° | Pulse: {pulse} µs")
+    print(f"[WRIST] Angle={angle}, Pulse={pulse} µs")
 
 wrist_scale = Scale(root, from_=-90, to=90, orient=HORIZONTAL, command=set_wrist)
 wrist_scale.set(0)
 wrist_scale.pack(fill="x", padx=20)
 
-gap_label = Label(root)
-gap_label.pack()
+gap()
 
-#Pump
+# ---------------- Pump (GUI only, shows pulse) ----------------
 PUMP_MIN_US = 500
 PUMP_MAX_US = 2500
-Label(root, text="Pump").pack()
 
-pump_label = Label(root, text="Power: 0 | Pulse: 500 µs")
+Label(root, text="Pump (GUI only)").pack()
+pump_label = Label(root, text="Power: 0% | Pulse: 500 µs")
 pump_label.pack()
 
 def set_pump(value):
-    power = int(value)  # 0..100
+    power = int(float(value))  # 0..100
     pulse = int(PUMP_MIN_US + (power * (PUMP_MAX_US - PUMP_MIN_US) / 100))
-
     pump_label.config(text=f"Power: {power}% | Pulse: {pulse} µs")
-    print(f"[Pump] Power={power}%, Pulse={pulse} µs")
+    print(f"[PUMP] Power={power}%, Pulse={pulse} µs")
 
 pump_scale = Scale(root, from_=0, to=100, orient=HORIZONTAL, command=set_pump)
 pump_scale.set(0)
 pump_scale.pack(fill="x", padx=20)
 
-#Reset
+# ---------------- Reset ----------------
 def reset_all():
-    midje_scale.set(0)
-    skulder_scale.set(0)
-    albue_scale.set(0)
-    wrist_scale.set(0)
-    pump_scale.set(0)
-    # update label + print
+    midje_scale.set(0); set_midje(0)
+    skulder_scale.set(0); set_skulder(0)
+    albue_scale.set(0); set_albue(0)
+    wrist_scale.set(0); set_wrist(0)
+    pump_scale.set(0); set_pump(0)
 
-reset_btn = Button(root, text="Reset", command=reset_all)
-reset_btn.pack(pady=10)
+Button(root, text="Reset", command=reset_all).pack(pady=10)
 
+# ---------------- Close handler ----------------
 def on_close():
+    servo1.detach()
+    servo2.detach()
     root.destroy()
 
 root.protocol("WM_DELETE_WINDOW", on_close)
+
+# Initialize outputs at center
+reset_all()
+
 root.mainloop()
