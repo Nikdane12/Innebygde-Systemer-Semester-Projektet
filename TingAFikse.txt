@@ -9,3 +9,7 @@ Hoved
     kommer til å henge ut fra siden på pien.
     Knappene er ikke koblet riktig, 1-2 må brukes
     Hva med /OE inngangen på led-kontrolleren?
+
+
+I2C
+SDA CLK

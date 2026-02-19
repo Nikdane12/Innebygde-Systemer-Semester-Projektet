@@ -14,3 +14,5 @@ Loadcell: https://www.fibossensor.com/how-to-put-a-load-cell-on-a-schematic.html
 Loadcell: https://www.loadstarsensors.com/connectingwitharduino.html
 
 I2C: https://www.geeksforgeeks.org/computer-organization-architecture/i2c-communication-protocol/   
+
+PI Diagram: https://pip-assets.raspberrypi.com/categories/892-raspberry-pi-5/documents/RP-008348-DS-5-raspberry-pi-5-product-brief.pdf?disposition=inline
