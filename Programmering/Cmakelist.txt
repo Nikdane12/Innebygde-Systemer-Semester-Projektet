@@ -1,0 +1,31 @@
+cmake_minimum_required(VERSION 3.16)
+project(robot_arm CXX)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# ── SFML ──────────────────────────────────────────────────────────────────────
+find_package(SFML 2.6 COMPONENTS graphics window system REQUIRED)
+
+# ── Dear ImGui + ImGui-SFML ───────────────────────────────────────────────────
+find_package(ImGui-SFML REQUIRED)
+
+# ── Executable ────────────────────────────────────────────────────────────────
+add_executable(robot_arm GUI_test_servo.cpp)
+
+target_link_libraries(robot_arm
+    PRIVATE
+    sfml-graphics
+    sfml-window
+    sfml-system
+    ImGui-SFML::ImGui-SFML
+)
+
+# Copy SFML DLLs next to the .exe on Windows so it can run
+if(WIN32)
+    add_custom_command(TARGET robot_arm POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            $<TARGET_RUNTIME_DLLS:robot_arm>
+            $<TARGET_FILE_DIR:robot_arm>
+        COMMAND_EXPAND_LISTS
+    )
+endif()
