@@ -350,7 +350,7 @@ def draw():
         ax.plot([tx, tx+dx_],[ty, ty+dy_],[tz, tz+dz_], color="red", lw=1.2, alpha=0.7)
 
     reach = L1 + L2 + L3
-    ax.set_xlim(-reach, reach)
+    ax.set_xlim(-reach, reach)              
     ax.set_ylim(-reach, reach)
     ax.set_zlim(0, BOX_H + reach)
     ax.set_xlabel("X"); ax.set_ylabel("Y"); ax.set_zlabel("Z")
