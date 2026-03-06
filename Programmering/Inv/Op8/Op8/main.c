@@ -1,13 +1,13 @@
 /*
- * main.c  –  Oppgave 8: Kommunikasjon med IO-kort
+ * main.c  �  Oppgave 8: Kommunikasjon med IO-kort
  *
  * Protocol (ASCII, newline-terminated):
- *   Pi sends  →  AVR replies
- *   "ADC_TMP\n"  → "TMP:<millivolts>:<celsius>\n"
- *   "ADC_POT\n"  → "POT:<raw_adc>\n"
- *   "LED_ON\n"   → "LED:ON\n"
- *   "LED_OFF\n"  → "LED:OFF\n"
- *   "PING\n"     → "PONG\n"   (connectivity test)
+ *   Pi sends  ?  AVR replies
+ *   "ADC_TMP\n"  ? "TMP:<millivolts>:<celsius>\n"
+ *   "ADC_POT\n"  ? "POT:<raw_adc>\n"
+ *   "LED_ON\n"   ? "LED:ON\n"
+ *   "LED_OFF\n"  ? "LED:OFF\n"
+ *   "PING\n"     ? "PONG\n"   (connectivity test)
  *
  * Hardware (AVR128DB-series, 4 MHz internal oscillator):
  *   TMP235 on AIN5 (PD5), 2.048 V ref
@@ -28,7 +28,7 @@
 #include "usart.h"
 #include "adc.h"
 
-/* ── USART3 blocking RX ──────────────────────────────────────────── */
+/* ?? USART3 blocking RX ???????????????????????????????????????????? */
 static char usart3_getchar(void)
 {
     while (!(USART3.STATUS & USART_RXCIF_bm)) { }
@@ -41,7 +41,7 @@ static void usart_rx_enable(void)
     USART3.CTRLB |= USART_RXEN_bm;
 }
 
-/* ── Receive one newline-terminated line ─────────────────────────── */
+/* ?? Receive one newline-terminated line ??????????????????????????? */
 #define RX_BUF_SIZE 32
 
 static void recv_line(char *buf)
@@ -56,10 +56,10 @@ static void recv_line(char *buf)
     buf[i] = '\0';
 }
 
-/* ── Main ────────────────────────────────────────────────────────── */
+/* ?? Main ?????????????????????????????????????????????????????????? */
 int main(void)
 {
-    usart_init();          /* sets stdout → USART3, 9600 baud         */
+    usart_init();          /* sets stdout ? USART3, 9600 baud         */
     usart_rx_enable();
 
     char rx_buf[RX_BUF_SIZE];
