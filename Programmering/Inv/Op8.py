@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import serial, time
 
-PORT = "/dev/ttyAMA10"   # change to /dev/ttyAMA0 or /dev/ttyUSB0 if needed
+PORT     = "/dev/ttyAMA10"
 BAUDRATE = 9600
 TIMEOUT  = 2.0
 
@@ -10,7 +10,9 @@ ser = serial.Serial(PORT, BAUDRATE, timeout=TIMEOUT)
 def send(cmd):
     ser.reset_input_buffer()
     ser.write((cmd + "\n").encode())
-    return ser.readline().decode(errors="replace").strip()
+    reply = ser.readline().decode(errors="replace").strip()
+    print(f"  [DEBUG] sent={cmd!r}  reply={reply!r}")   # remove once working
+    return reply
 
 def ping():
     r = send("PING")
@@ -18,19 +20,24 @@ def ping():
 
 def read_temperature():
     r = send("ADC_TMP")
-    _, mv, degC = r.split(":")
-    return int(mv), int(degC)
+    parts = r.split(":")
+    if len(parts) != 3 or parts[0] != "TMP":
+        raise ValueError(f"Bad TMP reply: {r!r}")
+    return int(parts[1]), int(parts[2])
 
 def read_pot():
     r = send("ADC_POT")
-    return int(r.split(":")[1])
+    parts = r.split(":")
+    if len(parts) != 2 or parts[0] != "POT":
+        raise ValueError(f"Bad POT reply: {r!r}")
+    return int(parts[1])
 
 def led(state):
     r = send("LED_ON" if state else "LED_OFF")
     print(r)
 
 def monitor(interval=1.0):
-    print(f"{'Time':>8}  {'mV':>6}  {'°C':>6}")
+    print(f"{'Time':>8}  {'mV':>6}  {'degC':>6}")
     print("-" * 28)
     t0 = time.time()
     try:
