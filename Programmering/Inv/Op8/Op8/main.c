@@ -100,6 +100,7 @@ int main(void)
             printf("LED:OFF\n");
         }
 
+
         /* Connectivity test */
         else if (strcmp(rx_buf, "PING") == 0) {
             printf("PONG\n");
