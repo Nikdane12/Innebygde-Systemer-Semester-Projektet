@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 import serial, time
 
-PORT     = "/dev/ttyS0"   # change to /dev/ttyAMA0 or /dev/ttyUSB0 if needed
+PORT = "/dev/ttyAMA10"   # change to /dev/ttyAMA0 or /dev/ttyUSB0 if needed
 BAUDRATE = 9600
 TIMEOUT  = 2.0
 
