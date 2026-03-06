@@ -6,17 +6,20 @@ BAUDRATE = 9600
 TIMEOUT  = 2.0
 
 ser = serial.Serial(PORT, BAUDRATE, timeout=TIMEOUT)
+time.sleep(0.5)            # wait for AVR to finish sending "READY"
+ser.reset_input_buffer()   # discard the "READY" message
 
 def send(cmd):
     ser.reset_input_buffer()
     ser.write((cmd + "\n").encode())
     reply = ser.readline().decode(errors="replace").strip()
-    print(f"  [DEBUG] sent={cmd!r}  reply={reply!r}")   # remove once working
+    print(f"  [DEBUG] sent={cmd!r}  reply={reply!r}")
     return reply
 
 def ping():
     r = send("PING")
     print("Ping:", r)
+    return r == "PONG"
 
 def read_temperature():
     r = send("ADC_TMP")
