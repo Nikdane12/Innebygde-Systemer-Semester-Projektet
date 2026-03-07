@@ -1,16 +1,23 @@
 #!/usr/bin/env python3
 import serial, time
 
-ser = serial.Serial("/dev/ttyAMA10", 9600, timeout=3)
+ser = serial.Serial("/dev/ttyAMA10", 38400, timeout=3)
+time.sleep(0.5)
 
-print("Listening for 5 seconds - reset the AVR now...")
-for _ in range(10):
-    line = ser.readline().decode(errors="replace").strip()
-    if line:
-        print("Received:", repr(line))
+# Read whatever the AVR sends on startup
+startup = ser.readline().decode(errors="replace").strip()
+print("AVR startup message:", repr(startup))
 
-print("Sending PING...")
-ser.write(b"PING\n")
-time.sleep(1)
-reply = ser.readline().decode(errors="replace").strip()
-print("Reply:", repr(reply))
+# Send a single character and wait for echo
+print("Sending 'A'...")
+ser.write(b"A")
+time.sleep(0.2)
+echo = ser.read(1).decode(errors="replace")
+print("Echo back:", repr(echo))
+
+if echo == "A":
+    print("SUCCESS - communication is working!")
+else:
+    print("FAIL - no echo received. Check wiring.")
+
+ser.close()
