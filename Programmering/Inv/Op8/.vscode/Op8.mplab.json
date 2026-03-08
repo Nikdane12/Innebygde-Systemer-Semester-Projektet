@@ -4,9 +4,12 @@
     "configurations": [
         {
             "name": "Release",
+            "id": "",
             "device": "AVR128DB48",
             "imageType": "application",
             "imagePath": "./out/Op8/Release.elf",
+            "toolProperties": "Release-tool-base",
+            "tool": "Simulator",
             "packs": [
                 {
                     "name": "AVR-Dx_DFP",
@@ -165,6 +168,11 @@
                 "compiler.preprocessor-macros": "NDEBUG",
                 "linker.input-libraries": "m"
             }
+        },
+        {
+            "name": "Release-tool-base",
+            "type": "tool",
+            "properties": {}
         }
     ],
     "fileSets": [
