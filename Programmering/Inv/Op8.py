@@ -10,6 +10,9 @@ while True:
     print(f"Sent: {message.strip()}")
 
     response = ser.readline().decode('utf-8').strip()
-    print(f"Received: {response}")
+    if response:
+        print(f"Received: {response}")
+    else:
+        print("Received: (timeout - no response from AVR)")
 
     time.sleep(1)
