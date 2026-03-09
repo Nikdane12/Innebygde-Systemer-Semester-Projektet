@@ -56,13 +56,13 @@ int main(void)
             printf("POT:%u\r\n", raw);
         }
         else if (strcmp(rx_buf, "LED_ON") == 0) {
-            PORTD.DIRSET = PIN6_bm;
-            PORTD.OUTSET = PIN6_bm;
+            PORTC.DIRSET = PIN6_bm;
+            PORTC.OUTSET = PIN6_bm;
             printf("LED:ON\r\n");
         }
         else if (strcmp(rx_buf, "LED_OFF") == 0) {
-            PORTD.DIRSET = PIN6_bm;
-            PORTD.OUTCLR = PIN6_bm;
+            PORTC.DIRSET = PIN6_bm;
+            PORTC.OUTCLR = PIN6_bm;
             printf("LED:OFF\r\n");
         }
         else {
