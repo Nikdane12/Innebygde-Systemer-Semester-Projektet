@@ -12,5 +12,6 @@
 #include <stdio.h>
 
 void usart_init(void);
+void usart_puts(const char *s);
 
 #endif

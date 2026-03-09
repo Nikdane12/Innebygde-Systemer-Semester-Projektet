@@ -22,6 +22,13 @@ static int usart3_getchar(FILE *stream){
 static FILE usart3_stdout = FDEV_SETUP_STREAM(usart3_putchar, NULL, _FDEV_SETUP_WRITE);
 static FILE usart3_stdin  = FDEV_SETUP_STREAM(NULL, usart3_getchar, _FDEV_SETUP_READ);
 
+void usart_puts(const char *s){
+    while (*s) {
+        while (!(USART3.STATUS & USART_DREIF_bm)) {}
+        USART3.TXDATAL = *s++;
+    }
+}
+
 void usart_init(void){
     USART3.BAUD  = 1667;
     USART3.CTRLB = USART_TXEN_bm | USART_RXEN_bm;

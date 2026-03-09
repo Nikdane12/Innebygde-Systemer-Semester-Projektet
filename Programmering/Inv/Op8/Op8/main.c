@@ -29,13 +29,15 @@ int main(void)
 {
     usart_init();   /* sets up TX/RX on PF0/PF1, stdin, stdout, 9600 baud */
 
-    printf("READY\r\n");
+    usart_puts("READY\r\n");
 
     char rx_buf[RX_BUF_SIZE];
 
     while (1)
     {
         recv_line(rx_buf);
-        printf("GOT:%s\r\n", rx_buf);
+        usart_puts("GOT:");
+        usart_puts(rx_buf);
+        usart_puts("\r\n");
     }
 }
