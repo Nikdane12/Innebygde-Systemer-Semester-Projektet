@@ -1,38 +1,24 @@
-#!/usr/bin/env python3
-import serial, time
+import time
+import serial
 
-ser = serial.Serial("/dev/ttyAMA10", 9600, timeout=2)
-time.sleep(0.5)
+# Loopback test for Raspberry Pi 5 UART
+# Hardware: connect GPIO14 (TX) directly to GPIO15 (RX) with a jumper wire
+ser = serial.Serial('/dev/ttyAMA0', 9600, timeout=1)
 
-# Read READY message from AVR
-startup = ser.readline().decode(errors="replace").strip()
-print("AVR says:", startup)
+test_messages = [b'Hello\n', b'Loopback\n', b'Test123\n']
 
-def send(cmd):
-    """Send one byte, return reply line."""
-    ser.write(cmd.encode())
-    reply = ser.readline().decode(errors="replace").strip()
-    print(f"  sent={cmd!r}  got={reply!r}")
-    return reply
+print("Starting UART loopback test...")
+print("Make sure GPIO14 (TX) is connected to GPIO15 (RX)\n")
 
-# Test ping
-send('0')
-time.sleep(0.5)
+for msg in test_messages:
+    ser.write(msg)
+    time.sleep(0.1)  # Give time for data to loop back
 
-# Test temperature
-send('1')
-time.sleep(0.5)
-
-# Test potentiometer
-send('2')
-time.sleep(0.5)
-
-# Test LED on
-send('3')
-time.sleep(1)
-
-# Test LED off
-send('4')
+    received = ser.readline()
+    if received == msg:
+        print(f"OK  Sent: {msg!r}  Received: {received!r}")
+    else:
+        print(f"FAIL  Sent: {msg!r}  Received: {received!r}")
 
 ser.close()
-print("Done.")
+print("\nDone.")
