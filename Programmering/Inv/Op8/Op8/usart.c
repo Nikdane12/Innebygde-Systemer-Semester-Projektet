@@ -8,32 +8,38 @@
 #include "usart.h"
 #include <avr/io.h>
 
-static int usart3_putchar(char c, FILE *stream){
-    while(!(USART3.STATUS & USART_DREIF_bm)){}
-    USART3.TXDATAL = c;
+/* Change USART below to match whichever port the board's USB-serial uses */
+#define UART        USART0
+#define UART_PORT   PORTA
+#define UART_TX_PIN PIN0_bm   /* PA0 = TX */
+#define UART_RX_PIN PIN1_bm   /* PA1 = RX */
+
+static int usart_putchar(char c, FILE *stream){
+    while(!(UART.STATUS & USART_DREIF_bm)){}
+    UART.TXDATAL = c;
     return 0;
 }
 
-static int usart3_getchar(FILE *stream){
-    while(!(USART3.STATUS & USART_RXCIF_bm)){}
-    return USART3.RXDATAL;
+static int usart_getchar(FILE *stream){
+    while(!(UART.STATUS & USART_RXCIF_bm)){}
+    return UART.RXDATAL;
 }
 
-static FILE usart3_stdout = FDEV_SETUP_STREAM(usart3_putchar, NULL, _FDEV_SETUP_WRITE);
-static FILE usart3_stdin  = FDEV_SETUP_STREAM(NULL, usart3_getchar, _FDEV_SETUP_READ);
+static FILE usart_stdout = FDEV_SETUP_STREAM(usart_putchar, NULL, _FDEV_SETUP_WRITE);
+static FILE usart_stdin  = FDEV_SETUP_STREAM(NULL, usart_getchar, _FDEV_SETUP_READ);
 
 void usart_puts(const char *s){
     while (*s) {
-        while (!(USART3.STATUS & USART_DREIF_bm)) {}
-        USART3.TXDATAL = *s++;
+        while (!(UART.STATUS & USART_DREIF_bm)) {}
+        UART.TXDATAL = *s++;
     }
 }
 
 void usart_init(void){
-    USART3.BAUD  = 1667;
-    USART3.CTRLB = USART_TXEN_bm | USART_RXEN_bm;
-    PORTF.DIRSET = PIN0_bm;         // PF0 = TX output
-    PORTF.DIRCLR = PIN1_bm;         // PF1 = RX input
-    stdout = &usart3_stdout;
-    stdin  = &usart3_stdin;
+    UART.BAUD  = 1667;
+    UART.CTRLB = USART_TXEN_bm | USART_RXEN_bm;
+    UART_PORT.DIRSET = UART_TX_PIN;
+    UART_PORT.DIRCLR = UART_RX_PIN;
+    stdout = &usart_stdout;
+    stdin  = &usart_stdin;
 }
