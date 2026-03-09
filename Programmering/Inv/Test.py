@@ -3,7 +3,7 @@ import serial
 
 # Loopback test for Raspberry Pi 5 UART
 # Hardware: connect GPIO14 (TX) directly to GPIO15 (RX) with a jumper wire
-ser = serial.Serial('/dev/ttyS0', 9600, timeout=1)
+ser = serial.Serial('/dev/ttyAMA0', 9600, timeout=1)
 
 test_messages = [b'Hello\n', b'Loopback\n', b'Test123\n']
 
