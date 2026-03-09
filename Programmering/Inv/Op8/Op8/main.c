@@ -28,7 +28,7 @@ static void recv_line(char *buf)
 
 int main(void)
 {
-    usart_init();   /* sets up TX/RX on PB0/PB1, stdin, stdout, 9600 baud */
+    usart_init();   /* sets up TX/RX on PF0/PF1, stdin, stdout, 9600 baud */
 
     printf("READY\r\n");
 

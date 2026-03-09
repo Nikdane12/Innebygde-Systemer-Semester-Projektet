@@ -1,24 +1,39 @@
 import time
 import serial
 
-# Loopback test for Raspberry Pi 5 UART
-# Hardware: connect GPIO14 (TX) directly to GPIO15 (RX) with a jumper wire
-ser = serial.Serial('/dev/ttyAMA0', 9600, timeout=1)
+ser = serial.Serial('/dev/ttyAMA0', 9600, timeout=2)
 
-test_messages = [b'Hello\n', b'Loopback\n', b'Test123\n']
+def send_command(cmd):
+    ser.write((cmd + '\r\n').encode('utf-8'))
+    response = ser.readline().decode('utf-8').strip()
+    return response
 
-print("Starting UART loopback test...")
-print("Make sure GPIO14 (TX) is connected to GPIO15 (RX)\n")
+# Wait for AVR to send READY on startup
+print("Waiting for AVR...")
+ready = ser.readline().decode('utf-8').strip()
+print(f"AVR: {ready}")
 
-for msg in test_messages:
-    ser.write(msg)
-    time.sleep(0.1)  # Give time for data to loop back
+# PING test
+resp = send_command("PING")
+print(f"PING -> {resp}")
 
-    received = ser.readline()
-    if received == msg:
-        print(f"OK  Sent: {msg!r}  Received: {received!r}")
-    else:
-        print(f"FAIL  Sent: {msg!r}  Received: {received!r}")
+# Read temperature
+resp = send_command("ADC_TMP")
+print(f"ADC_TMP -> {resp}")
+if resp.startswith("TMP:"):
+    parts = resp.split(":")
+    print(f"  Temperature: {parts[2]} C  ({parts[1]} mV)")
+
+# Read potentiometer
+resp = send_command("ADC_POT")
+print(f"ADC_POT -> {resp}")
+if resp.startswith("POT:"):
+    raw = int(resp.split(":")[1])
+    print(f"  Potentiometer raw: {raw}  ({raw / 4095 * 100:.1f}%)")
+
+# LED test
+print(send_command("LED_ON"))
+time.sleep(1)
+print(send_command("LED_OFF"))
 
 ser.close()
-print("\nDone.")
