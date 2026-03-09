@@ -10,7 +10,6 @@
 #include <string.h>
 #include <stdint.h>
 #include "usart.h"
-#include "adc.h"
 
 #define RX_BUF_SIZE 32
 
@@ -37,36 +36,6 @@ int main(void)
     while (1)
     {
         recv_line(rx_buf);
-
-        if (strcmp(rx_buf, "PING") == 0) {
-            printf("PONG\r\n");
-        }
-        else if (strcmp(rx_buf, "ADC_TMP") == 0) {
-            adc0_init_tmp_freerun();
-            _delay_ms(1);
-            uint16_t raw  = adc0_read12_wait();
-            uint16_t mv   = adc_to_mV_2048(raw);
-            int16_t  degC = tmp235_C_from_mV(mv);
-            printf("TMP:%u:%d\r\n", mv, (int)degC);
-        }
-        else if (strcmp(rx_buf, "ADC_POT") == 0) {
-            adc0_init_pot_ain4_vdd_freerun();
-            _delay_ms(1);
-            uint16_t raw = adc0_read12_wait();
-            printf("POT:%u\r\n", raw);
-        }
-        else if (strcmp(rx_buf, "LED_ON") == 0) {
-            PORTC.DIRSET = PIN6_bm;
-            PORTC.OUTSET = PIN6_bm;
-            printf("LED:ON\r\n");
-        }
-        else if (strcmp(rx_buf, "LED_OFF") == 0) {
-            PORTC.DIRSET = PIN6_bm;
-            PORTC.OUTCLR = PIN6_bm;
-            printf("LED:OFF\r\n");
-        }
-        else {
-            printf("ERR:UNKNOWN\r\n");
-        }
+        printf("GOT:%s\r\n", rx_buf);
     }
 }
