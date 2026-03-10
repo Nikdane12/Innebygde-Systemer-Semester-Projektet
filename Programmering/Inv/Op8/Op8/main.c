@@ -25,17 +25,6 @@ static void xosc_16MHz_init(void){
     while(CLKCTRL.MCLKSTATUS & CLKCTRL_SOSC_bm);
 }
 
-/* Wait for a full line from RPi over USART2 */
-static void recv_line(char *buf){
-    uint8_t i = 0;
-    while (i < RX_BUF_SIZE - 1){
-        while(!(USART2.STATUS & USART_RXCIF_bm)){}  /* wait for byte */
-        char c = USART2.RXDATAL;
-        if (c == '\r' || c == '\n') break;
-        buf[i++] = c;
-    }
-    buf[i] = '\0';
-}
 
 int main(void){
     xosc_16MHz_init();
@@ -45,19 +34,26 @@ int main(void){
     printf("AVR READY\r\n");
 
     char buf[RX_BUF_SIZE];
+    uint8_t i = 0;
 
     for(;;){
-        /* Send a message to RPi */
+        /* Send message to RPi every second */
         fprintf(&usart2_stdout, "Hello from AVR\r\n");
-        printf("Sent to RPi: Hello from AVR\r\n");
+        printf("Sent to RPi\r\n");
 
-        _delay_ms(500);
-
-        /* Wait for reply from RPi */
-        recv_line(buf);
-        fprintf(&usart2_stdout, "GOT:%s\r\n", buf);
-        printf("RPi said: %s\r\n", buf);
-
+        /* Check for incoming bytes from RPi (non-blocking) */
         _delay_ms(1000);
+        while(USART2.STATUS & USART_RXCIF_bm){
+            char c = USART2.RXDATAL;
+            if (c == '\r' || c == '\n'){
+                if (i > 0){
+                    buf[i] = '\0';
+                    printf("RPi said: %s\r\n", buf);
+                    i = 0;
+                }
+            } else if (i < RX_BUF_SIZE - 1){
+                buf[i++] = c;
+            }
+        }
     }
 }
