@@ -1,12 +1,12 @@
 /*
- * main.c - Oppgave 8: Kommunikasjon med RPi
+ * main.c - Oppgave 8: RPi sender tekst, AVR printer til terminal
  * 16 MHz external crystal, 38400 baud
- * USART3 (PORTB) = PC terminal, USART2 (PORTF ALT1) = RPi
+ * USART3 (PORTB PB0) = PC terminal
+ * USART2 (PORTF ALT1 PF4/PF5) = RPi
  */
 #define F_CPU 16000000UL
 #include <avr/io.h>
 #include <avr/cpufunc.h>
-#include <util/delay.h>
 #include <stdio.h>
 #include <stdint.h>
 #include "usart.h"
@@ -25,35 +25,28 @@ static void xosc_16MHz_init(void){
     while(CLKCTRL.MCLKSTATUS & CLKCTRL_SOSC_bm);
 }
 
-
 int main(void){
     xosc_16MHz_init();
     usart_init();
 
-    fprintf(&usart2_stdout, "AVR READY\r\n");
-    printf("AVR READY\r\n");
+    printf("Waiting for RPi...\r\n");
 
     char buf[RX_BUF_SIZE];
     uint8_t i = 0;
 
     for(;;){
-        /* Send message to RPi every second */
-        fprintf(&usart2_stdout, "Hello from AVR\r\n");
-        printf("Sent to RPi\r\n");
+        /* Block until a byte arrives from RPi */
+        while(!(USART2.STATUS & USART_RXCIF_bm)){}
+        char c = USART2.RXDATAL;
 
-        /* Check for incoming bytes from RPi (non-blocking) */
-        _delay_ms(1000);
-        while(USART2.STATUS & USART_RXCIF_bm){
-            char c = USART2.RXDATAL;
-            if (c == '\r' || c == '\n'){
-                if (i > 0){
-                    buf[i] = '\0';
-                    printf("RPi said: %s\r\n", buf);
-                    i = 0;
-                }
-            } else if (i < RX_BUF_SIZE - 1){
-                buf[i++] = c;
+        if (c == '\r' || c == '\n'){
+            if (i > 0){
+                buf[i] = '\0';
+                printf("RPi: %s\r\n", buf);
+                i = 0;
             }
+        } else if (i < RX_BUF_SIZE - 1){
+            buf[i++] = c;
         }
     }
 }
