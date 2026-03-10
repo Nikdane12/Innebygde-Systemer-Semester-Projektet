@@ -5,7 +5,7 @@ import serial
 import time
 
 # RPi UART port - check with 'ls /dev/serial*'
-PORT = '/dev/serial0'
+PORT = '/dev/ttyAMA0'
 BAUD = 38400
 
 ser = serial.Serial(PORT, BAUD, timeout=2)
