@@ -1,15 +1,9 @@
-/*
- * usart.h
- *
- * Created: 22.09.2025 12:32:59
- *  Author: olava
- */ 
-
-
 #ifndef USART_H
 #define USART_H
-
 #include <stdio.h>
+
+extern FILE usart2_stdout;
+extern FILE usart3_stdout;
 
 void usart_init(void);
 
