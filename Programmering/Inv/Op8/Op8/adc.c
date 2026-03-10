@@ -10,7 +10,6 @@
 #define F_CPU 4000000UL
 #include <util/delay.h>
 
-/* -------- Section 1: Temperature reader (AIN5, 2.048 V) -------- */
 void adc0_init_tmp_freerun(void)
 {
     VREF.ADC0REF = VREF_REFSEL_2V048_gc;   // internal 2.048 V reference
@@ -24,7 +23,6 @@ void adc0_init_tmp_freerun(void)
     ADC0.COMMAND  = ADC_STCONV_bm;         // start free-run
 }
 
-/* -------- Section 2: Potentiometer task (AIN4, VDD) -------- */
 void adc0_init_pot_ain4_vdd_freerun(void)
 {
     // Optional: disable digital input on PD4 (AIN4) for cleaner analog reads
@@ -43,7 +41,6 @@ void adc0_init_pot_ain4_vdd_freerun(void)
     ADC0.COMMAND  = ADC_STCONV_bm;         // start free-run
 }
 
-/* -------- Common read (12-bit) -------- */
 uint16_t adc0_read12_wait(void)
 {
     while(!(ADC0.INTFLAGS & ADC_RESRDY_bm)) { }

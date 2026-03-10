@@ -94,9 +94,6 @@ int main(void){
     stdout = &usart3_stdout;
     printf("IO-kort ready\r\n");
 
-    /* ADC init - potentiometer on AIN4 by default */
-    adc_init_freerunning(ADC_MUXPOS_AIN4_gc);
-
     char cmd[32];
 
     for(;;){
@@ -105,24 +102,22 @@ int main(void){
         printf("CMD: %s\r\n", cmd);   /* echo to PC terminal for debugging */
 
         if(strcmp(cmd, "ADC") == 0){
-            /* ADC measurement on AIN4 (potentiometer) */
-            uint16_t val = adc_get_result();
+            adc0_init_pot_ain4_vdd_freerun();
+            uint16_t raw = adc0_read12_wait();
             char reply[16];
-            snprintf(reply, sizeof(reply), "ADC:%u\n", val);
+            snprintf(reply, sizeof(reply), "ADC:%u\n", raw);
             usart2_puts(reply);
-            printf("ADC: %u\r\n", val);
+            printf("ADC: %u\r\n", raw);
 
         } else if(strcmp(cmd, "TMP") == 0){
-            /* Temperature on AIN5 */
             adc0_init_tmp_freerun();
-            _delay_ms(10);
-            int16_t temp = adc_get_temp_celsius_rounded();
+            uint16_t raw = adc0_read12_wait();
+            uint16_t mv  = adc_to_mV_2048(raw);
+            int16_t  deg = tmp235_C_from_mV(mv);
             char reply[16];
-            snprintf(reply, sizeof(reply), "TMP:%d\n", temp);
+            snprintf(reply, sizeof(reply), "TMP:%d\n", deg);
             usart2_puts(reply);
-            printf("TMP: %d C\r\n", temp);
-            /* Switch back to pot */
-            adc_init_freerunning(ADC_MUXPOS_AIN4_gc);
+            printf("TMP: %d C\r\n", deg);
 
         } else if(strncmp(cmd, "LED:", 4) == 0){
             uint8_t on = (uint8_t)atoi(cmd + 4);
