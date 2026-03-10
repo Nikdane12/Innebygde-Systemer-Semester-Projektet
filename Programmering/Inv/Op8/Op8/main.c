@@ -1,13 +1,17 @@
 /*
- * main.c - Forwards USART3 (PORTB RX) to USART2 (PORTF TX)
+ * main.c - Oppgave 8: Kommunikasjon med RPi
  * 16 MHz external crystal, 38400 baud
+ * USART3 (PORTB) = PC terminal, USART2 (PORTF ALT1) = RPi
  */
 #define F_CPU 16000000UL
 #include <avr/io.h>
 #include <avr/cpufunc.h>
 #include <util/delay.h>
 #include <stdio.h>
+#include <stdint.h>
 #include "usart.h"
+
+#define RX_BUF_SIZE 32
 
 static void xosc_16MHz_init(void){
     ccp_write_io((void*)&CLKCTRL.XOSCHFCTRLA,
@@ -22,19 +26,33 @@ static void xosc_16MHz_init(void){
 }
 
 int main(void){
-	xosc_16MHz_init();
-	usart_init();
+    xosc_16MHz_init();
+    usart_init();
 
-	for(;;){
-		/* Send on USART3 (loopback receives it internally) */
-		printf("Hello from AVR\r\n");
+    char buf[RX_BUF_SIZE];
+    uint8_t i = 0;
 
-		/* Forward each received byte to USART2 (PORTF) */
-		while(USART3.STATUS & USART_RXCIF_bm){
-			char c = USART3.RXDATAL;
-			while(!(USART2.STATUS & USART_DREIF_bm)){}
-			USART2.TXDATAL = c;
-		}
-		_delay_ms(1000);
-	}
+    for(;;){
+        /* Send message to RPi every second */
+        fprintf(&usart2_stdout, "Hello from AVR\r\n");
+        printf("Sent to RPi\r\n");
+
+        /* Read any incoming message from RPi and echo it back */
+        _delay_ms(100);
+        while(USART2.STATUS & USART_RXCIF_bm){
+            char c = USART2.RXDATAL;
+            if (c == '\r' || c == '\n'){
+                if (i > 0){
+                    buf[i] = '\0';
+                    fprintf(&usart2_stdout, "GOT:%s\r\n", buf);
+                    printf("RPi said: %s\r\n", buf);
+                    i = 0;
+                }
+            } else if (i < RX_BUF_SIZE - 1){
+                buf[i++] = c;
+            }
+        }
+
+        _delay_ms(900);
+    }
 }

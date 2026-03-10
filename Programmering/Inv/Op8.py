@@ -1,16 +1,13 @@
 import time
 import serial
 
-ser = serial.Serial('/dev/ttyAMA0', 9600, timeout=2)
-
-message = "Hello AVR\r\n"
+ser = serial.Serial('/dev/ttyAMA0', 38400, timeout=2)
 
 while True:
-    ser.write(message.encode('utf-8'))
-    print(f"Sent: {message.strip()}")
-
+    # Read message from AVR
     response = ser.readline().decode('utf-8').strip()
-    
-    print(f"Received: {response}")
+    if response:
+        print(f"AVR: {response}")
 
-    time.sleep(1)
+    # Send message back to AVR
+    ser.write("Hello AVR\r\n".encode('utf-8'))
