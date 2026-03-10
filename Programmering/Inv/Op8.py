@@ -11,3 +11,4 @@ while True:
 
     # Send message back to AVR
     ser.write("Hello AVR\r\n".encode('utf-8'))
+    time.sleep(1)
