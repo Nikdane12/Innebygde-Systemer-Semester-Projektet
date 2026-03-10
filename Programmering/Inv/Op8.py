@@ -1,16 +1,22 @@
 import time
 import serial
+import threading
 
-ser = serial.Serial('/dev/ttyAMA0', 38400, timeout=2)
+ser = serial.Serial('/dev/ttyAMA0', 38400, timeout=1)
 
-while True:
-    # Read message from AVR
-    response = ser.readline().decode('utf-8').strip()
-    if response:
-        print(f"AVR: {response}")
-    else:
-        print("No response from AVR (not connected?)")
+def receive_loop():
+    while True:
+        response = ser.readline().decode('utf-8').strip()
+        if response:
+            print(f"AVR: {response}")
 
-    # Send message back to AVR
-    ser.write("Hello AVR\r\n".encode('utf-8'))
-    time.sleep(1)
+def send_loop():
+    while True:
+        msg = input("RPi: ")
+        ser.write((msg + '\r\n').encode('utf-8'))
+        time.sleep(1)
+
+recv_thread = threading.Thread(target=receive_loop, daemon=True)
+recv_thread.start()
+
+send_loop()
