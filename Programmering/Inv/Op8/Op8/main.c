@@ -6,8 +6,7 @@
  * Message protocol (text commands from RPi):
  *   "ADC\n"           -> measure AIN4 (pot), reply "ADC:1234\n"
  *   "TMP\n"           -> measure AIN5 (temp), reply "TMP:23\n"
- *   "LED:n:1\n"        -> LED n (0-3) on   e.g. LED:2:1
- *   "LED:n:0\n"        -> LED n (0-3) off  e.g. LED:2:0
+ *   "LED:n\n"          -> toggle LED n (0-3), e.g. LED:2
  *   "SERVO:90\n"      -> set servo to 90 degrees
  *   "BUZZ:500\n"      -> buzzer at 500 Hz for 200 ms
  *   "BUZZ:0\n"        -> buzzer off
@@ -41,17 +40,16 @@ static void xosc_16MHz_init(void){
     while(CLKCTRL.MCLKSTATUS & CLKCTRL_SOSC_bm);
 }
 
-/* -------- LEDs on PORTC (PC0-PC3) -------- */
+/* -------- LEDs on PORTC (PC0-PC3, active low) -------- */
 #define LED_MASK (PIN0_bm | PIN1_bm | PIN2_bm | PIN3_bm)
 
 static void led_init(void){
     PORTC.DIRSET = LED_MASK;
-    PORTC.OUTCLR = LED_MASK;   /* all off */
+    PORTC.OUTSET = LED_MASK;   /* all off (active low) */
 }
-static void led_set(uint8_t n, uint8_t on){
+static void led_toggle(uint8_t n){
     uint8_t pin = (1 << (n & 0x03));
-    if(on) PORTC.OUTSET = pin;
-    else   PORTC.OUTCLR = pin;
+    PORTC.OUTTGL = pin;
 }
 
 /* -------- Servo angle to PWM ticks -------- */
@@ -123,13 +121,11 @@ int main(void){
             printf("TMP: %d C\r\n", deg);
 
         } else if(strncmp(cmd, "LED:", 4) == 0){
-            /* Format: LED:n:1 or LED:n:0  (n = 0..3) */
-            uint8_t n  = (uint8_t)atoi(cmd + 4);
-            char *colon = strchr(cmd + 4, ':');
-            uint8_t on = colon ? (uint8_t)atoi(colon + 1) : 0;
-            led_set(n, on);
+            /* Format: LED:n  (n = 0..3) - toggles the LED */
+            uint8_t n = (uint8_t)atoi(cmd + 4);
+            led_toggle(n);
             usart2_puts("OK\n");
-            printf("LED%d: %d\r\n", n, on);
+            printf("LED%d toggled\r\n", n);
 
         } else if(strncmp(cmd, "SERVO:", 6) == 0){
             uint8_t deg = (uint8_t)atoi(cmd + 6);
