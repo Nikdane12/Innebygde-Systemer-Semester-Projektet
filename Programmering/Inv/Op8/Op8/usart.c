@@ -13,31 +13,13 @@ static int usart3_putchar(char c, FILE *stream){
     USART3.TXDATAL = c;
     return 0;
 }
-<<<<<<< HEAD
 
 static FILE usart3_stdout = FDEV_SETUP_STREAM(usart3_putchar, NULL, _FDEV_SETUP_WRITE);
-
-void usart_puts(const char *s){
-    while (*s) {
-        while (!(USART3.STATUS & USART_DREIF_bm)) {}
-        USART3.TXDATAL = *s++;
-    }
-}
 
 void usart_init(void){
     /* 16 MHz clock, 9600 baud: (64 * 16000000) / (16 * 9600) = 6667 */
     USART3.BAUD  = 6667;
-    USART3.CTRLB = USART_TXEN_bm | USART_RXEN_bm;
+    USART3.CTRLB = USART_TXEN_bm;
     PORTF.DIRSET = PIN0_bm;    /* PF0 = TX output */
-    PORTF.DIRCLR = PIN1_bm;    /* PF1 = RX input  */
     stdout = &usart3_stdout;
-=======
-static FILE usart3_stdout = FDEV_SETUP_STREAM(usart3_putchar, NULL, _FDEV_SETUP_WRITE);
-
-void usart_init(void){
-    USART3.BAUD  = 1667;            
-    USART3.CTRLB = USART_TXEN_bm;   
-    PORTB.DIRSET = PIN0_bm;         
-    stdout = &usart3_stdout;        //printf -> USART3
->>>>>>> 507955a5bc3af9c09961c26ff4a46f65c13a0f90
 }
