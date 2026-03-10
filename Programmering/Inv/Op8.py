@@ -8,6 +8,8 @@ while True:
     response = ser.readline().decode('utf-8').strip()
     if response:
         print(f"AVR: {response}")
+    else:
+        print("No response from AVR (not connected?)")
 
     # Send message back to AVR
     ser.write("Hello AVR\r\n".encode('utf-8'))
