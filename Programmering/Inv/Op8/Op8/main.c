@@ -12,7 +12,7 @@
  *   "BUZZ:0\n"        -> buzzer off
  */
 
-#define F_CPU 16000000UL
+#define F_CPU 4000000UL
 #include <avr/io.h>
 #include <avr/cpufunc.h>
 #include <avr/interrupt.h>
@@ -53,7 +53,7 @@ static void led_toggle(uint8_t n){
 }
 
 /*Servo angle to PWM ticks*/
-/* PER=40000, 1ms=2000 ticks, 2ms=4000 ticks */
+// PER=40000, 1ms=2000 ticks, 2ms=4000 ticks
 static uint16_t angle_to_ticks(uint8_t deg){
     if(deg > 180) deg = 180;
     return (uint16_t)(2000u + ((uint32_t)deg * 2000u) / 180u);
@@ -98,9 +98,9 @@ int main(void){
     char cmd[32];
 
     for(;;){
-        /* Wait for command from RPi on USART2 */
+        // Wait for command from RPi on USART2
         usart2_getline(cmd, sizeof(cmd));
-        printf("CMD: %s\r\n", cmd);   /* echo to PC terminal for debugging */
+        printf("CMD: %s\r\n", cmd);   // echo to PC terminal for debugging
 
         if(strcmp(cmd, "ADC") == 0){
             adc0_init_pot_ain4_vdd_freerun();
@@ -121,7 +121,7 @@ int main(void){
             printf("TMP: %d C\r\n", deg);
 
         } else if(strncmp(cmd, "LED:", 4) == 0){
-            /* Format: LED:n  (n = 0..3) - toggles the LED */
+            // Format: LED:n  (n = 0..3) - toggles the LED
             uint8_t n = (uint8_t)atoi(cmd + 4);
             led_toggle(n);
             usart2_puts("OK\n");
