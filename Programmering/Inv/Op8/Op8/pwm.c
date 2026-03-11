@@ -16,8 +16,8 @@ void pwm_1_servo_init(){
 	PORTE.DIR |= (1<<0);
 	PORTE.PIN0CTRL |= PORT_INVEN_bm; // transistors invert output
 	// pwm_frequency should be 50 Hz
-	// starting timer and selecting no division: 
-	TCA0.SINGLE.CTRLA = TCA_SINGLE_CLKSEL_DIV2_gc | TCA_SINGLE_ENABLE_bm;
+	// 16MHz / DIV8 = 2MHz timer clock -> 1ms=2000 ticks, PER=40000 -> 50Hz
+	TCA0.SINGLE.CTRLA = TCA_SINGLE_CLKSEL_DIV8_gc | TCA_SINGLE_ENABLE_bm;
 	// enabling output pins on compare channels and setting wave generation mode to single-slope pwm
 	TCA0.SINGLE.CTRLB = TCA_SINGLE_CMP0_bm  | TCA_SINGLE_WGMODE_SINGLESLOPE_gc;
 	// interrupts not necessary in this mode

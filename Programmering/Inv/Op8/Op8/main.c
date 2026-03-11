@@ -12,7 +12,7 @@
  *   "BUZZ:0\n"        -> buzzer off
  */
 
-#define F_CPU 4000000UL
+#define F_CPU 16000000UL
 #include <avr/io.h>
 #include <avr/cpufunc.h>
 #include <avr/interrupt.h>
@@ -53,10 +53,10 @@ static void led_toggle(uint8_t n){
 }
 
 /*Servo angle to PWM ticks*/
-// PER=40000, 1ms=2000 ticks, 2ms=4000 ticks
+/* PER=40000, 0.5ms=1000 ticks, 2.5ms=5000 ticks */
 static uint16_t angle_to_ticks(uint8_t deg){
     if(deg > 180) deg = 180;
-    return (uint16_t)(2000u + ((uint32_t)deg * 2000u) / 180u);
+    return (uint16_t)(1000u + ((uint32_t)deg * 4000u) / 180u);
 }
 
 /*Receive a line from USART2 (RPi)*/
