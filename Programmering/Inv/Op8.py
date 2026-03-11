@@ -2,7 +2,7 @@
 import serial
 import time
 
-ser = serial.Serial('/dev/ttyAMA0', 9600, timeout=2)
+ser = serial.Serial('/dev/ttyAMA0', 38400, timeout=2)
 time.sleep(0.5)
 
 print("Connected. Type a command (ADC, TMP, LED:0, LED:1, LED:2, LED:3, SERVO:90, BUZZ:500, BUZZ:0)")
