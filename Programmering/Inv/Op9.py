@@ -54,13 +54,15 @@ class LED:
 
     def turn_on(self):
         if not self._state:
-            self._state = True
-            send_command(f"LED:{self.index}")
+            resp = send_command(f"LED:{self.index}")
+            if resp == "OK":
+                self._state = True
 
     def turn_off(self):
         if self._state:
-            self._state = False
-            send_command(f"LED:{self.index}")
+            resp = send_command(f"LED:{self.index}")
+            if resp == "OK":
+                self._state = False
 
     def toggle(self):
         if self._state:
@@ -168,8 +170,18 @@ def build_gui():
                 time.sleep(0.1)
         threading.Thread(target=task, daemon=True).start()
 
+    def sync_off():
+        """Sett GUI-tilstand til AV uten å sende kommandoer.
+        Bruk når du vet at alle LEDs fysisk er av på kortet."""
+        for i in range(4):
+            leds[i]._state = False
+            refresh_led(i)
+        log("[SYNC] GUI tilbakestilt til alle AV")
+
     tk.Button(ctrl_row, text="Alle PÅ",  width=10, command=all_on).pack(side=tk.LEFT, padx=4)
     tk.Button(ctrl_row, text="Alle AV", width=10, command=all_off).pack(side=tk.LEFT, padx=4)
+    tk.Button(ctrl_row, text="Synk GUI", width=10, command=sync_off,
+              fg="orange").pack(side=tk.LEFT, padx=4)
 
     # ── Sensor-seksjon (ADC + Temperatur) ───────────────────────────────────
     sens_frame = ttk.LabelFrame(root, text="Sensorer", padding=10)
