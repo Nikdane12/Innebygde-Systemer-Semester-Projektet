@@ -153,14 +153,20 @@ def build_gui():
     ctrl_row.pack(pady=(8, 0))
 
     def all_on():
-        for i in range(4):
-            leds[i].turn_on()
-            refresh_led(i)
+        def task():
+            for i in range(4):
+                leds[i].turn_on()
+                root.after(0, refresh_led, i)
+                time.sleep(0.1)
+        threading.Thread(target=task, daemon=True).start()
 
     def all_off():
-        for i in range(4):
-            leds[i].turn_off()
-            refresh_led(i)
+        def task():
+            for i in range(4):
+                leds[i].turn_off()
+                root.after(0, refresh_led, i)
+                time.sleep(0.1)
+        threading.Thread(target=task, daemon=True).start()
 
     tk.Button(ctrl_row, text="Alle PÅ",  width=10, command=all_on).pack(side=tk.LEFT, padx=4)
     tk.Button(ctrl_row, text="Alle AV", width=10, command=all_off).pack(side=tk.LEFT, padx=4)
