@@ -27,7 +27,7 @@
 #include "buzzer.h"
 #include "pwm.h"
 
-/* -------- Clock -------- */
+/*Clock*/
 static void xosc_16MHz_init(void){
     ccp_write_io((void*)&CLKCTRL.XOSCHFCTRLA,
         CLKCTRL_RUNSTBY_bm |
@@ -40,7 +40,7 @@ static void xosc_16MHz_init(void){
     while(CLKCTRL.MCLKSTATUS & CLKCTRL_SOSC_bm);
 }
 
-/* -------- LEDs on PORTC (PC0-PC3, active low) -------- */
+/*LEDs on PORTC (PC0-PC3, active low)*/
 #define LED_MASK (PIN0_bm | PIN1_bm | PIN2_bm | PIN3_bm)
 
 static void led_init(void){
@@ -52,14 +52,14 @@ static void led_toggle(uint8_t n){
     PORTC.OUTTGL = pin;
 }
 
-/* -------- Servo angle to PWM ticks -------- */
+/*Servo angle to PWM ticks*/
 /* PER=40000, 1ms=2000 ticks, 2ms=4000 ticks */
 static uint16_t angle_to_ticks(uint8_t deg){
     if(deg > 180) deg = 180;
     return (uint16_t)(2000u + ((uint32_t)deg * 2000u) / 180u);
 }
 
-/* -------- Receive a line from USART2 (RPi) -------- */
+/*Receive a line from USART2 (RPi)*/
 static uint8_t usart2_getline(char *buf, uint8_t maxlen){
     uint8_t i = 0;
     while(i < maxlen - 1){
@@ -74,7 +74,7 @@ static uint8_t usart2_getline(char *buf, uint8_t maxlen){
     return i;
 }
 
-/* -------- Send string on USART2 (RPi) -------- */
+/*Send string on USART2 (RPi)*/
 static void usart2_puts(const char *s){
     while(*s){
         while(!(USART2.STATUS & USART_DREIF_bm)){}
@@ -82,7 +82,7 @@ static void usart2_puts(const char *s){
     }
 }
 
-/* -------- Main -------- */
+/*Main*/
 int main(void){
     xosc_16MHz_init();
     usart_init();
