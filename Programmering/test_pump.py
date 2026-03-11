@@ -13,8 +13,8 @@ from time import sleep
 motor = Motor(forward=17, backward=27, enable=19, pwm=True)
 
 print("Full hastighet fremover i 2s")
-motor.forward(10.0)
-sleep(2)
+motor.forward(1.0)
+sleep(30)
 
 print("Halv hastighet fremover i 2s")
 motor.forward(0.5)
