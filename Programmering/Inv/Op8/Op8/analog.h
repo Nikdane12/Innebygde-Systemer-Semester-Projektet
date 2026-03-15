@@ -1,11 +1,3 @@
-/*
- * analog.h
- *
- * Created: 31.08.2022 11:15:38
- *  Author: pol022
- */ 
-
-
 #ifndef ANALOG_H_
 #define ANALOG_H_
 
@@ -13,13 +5,10 @@ volatile uint16_t result;
 volatile uint8_t res_ready;
 volatile uint8_t outside;
 
-
-
 //linear transform from the set A to the set B with scaling accordingly
 int32_t linear_map(int32_t value, int32_t a_min,int32_t a_max,int32_t b_min, int32_t b_max);
 
 void ac_init_interrupt_on_change(uint8_t channel);
-
 
 // dac functions
 void dac_init();
@@ -35,10 +24,7 @@ uint16_t adc_get_result();
 volatile uint8_t sound_detected;
 void adc_init_mic();
 
-
-
-
-/* Temperature sensor calibration data*/
+// Temperature sensor calibration data
 static uint16_t t_offset;
 static uint16_t t_slope;
 // temperature sensor

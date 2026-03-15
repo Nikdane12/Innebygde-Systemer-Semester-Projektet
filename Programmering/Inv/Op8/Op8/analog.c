@@ -1,10 +1,3 @@
-/*
- * analog.c
- *
- * Created: 31.08.2022 11:15:52
- *  Author: pol022
- */ 
-
 #include <avr/io.h>
 #include "analog.h"
 #include <avr/interrupt.h>
