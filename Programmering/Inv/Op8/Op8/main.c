@@ -1,15 +1,12 @@
 /*
- * main.c - IO-kort: USART command handler for RPi
- * USART2 (PF4/PF5) = RPi, USART3 (PB0) = PC terminal
- * 16 MHz external crystal, 38400 baud
+ * 38400 baud
  *
- * Message protocol (text commands from RPi):
- *   "ADC\n"           -> measure AIN4 (pot), reply "ADC:1234\n"
- *   "TMP\n"           -> measure AIN5 (temp), reply "TMP:23\n"
- *   "LED:n\n"          -> toggle LED n (0-3), e.g. LED:2
- *   "SERVO:90\n"      -> set servo to 90 degrees
- *   "BUZZ:500\n"      -> buzzer at 500 Hz for 200 ms
- *   "BUZZ:0\n"        -> buzzer off
+ *   "ADC\n"     
+ *   "TMP\n"       
+ *   "LED:n\n"     
+ *   "SERVO:X\n"     
+ *   "BUZZ:X\n"      
+ *   "BUZZ:0\n"        
  */
 
 #define F_CPU 16000000UL
@@ -27,7 +24,6 @@
 #include "buzzer.h"
 #include "pwm.h"
 
-/*Clock*/
 static void xosc_16MHz_init(void){
     ccp_write_io((void*)&CLKCTRL.XOSCHFCTRLA,
         CLKCTRL_RUNSTBY_bm |
@@ -40,26 +36,25 @@ static void xosc_16MHz_init(void){
     while(CLKCTRL.MCLKSTATUS & CLKCTRL_SOSC_bm);
 }
 
-/*LEDs on PORTC (PC0-PC3, active low)*/
+//LED
 #define LED_MASK (PIN0_bm | PIN1_bm | PIN2_bm | PIN3_bm)
 
 static void led_init(void){
     PORTC.DIRSET = LED_MASK;
-    PORTC.OUTSET = LED_MASK;   /* all off (active low) */
+    PORTC.OUTSET = LED_MASK;
 }
 static void led_toggle(uint8_t n){
     uint8_t pin = (1 << (n & 0x03));
     PORTC.OUTTGL = pin;
 }
 
-/*Servo angle to PWM ticks*/
-/* PER=40000, 0.5ms=1000 ticks, 2.5ms=5000 ticks */
+//Servo
 static uint16_t angle_to_ticks(uint8_t deg){
     if(deg > 180) deg = 180;
     return (uint16_t)(1000u + ((uint32_t)deg * 4000u) / 180u);
 }
 
-/*Receive a line from USART2 (RPi)*/
+//USART2 (RPi)
 static uint8_t usart2_getline(char *buf, uint8_t maxlen){
     uint8_t i = 0;
     while(i < maxlen - 1){
@@ -74,7 +69,6 @@ static uint8_t usart2_getline(char *buf, uint8_t maxlen){
     return i;
 }
 
-/*Send string on USART2 (RPi)*/
 static void usart2_puts(const char *s){
     while(*s){
         while(!(USART2.STATUS & USART_DREIF_bm)){}
@@ -82,7 +76,7 @@ static void usart2_puts(const char *s){
     }
 }
 
-/*Main*/
+//Main
 int main(void){
     xosc_16MHz_init();
     usart_init();
@@ -91,16 +85,16 @@ int main(void){
     pwm_1_servo_init();
     sei();
 
-    /* printf goes to PC terminal on PORTB */
+    //Printf goes to PC terminal
     stdout = &usart3_stdout;
     printf("IO-kort ready\r\n");
 
     char cmd[32];
 
     for(;;){
-        // Wait for command from RPi on USART2
+        // Wait for command
         usart2_getline(cmd, sizeof(cmd));
-        printf("CMD: %s\r\n", cmd);   // echo to PC terminal for debugging
+        printf("CMD: %s\r\n", cmd);   //Echo command
 
         if(strcmp(cmd, "ADC") == 0){
             adc0_init_pot_ain4_vdd_freerun();
@@ -121,7 +115,6 @@ int main(void){
             printf("TMP: %d C\r\n", deg);
 
         } else if(strncmp(cmd, "LED:", 4) == 0){
-            // Format: LED:n  (n = 0..3) - toggles the LED
             uint8_t n = (uint8_t)atoi(cmd + 4);
             led_toggle(n);
             usart2_puts("OK\n");

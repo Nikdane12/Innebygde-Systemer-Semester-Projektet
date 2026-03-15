@@ -1,8 +1,3 @@
-/*
- * adc.c
- * Two sections: TMP on AIN5 (2.048 V) and POT on AIN4 (VDD)
- */
-
 #include "adc.h"
 #include <avr/io.h>
 #include <stdint.h>

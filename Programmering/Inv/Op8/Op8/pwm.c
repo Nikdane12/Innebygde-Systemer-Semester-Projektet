@@ -1,10 +1,3 @@
-/*
- * pwm.c
- *
- * Created: 28.09.2023 09:33:57
- *  Author: pol022
- */ 
-
 #include "pwm.h"
 #include <avr/io.h>
 

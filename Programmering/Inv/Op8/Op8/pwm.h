@@ -1,11 +1,3 @@
-/*
- * pwm.h
- *
- * Created: 28.09.2023 09:33:39
- *  Author: pol022
- */ 
-
-
 #ifndef PWM_H_
 #define PWM_H_
 #include <avr/io.h>

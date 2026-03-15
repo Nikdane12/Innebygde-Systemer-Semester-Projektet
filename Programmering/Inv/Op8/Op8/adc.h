@@ -1,11 +1,3 @@
-/*
- * adc.h
- *
- * Created: 22.09.2025 12:34:32
- *  Author: olava
- */ 
-
-
 #ifndef ADC_H
 #define ADC_H
 
@@ -23,7 +15,7 @@ static inline uint16_t adc_to_mV_2048(uint16_t adc12){
     return (uint16_t)(mv >> 12);                   //4096
 }
 
-//10 mV/°C, 500 mV @ 0°C
+//10 mV/ï¿½C, 500 mV @ 0ï¿½C
 static inline int16_t tmp235_C_from_mV(uint16_t mv){
     return (int16_t)(((int32_t)mv - 500) / 10);
 }
