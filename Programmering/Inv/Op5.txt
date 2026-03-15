@@ -1,0 +1,3 @@
+Chipen RS-485 kan kommunisere med felere enheter på samme kabel
+Det betyr for å unngå kollisjoner trenger hvermedling en adresse
+og noen regler får å unngå feil. 
