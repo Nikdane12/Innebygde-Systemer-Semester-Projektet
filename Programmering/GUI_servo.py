@@ -33,6 +33,8 @@ NUDGE_STEP     = 0.05 # metres per arrow-key press
 DRAG_GAIN      = 0.85
 VERT_GAIN      = 0.70
 REDRAW_MS      = 30   # minimum ms between redraws (≈33 fps cap)
+ANIM_STEPS     = 40   # interpolation frames for smooth POI move
+ANIM_MS        = 20   # ms between animation frames (≈50 fps)
 
 SEG_COLORS  = ["#2196F3", "#4CAF50", "#FF9800", "#E91E63", "#9C27B0"]
 JOINT_LABELS = ["O", "A", "B", "C", "D", "E"]
@@ -111,6 +113,44 @@ def disable_3d_mouse(ax, fig):
 # -------------------------
 # Inverse kinematics
 # -------------------------
+def _geometric_seed(r_forward, z_world, yaw):
+    """Analytically aim shoulder and elbow toward the target before handing off to IK.
+
+    From the DH chain, joint B (shoulder pivot) is at:
+        r_B = l1 * sin(slider_deg)
+        z_B = BOX_H + l1 * cos(slider_deg)
+    So the slider that points B straight at the target is atan2(r, dz).
+    The elbow seed is computed the same way for the remaining vector."""
+    sh_off, el_off, wr_off = get_offsets()
+    l1, *_ = get_lengths()
+    dz = z_world - BOX_H
+
+    sh_seed = clamp(math.degrees(math.atan2(r_forward, dz)), SH_MIN, SH_MAX)
+
+    # Where joint B lands with that shoulder seed
+    r_B   = l1 * math.sin(math.radians(sh_seed))
+    z_B   = l1 * math.cos(math.radians(sh_seed))  # relative to BOX_H
+    dr    = r_forward - r_B
+    dz2   = dz - z_B
+    el_seed = clamp(math.degrees(math.atan2(dr, dz2)), EL_MIN, EL_MAX)
+
+    sh = sh_seed + sh_off
+    el = el_seed + el_off
+    wr = wr_off
+    return np.deg2rad([yaw, -sh, -el, -wr])
+
+
+def _best_sol(candidates, q0_ref):
+    """Return the successful solution closest to q0_ref, or None."""
+    best, best_dist = None, float("inf")
+    for sol in candidates:
+        if sol.success:
+            d = np.linalg.norm(sol.q - q0_ref)
+            if d < best_dist:
+                best, best_dist = sol, d
+    return best
+
+
 def ik_solve(r_forward, z_world, prev_angles=None):
     r_forward = max(0.0, r_forward)
     yaw = yaw_scale.get()
@@ -126,13 +166,23 @@ def ik_solve(r_forward, z_world, prev_angles=None):
         sh = prev_angles['shoulder'] + sh_off
         el = prev_angles['elbow']    + el_off
         wr = prev_angles['wrist']    + wr_off
-        q0 = np.deg2rad([yaw, -sh, -el, -wr])
+        q0_prev = np.deg2rad([yaw, -sh, -el, -wr])
     else:
-        q0 = np.deg2rad([0, sh_off, el_off, wr_off])
+        q0_prev = np.deg2rad([yaw, -(sh_off), -(el_off), -(wr_off)])
 
-    sol = robot.ikine_LM(T_target, q0=q0, mask=[1, 1, 1, 0, 0, 0])
+    # Three seeds:
+    #   1. previous angles  — continuity during drag / animation
+    #   2. geometric hint   — analytically aims shoulder+elbow at target
+    #   3. neutral pose     — fallback for degenerate cases
+    q0_geo     = _geometric_seed(r_forward, z_world, yaw)
+    q0_neutral = np.deg2rad([yaw, -(sh_off), -(el_off), -(wr_off)])
 
-    if sol.success:
+    sols = [robot.ikine_LM(T_target, q0=q, mask=[1, 1, 1, 0, 0, 0])
+            for q in (q0_prev, q0_geo, q0_neutral)]
+
+    sol = _best_sol(sols, q0_prev)
+
+    if sol is not None:
         _, q2, q3, q4 = sol.q
         sh_slider = clamp(-np.rad2deg(q2) - sh_off, SH_MIN, SH_MAX)
         el_deg    = clamp(-np.rad2deg(q3)  - el_off, EL_MIN, EL_MAX)
@@ -148,13 +198,23 @@ def ik_solve(r_forward, z_world, prev_angles=None):
 # -------------------------
 root = Tk()
 root.title("3D Arm Visualizer")
-root.geometry("1020x680")
+root.geometry("1200x900")
 
-fig = Figure(figsize=(7.5, 5.6))
+left_frame = Frame(root)
+left_frame.pack(side=LEFT, fill=BOTH, expand=True)
+
+fig = Figure(figsize=(7.5, 4.2))
 ax  = fig.add_subplot(111, projection="3d")
 
-canvas = FigureCanvasTkAgg(fig, master=root)
-canvas.get_tk_widget().pack(side=LEFT, fill=BOTH, expand=True)
+canvas = FigureCanvasTkAgg(fig, master=left_frame)
+canvas.get_tk_widget().pack(side=TOP, fill=BOTH, expand=True)
+
+fig2 = Figure(figsize=(7.5, 3.0))
+ax2  = fig2.add_subplot(111)
+ax2.set_aspect("equal")
+
+canvas2 = FigureCanvasTkAgg(fig2, master=left_frame)
+canvas2.get_tk_widget().pack(side=TOP, fill=BOTH, expand=True)
 
 controls = Frame(root)
 controls.pack(side=RIGHT, fill=Y, padx=12, pady=12)
@@ -254,8 +314,12 @@ dragging        = False
 last_mouse      = None
 internal_update = False
 _redraw_pending = False
+_anim_steps     = []
+_anim_idx       = 0
+_poi_dragging   = False
 
 target = {"r": 0.0, "z": BOX_H + 0.5}
+poi    = {"x": 0.5, "y": 0.0, "z": BOX_H + 0.5}  # point of interest (world coords)
 
 # -------------------------
 # FK helpers
@@ -324,6 +388,12 @@ def draw():
     tz = target["z"]
     ax.scatter([tx], [ty], [tz], marker="x", s=120, c="red", zorder=8)
 
+    # Point of interest marker
+    ax.scatter([poi["x"]], [poi["y"]], [poi["z"]],
+               marker="*", s=200, c="lime", zorder=9, label="POI")
+    ax.plot([poi["x"], poi["x"]], [poi["y"], poi["y"]], [0, poi["z"]],
+            color="lime", lw=0.8, linestyle=":", alpha=0.5)
+
     # Line from end-effector to target (shows IK error)
     Dx, Dy, Dz = pts[-1]
     err = math.sqrt((Dx-tx)**2 + (Dy-ty)**2 + (Dz-tz)**2)
@@ -362,6 +432,42 @@ def draw():
     ))
 
     canvas.draw()
+    draw_2d()
+
+def draw_2d():
+    ax2.clear()
+    reach = current_reach()
+
+    # Reach limit circle
+    theta = np.linspace(0, 2 * np.pi, 120)
+    ax2.plot(reach * np.cos(theta), reach * np.sin(theta),
+             color="#AAAAAA", lw=0.8, linestyle=":", alpha=0.6)
+
+    # Arm footprint (joint projections onto XY plane)
+    yaw = yaw_scale.get()
+    T_O, T_A, T_B, T_C, T_D, T_E = fk_chain(yaw, shoulder_scale.get(),
+                                              elbow_scale.get(), wrist_scale.get())
+    pts = [point_from_T(T) for T in (T_O, T_A, T_B, T_C, T_D, T_E)]
+    xs2 = [p[0] for p in pts]
+    ys2 = [p[1] for p in pts]
+
+    for i in range(len(xs2) - 1):
+        ax2.plot([xs2[i], xs2[i+1]], [ys2[i], ys2[i+1]],
+                 color=SEG_COLORS[i], lw=2.5, solid_capstyle="round")
+    for jx, jy in zip(xs2, ys2):
+        ax2.scatter([jx], [jy], s=30, c="cyan", zorder=10)
+
+    # POI marker
+    ax2.scatter([poi["x"]], [poi["y"]], marker="*", s=220, c="lime", zorder=9)
+
+    ax2.set_xlim(-reach, reach)
+    ax2.set_ylim(-reach, reach)
+    ax2.set_aspect("equal")
+    ax2.set_xlabel("X (m)")
+    ax2.set_ylabel("Y (m)")
+    ax2.set_title("Top view (XY) — click/drag  ★  to move POI", fontsize=9)
+    ax2.grid(True, alpha=0.3)
+    canvas2.draw()
 
 def request_draw():
     """Rate-limit redraws to REDRAW_MS to keep the UI responsive."""
@@ -369,6 +475,73 @@ def request_draw():
     if not _redraw_pending:
         _redraw_pending = True
         root.after(REDRAW_MS, draw)
+
+# -------------------------
+# POI animation
+# -------------------------
+def animate_step():
+    global _anim_idx, internal_update
+    if _anim_idx >= len(_anim_steps):
+        return
+    yaw_v, sh_v, el_v, wr_v = _anim_steps[_anim_idx]
+    _anim_idx += 1
+
+    internal_update = True
+    yaw_scale.set(yaw_v)
+    shoulder_scale.set(sh_v)
+    elbow_scale.set(el_v)
+    wrist_scale.set(wr_v)
+    internal_update = False
+
+    Dx, Dy, Dz = current_D()
+    target["r"] = math.hypot(Dx, Dy)
+    target["z"] = Dz
+
+    draw()
+    if _anim_idx < len(_anim_steps):
+        root.after(ANIM_MS, animate_step)
+
+def go_to_poi():
+    global _anim_steps, _anim_idx
+    try:
+        poi["x"] = float(poi_x_entry.get())
+        poi["y"] = float(poi_y_entry.get())
+        poi["z"] = float(poi_z_entry.get())
+    except ValueError:
+        return
+
+    # Current joint angles
+    y0 = yaw_scale.get()
+    s0 = shoulder_scale.get()
+    e0 = elbow_scale.get()
+    w0 = wrist_scale.get()
+
+    # Compute yaw and r from x, y; clamp r to max reach so arm always
+    # points toward the POI even when it's out of reach
+    yaw_t = clamp(math.degrees(math.atan2(poi["y"], poi["x"])), YAW_MIN, YAW_MAX)
+    r_t   = min(math.hypot(poi["x"], poi["y"]), current_reach() * 0.99)
+    z_t   = clamp(poi["z"], 0.0, BOX_H + current_reach())
+
+    # Solve IK at target yaw
+    old_yaw = yaw_scale.get()
+    yaw_scale.set(yaw_t)
+    prev = {"shoulder": s0, "elbow": e0, "wrist": w0}
+    shs_t, el_t, wr_t = ik_solve(r_t, z_t, prev)
+    yaw_scale.set(old_yaw)
+
+    # Build smooth interpolation steps (ease-in-out)
+    _anim_steps = []
+    for i in range(1, ANIM_STEPS + 1):
+        t = i / ANIM_STEPS
+        t_s = t * t * (3 - 2 * t)  # smoothstep
+        _anim_steps.append((
+            y0 + (yaw_t - y0)   * t_s,
+            s0 + (shs_t - s0)   * t_s,
+            e0 + (el_t  - e0)   * t_s,
+            w0 + (wr_t  - w0)   * t_s,
+        ))
+    _anim_idx = 0
+    animate_step()
 
 # -------------------------
 # Slider callbacks
@@ -486,6 +659,30 @@ def reset_all():
 
 Button(controls, text="Reset  (R)", command=reset_all).pack(pady=12)
 
+Frame(controls, height=2, bd=1, relief=SUNKEN).pack(fill="x", pady=6)
+
+Label(controls, text="Point of Interest (m)", font=("TkDefaultFont", 9, "bold")).pack()
+
+_poi_frame = Frame(controls)
+_poi_frame.pack(fill="x", pady=2)
+
+Label(_poi_frame, text="X:", width=3, anchor="w").grid(row=0, column=0, padx=4)
+poi_x_entry = Entry(_poi_frame, width=8)
+poi_x_entry.insert(0, f"{poi['x']:.3f}")
+poi_x_entry.grid(row=0, column=1, padx=4)
+
+Label(_poi_frame, text="Y:", width=3, anchor="w").grid(row=1, column=0, padx=4)
+poi_y_entry = Entry(_poi_frame, width=8)
+poi_y_entry.insert(0, f"{poi['y']:.3f}")
+poi_y_entry.grid(row=1, column=1, padx=4)
+
+Label(_poi_frame, text="Z:", width=3, anchor="w").grid(row=2, column=0, padx=4)
+poi_z_entry = Entry(_poi_frame, width=8)
+poi_z_entry.insert(0, f"{poi['z']:.3f}")
+poi_z_entry.grid(row=2, column=1, padx=4)
+
+Button(controls, text="Go to POI", command=go_to_poi).pack(pady=6)
+
 # -------------------------
 # Keyboard shortcuts
 # -------------------------
@@ -526,11 +723,39 @@ def on_key(event):
 root.bind("<KeyPress>", on_key)
 
 # -------------------------
-# Canvas events
+# Canvas events (3D)
 # -------------------------
 fig.canvas.mpl_connect("button_press_event",   on_press)
 fig.canvas.mpl_connect("button_release_event", on_release)
 fig.canvas.mpl_connect("motion_notify_event",  on_motion)
+
+# -------------------------
+# Canvas events (2D top view — drag POI in XY)
+# -------------------------
+def on_press_2d(event):
+    global _poi_dragging
+    if event.inaxes != ax2 or event.xdata is None:
+        return
+    if math.hypot(event.xdata - poi["x"], event.ydata - poi["y"]) < current_reach() * 0.1:
+        _poi_dragging = True
+
+def on_release_2d(_event):
+    global _poi_dragging
+    _poi_dragging = False
+
+def on_motion_2d(event):
+    if not _poi_dragging or event.inaxes != ax2 or event.xdata is None:
+        return
+    poi["x"] = event.xdata
+    poi["y"] = event.ydata
+    poi_x_entry.delete(0, END); poi_x_entry.insert(0, f"{poi['x']:.3f}")
+    poi_y_entry.delete(0, END); poi_y_entry.insert(0, f"{poi['y']:.3f}")
+    draw_2d()
+    request_draw()
+
+fig2.canvas.mpl_connect("button_press_event",   on_press_2d)
+fig2.canvas.mpl_connect("button_release_event", on_release_2d)
+fig2.canvas.mpl_connect("motion_notify_event",  on_motion_2d)
 
 # -------------------------
 # Initial draw
