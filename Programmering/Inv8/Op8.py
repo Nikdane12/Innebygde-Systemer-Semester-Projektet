@@ -10,7 +10,7 @@ import serial
 import threading
 import time
 
-# ─── Serieport ────────────────────────────────────────────────────────────────
+#Serieport
 PORT  = '/dev/ttyAMA0'
 BAUD  = 38400
 
@@ -40,7 +40,7 @@ def send_command(cmd: str) -> str:
         return ""
 
 
-# ─── LED-klasse ───────────────────────────────────────────────────────────────
+#LED
 class LED:
     """Representerer en LED på IO-kortet med på/av-tilstand."""
 
@@ -71,7 +71,7 @@ class LED:
             self.turn_on()
 
 
-# ─── Hjelper: tråd for polling ────────────────────────────────────────────────
+#Hjelper: tråd for polling
 def poll_sensor(cmd: str, label: tk.Label, prefix: str):
     """Spør om sensor i bakgrunnstråd og oppdater label."""
     def task():
@@ -80,7 +80,7 @@ def poll_sensor(cmd: str, label: tk.Label, prefix: str):
     threading.Thread(target=task, daemon=True).start()
 
 
-# ─── Logg ─────────────────────────────────────────────────────────────────────
+#Logg
 _log_widget = None
 
 def log(msg: str):
@@ -93,7 +93,7 @@ def log(msg: str):
         print(msg)
 
 
-# ─── GUI ──────────────────────────────────────────────────────────────────────
+#UI
 def build_gui():
     global _log_widget
 
@@ -104,11 +104,11 @@ def build_gui():
     style = ttk.Style(root)
     style.theme_use("clam")
 
-    # ── Tittel ──────────────────────────────────────────────────────────────
+    #Tittel
     tk.Label(root, text="IO-kort styrepanel", font=("Segoe UI", 14, "bold"),
              pady=8).grid(row=0, column=0, columnspan=2, sticky="ew")
 
-    # ── LED-seksjon ─────────────────────────────────────────────────────────
+    #LED-seksjon
     led_frame = ttk.LabelFrame(root, text="LEDs", padding=10)
     led_frame.grid(row=1, column=0, padx=10, pady=6, sticky="nsew")
 
@@ -170,20 +170,12 @@ def build_gui():
                 time.sleep(0.1)
         threading.Thread(target=task, daemon=True).start()
 
-    def sync_off():
-        """Sett GUI-tilstand til AV uten å sende kommandoer.
-        Bruk når du vet at alle LEDs fysisk er av på kortet."""
-        for i in range(4):
-            leds[i]._state = False
-            refresh_led(i)
-        log("[SYNC] GUI tilbakestilt til alle AV")
-
     tk.Button(ctrl_row, text="Alle PÅ",  width=10, command=all_on).pack(side=tk.LEFT, padx=4)
     tk.Button(ctrl_row, text="Alle AV", width=10, command=all_off).pack(side=tk.LEFT, padx=4)
     tk.Button(ctrl_row, text="Synk GUI", width=10, command=sync_off,
               fg="orange").pack(side=tk.LEFT, padx=4)
 
-    # ── Sensor-seksjon (ADC + Temperatur) ───────────────────────────────────
+    #Sensor-seksjon
     sens_frame = ttk.LabelFrame(root, text="Sensorer", padding=10)
     sens_frame.grid(row=2, column=0, padx=10, pady=6, sticky="nsew")
 
@@ -201,7 +193,7 @@ def build_gui():
               command=lambda: poll_sensor("TMP", tmp_label, "Temperatur: ")
               ).pack(anchor="w", pady=2)
 
-    # ── Servo-seksjon ───────────────────────────────────────────────────────
+    #Servo-seksjon
     servo_frame = ttk.LabelFrame(root, text="Servo", padding=10)
     servo_frame.grid(row=1, column=1, padx=10, pady=6, sticky="nsew")
 
@@ -225,7 +217,7 @@ def build_gui():
     tk.Button(servo_frame, text="Send servo", command=send_servo,
               width=14).pack(pady=6)
 
-    # ── Summer-seksjon ──────────────────────────────────────────────────────
+    #Buzzer-seksjon
     buzz_frame = ttk.LabelFrame(root, text="Summer", padding=10)
     buzz_frame.grid(row=2, column=1, padx=10, pady=6, sticky="nsew")
 
@@ -256,7 +248,7 @@ def build_gui():
     tk.Button(btn_row, text="Spill av", command=send_buzz,  width=10).pack(side=tk.LEFT, padx=3)
     tk.Button(btn_row, text="Stopp",    command=stop_buzz,  width=10).pack(side=tk.LEFT, padx=3)
 
-    # ── Logg ────────────────────────────────────────────────────────────────
+    #Logg
     log_frame = ttk.LabelFrame(root, text="Kommunikasjonslogg", padding=6)
     log_frame.grid(row=3, column=0, columnspan=2, padx=10, pady=6, sticky="nsew")
 
@@ -270,7 +262,7 @@ def build_gui():
     root.mainloop()
 
 
-# ─── Hovedprogram ─────────────────────────────────────────────────────────────
+#Hovedprogram
 if __name__ == "__main__":
     connect_serial()
     build_gui()
