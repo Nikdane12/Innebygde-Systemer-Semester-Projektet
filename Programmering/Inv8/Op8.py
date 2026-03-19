@@ -213,13 +213,6 @@ def build_gui():
     servo_scale.set(90)
     servo_scale.pack()
 
-    def send_servo():
-        angle = servo_scale.get()
-        send_command(f"SERVO:{angle}")
-
-    tk.Button(servo_frame, text="Send servo", command=send_servo,
-              width=14).pack(pady=6)
-
     #Buzzer-seksjon
     buzz_frame = ttk.LabelFrame(root, text="Summer", padding=10)
     buzz_frame.grid(row=2, column=1, padx=10, pady=6, sticky="nsew")
