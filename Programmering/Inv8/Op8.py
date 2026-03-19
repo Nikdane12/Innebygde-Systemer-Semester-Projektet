@@ -177,9 +177,6 @@ def build_gui():
             leds[i].turn_off()
             root.after(0, refresh_led, i)
 
-    tk.Button(ctrl_row, text="Synk GUI", width=10, command=sync_off,
-              fg="orange").pack(side=tk.LEFT, padx=4)
-
     #Sensor-seksjon
     sens_frame = ttk.LabelFrame(root, text="Sensorer", padding=10)
     sens_frame.grid(row=2, column=0, padx=10, pady=6, sticky="nsew")
@@ -208,6 +205,7 @@ def build_gui():
     def on_servo_change(val):
         angle = int(float(val))
         servo_label.config(text=f"Vinkel: {angle}°")
+        send_command(f"SERVO:{angle}")
 
     servo_scale = tk.Scale(servo_frame, from_=0, to=180,
                            orient=tk.HORIZONTAL, length=200,
