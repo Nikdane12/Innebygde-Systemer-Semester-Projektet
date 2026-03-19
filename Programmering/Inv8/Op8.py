@@ -172,6 +172,11 @@ def build_gui():
 
     tk.Button(ctrl_row, text="Alle PÅ",  width=10, command=all_on).pack(side=tk.LEFT, padx=4)
     tk.Button(ctrl_row, text="Alle AV", width=10, command=all_off).pack(side=tk.LEFT, padx=4)
+    def sync_off():
+        for i in range(4):
+            leds[i].turn_off()
+            root.after(0, refresh_led, i)
+
     tk.Button(ctrl_row, text="Synk GUI", width=10, command=sync_off,
               fg="orange").pack(side=tk.LEFT, padx=4)
 
