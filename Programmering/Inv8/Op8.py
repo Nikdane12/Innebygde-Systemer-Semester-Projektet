@@ -78,12 +78,6 @@ def poll_sensor(cmd: str, label: tk.Label, prefix: str):
 _log_widget = None
 
 def log(msg: str):
-    if _log_widget is not None:
-        _log_widget.config(state=tk.NORMAL)
-        _log_widget.insert(tk.END, msg + '\n')
-        _log_widget.see(tk.END)
-        _log_widget.config(state=tk.DISABLED)
-    else:
         print(msg)
 
 
@@ -166,10 +160,6 @@ def build_gui():
 
     tk.Button(ctrl_row, text="Alle PÅ",  width=10, command=all_on).pack(side=tk.LEFT, padx=4)
     tk.Button(ctrl_row, text="Alle AV", width=10, command=all_off).pack(side=tk.LEFT, padx=4)
-    def sync_off():
-        for i in range(4):
-            leds[i].turn_off()
-            root.after(0, refresh_led, i)
 
     #Sensor-seksjon
     sens_frame = ttk.LabelFrame(root, text="Sensorer", padding=10)
@@ -208,7 +198,7 @@ def build_gui():
     servo_scale.pack()
 
     #Buzzer-seksjon
-    buzz_frame = ttk.LabelFrame(root, text="Summer", padding=10)
+    buzz_frame = ttk.LabelFrame(root, text="Buzz", padding=10)
     buzz_frame.grid(row=2, column=1, padx=10, pady=6, sticky="nsew")
 
     buzz_label = tk.Label(buzz_frame, text="Frekvens: 500 Hz", font=("Segoe UI", 10))
@@ -237,6 +227,8 @@ def build_gui():
 
     tk.Button(btn_row, text="Spill av", command=send_buzz,  width=10).pack(side=tk.LEFT, padx=3)
     tk.Button(btn_row, text="Stopp",    command=stop_buzz,  width=10).pack(side=tk.LEFT, padx=3)
+
+    root.mainloop()
 
 #Hovedprogram
 if __name__ == "__main__":
