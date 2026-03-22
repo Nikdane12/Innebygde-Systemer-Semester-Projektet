@@ -238,6 +238,8 @@ def build_gui():
     tk.Button(btn_row, text="Spill av", command=send_buzz,  width=10).pack(side=tk.LEFT, padx=3)
     tk.Button(btn_row, text="Stopp",    command=stop_buzz,  width=10).pack(side=tk.LEFT, padx=3)
 
+    root.mainloop()
+
 #Hovedprogram
 if __name__ == "__main__":
     connect_serial()
