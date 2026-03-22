@@ -1,9 +1,3 @@
-#!/usr/bin/env python3
-
-#Op9 - IO-kort GUI
-#Styrer LEDs, servo, summer og leser ADC/temperatur via serieport.
-
-
 import tkinter as tk
 from tkinter import ttk
 import serial
