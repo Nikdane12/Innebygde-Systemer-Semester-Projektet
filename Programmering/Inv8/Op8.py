@@ -78,12 +78,6 @@ def poll_sensor(cmd: str, label: tk.Label, prefix: str):
 _log_widget = None
 
 def log(msg: str):
-    if _log_widget is not None:
-        _log_widget.config(state=tk.NORMAL)
-        _log_widget.insert(tk.END, msg + '\n')
-        _log_widget.see(tk.END)
-        _log_widget.config(state=tk.DISABLED)
-    else:
         print(msg)
 
 
@@ -208,7 +202,7 @@ def build_gui():
     servo_scale.pack()
 
     #Buzzer-seksjon
-    buzz_frame = ttk.LabelFrame(root, text="Summer", padding=10)
+    buzz_frame = ttk.LabelFrame(root, text="Buzz", padding=10)
     buzz_frame.grid(row=2, column=1, padx=10, pady=6, sticky="nsew")
 
     buzz_label = tk.Label(buzz_frame, text="Frekvens: 500 Hz", font=("Segoe UI", 10))
