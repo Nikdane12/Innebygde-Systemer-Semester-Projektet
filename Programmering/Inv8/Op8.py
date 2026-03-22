@@ -74,6 +74,19 @@ def poll_sensor(cmd: str, label: tk.Label, prefix: str):
     threading.Thread(target=task, daemon=True).start()
 
 
+#Logg
+_log_widget = None
+
+def log(msg: str):
+    if _log_widget is not None:
+        _log_widget.config(state=tk.NORMAL)
+        _log_widget.insert(tk.END, msg + '\n')
+        _log_widget.see(tk.END)
+        _log_widget.config(state=tk.DISABLED)
+    else:
+        print(msg)
+
+
 #UI
 def build_gui():
     global _log_widget
@@ -225,12 +238,9 @@ def build_gui():
     tk.Button(btn_row, text="Spill av", command=send_buzz,  width=10).pack(side=tk.LEFT, padx=3)
     tk.Button(btn_row, text="Stopp",    command=stop_buzz,  width=10).pack(side=tk.LEFT, padx=3)
 
-    return root
-
 #Hovedprogram
 if __name__ == "__main__":
     connect_serial()
-    root = build_gui()
-    root.mainloop()
+    build_gui()
     if ser and ser.is_open:
         ser.close()
