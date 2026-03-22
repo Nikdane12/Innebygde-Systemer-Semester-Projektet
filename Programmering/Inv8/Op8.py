@@ -1,9 +1,3 @@
-#!/usr/bin/env python3
-"""
-Op9 – IO-kort GUI
-Styrer LEDs, servo, summer og leser ADC/temperatur via serieport.
-"""
-
 import tkinter as tk
 from tkinter import ttk
 import serial
@@ -42,7 +36,6 @@ def send_command(cmd: str) -> str:
 
 #LED
 class LED:
-    """Representerer en LED på IO-kortet med på/av-tilstand."""
 
     def __init__(self, index: int):
         self.index = index      # 0–3
@@ -243,20 +236,6 @@ def build_gui():
 
     tk.Button(btn_row, text="Spill av", command=send_buzz,  width=10).pack(side=tk.LEFT, padx=3)
     tk.Button(btn_row, text="Stopp",    command=stop_buzz,  width=10).pack(side=tk.LEFT, padx=3)
-
-    #Logg
-    log_frame = ttk.LabelFrame(root, text="Kommunikasjonslogg", padding=6)
-    log_frame.grid(row=3, column=0, columnspan=2, padx=10, pady=6, sticky="nsew")
-
-    _log_widget = tk.Text(log_frame, height=8, state=tk.DISABLED,
-                          font=("Courier", 9), bg="#111", fg="#0f0")
-    sb = ttk.Scrollbar(log_frame, command=_log_widget.yview)
-    _log_widget.config(yscrollcommand=sb.set)
-    _log_widget.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
-    sb.pack(side=tk.RIGHT, fill=tk.Y)
-
-    root.mainloop()
-
 
 #Hovedprogram
 if __name__ == "__main__":
