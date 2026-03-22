@@ -1,3 +1,9 @@
+#!/usr/bin/env python3
+
+#Op9 - IO-kort GUI
+#Styrer LEDs, servo, summer og leser ADC/temperatur via serieport.
+
+
 import tkinter as tk
 from tkinter import ttk
 import serial
@@ -20,7 +26,7 @@ def connect_serial():
         log(f"[FEIL] Kan ikke åpne {PORT}: {e}")
 
 def send_command(cmd: str) -> str:
-    """Send en kommando og returner svaret."""
+    #Send en kommando og returner svaret.
     if ser is None or not ser.is_open:
         log(f"[IKKE TILKOBLET] {cmd}")
         return ""
@@ -36,9 +42,10 @@ def send_command(cmd: str) -> str:
 
 #LED
 class LED:
+    #Representerer en LED på IO-kortet med på/av-tilstand.
 
     def __init__(self, index: int):
-        self.index = index      # 0–3
+        self.index = index      # 03
         self._state = False     # False = av, True = på
 
     @property
@@ -66,7 +73,7 @@ class LED:
 
 #Hjelper: tråd for polling
 def poll_sensor(cmd: str, label: tk.Label, prefix: str):
-    """Spør om sensor i bakgrunnstråd og oppdater label."""
+    #Spør om sensor i bakgrunnstråd og oppdater label.
     def task():
         resp = send_command(cmd)
         label.config(text=f"{prefix}{resp}")
@@ -107,7 +114,7 @@ def build_gui():
 
     leds = [LED(i) for i in range(4)]
     led_buttons  = []
-    led_circles  = []   # Canvas for visuell indikator
+    led_circles  = []   #Canvas for visuell indikator
 
     LED_ON_COLOR  = "#00cc44"
     LED_OFF_COLOR = "#555555"
@@ -174,14 +181,14 @@ def build_gui():
     sens_frame = ttk.LabelFrame(root, text="Sensorer", padding=10)
     sens_frame.grid(row=2, column=0, padx=10, pady=6, sticky="nsew")
 
-    adc_label = tk.Label(sens_frame, text="ADC: –", font=("Courier", 11),
+    adc_label = tk.Label(sens_frame, text="ADC: -", font=("Courier", 11),
                          anchor="w", width=28)
     adc_label.pack(anchor="w")
     tk.Button(sens_frame, text="Les ADC",
               command=lambda: poll_sensor("ADC", adc_label, "ADC: ")
               ).pack(anchor="w", pady=(2, 6))
 
-    tmp_label = tk.Label(sens_frame, text="Temperatur: –", font=("Courier", 11),
+    tmp_label = tk.Label(sens_frame, text="Temperatur: -", font=("Courier", 11),
                          anchor="w", width=28)
     tmp_label.pack(anchor="w")
     tk.Button(sens_frame, text="Les temperatur",
