@@ -1,11 +1,1 @@
-HX711 
-    works perfectly at 3.3 V
-    monterings hule
-    fiks plasering
-
-Hoved
-    Rotere header
-    kan koble 5V to pinen to å gi strøm til pien
-    kommer til å henge ut fra siden på pien.
-    Knappene er ikke koblet riktig, 1-2 må brukes
-    Hva med /OE inngangen på led-kontrolleren?
+Leds fik fire skal ha to (Excel sei vi skal ha fire da...); LTST-C193KGKT-5A
