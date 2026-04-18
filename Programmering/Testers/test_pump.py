@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
-"""
-L298N motordriver – test
-  IN1  → GPIO 17  (fremover)
-  IN2  → GPIO 27  (bakover)
-  ENA  → GPIO 19  (PWM hastighet)
-"""
+#L298N motordriver – test
+#  IN1  → GPIO 17  (fremover)
+#  IN2  → GPIO 27  (bakover)
+#  ENA  → GPIO 19  (PWM hastighet)
+
 
 from gpiozero import Motor
 from time import sleep
