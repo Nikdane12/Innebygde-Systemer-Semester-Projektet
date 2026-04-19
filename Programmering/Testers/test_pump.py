@@ -1,5 +1,4 @@
-#!/usr/bin/env python3
-#L298N motordriver – test
+#L298N motordriver – via RPi pins
 #  IN1  → GPIO 17  (fremover)
 #  IN2  → GPIO 27  (bakover)
 #  ENA  → GPIO 19  (PWM hastighet)

@@ -20,7 +20,7 @@ for addr in range(0x03, 0x78):
         found.append(hex(addr))
     except OSError:
         pass
-print("Devices found:", found if found else "Noka e gæli")
+print("Devices found:", found if found else "Nothing")
 
 # Sleep -> set prescaler -> wake up
 bus.write_byte_data(PCA_ADDR, 0x00, 0x10)   # sleep (required before prescaler)

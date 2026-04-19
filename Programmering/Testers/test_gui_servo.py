@@ -1,3 +1,5 @@
+#Via RPi pins (note: fake pins everything is simulated)
+
 from tkinter import *
 import math
 import numpy as np
@@ -10,14 +12,10 @@ from matplotlib.figure import Figure
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from mpl_toolkits.mplot3d import proj3d
 
-# ─────────────────────────────────────────
-# ① N-JOINT CONFIG  ← change this number
-# ─────────────────────────────────────────
+# N-JOINT CONFIG  ← change this number
 N_JOINTS = 4          # total revolute joints (1 = base yaw + N-1 pitch joints)
 
-# ─────────────────────────────────────────
 # Robot geometry defaults
-# ─────────────────────────────────────────
 BOX_H        = 0.35
 DEFAULT_LINK = 0.80   # metres, applied to every link on first run
 
@@ -43,9 +41,7 @@ SEG_COLORS   = ["#2196F3", "#4CAF50", "#FF9800", "#E91E63",
                 "#FFC107", "#607D8B"]
 JOINT_LABELS = list("OABCDEFGHIJ")
 
-# ─────────────────────────────────────────
 # Helpers
-# ─────────────────────────────────────────
 def deg2rad(d): return math.radians(d)
 def rad2deg(r): return math.degrees(r)
 def clamp(v, lo, hi): return max(lo, min(hi, v))
@@ -58,9 +54,7 @@ def wrap180(deg):
 def point_from_T(T):
     return (float(T.t[0]), float(T.t[1]), float(T.t[2]))
 
-# ─────────────────────────────────────────
 # Dynamic link-length store
-# ─────────────────────────────────────────
 _link_lengths = [DEFAULT_LINK] * N_JOINTS   # one entry per joint
 
 def get_link_lengths():
@@ -69,9 +63,7 @@ def get_link_lengths():
 def current_reach():
     return sum(_link_lengths)
 
-# ─────────────────────────────────────────
 # Build / rebuild the DH robot
-# ─────────────────────────────────────────
 robot = None   # initialised by rebuild_robot()
 
 def _make_dh_links(lengths):

@@ -1,3 +1,4 @@
+#Via RPi pins
 from gpiozero import Servo
 from time import sleep
 
