@@ -43,7 +43,7 @@ def set_servo(channel, pulse_us):
     rb_l = bus.read_byte_data(PCA_ADDR, reg + 2)
     rb_h = bus.read_byte_data(PCA_ADDR, reg + 3)
     rb_ticks = rb_l | (rb_h << 8)
-    print(f"  ch{channel}: {pulse_us} µs → {ticks} ticks | readback: {rb_ticks} ticks")
+    print(f"  ch{channel}: {pulse_us} µs -> {ticks} ticks | readback: {rb_ticks} ticks")
 
 print("Sweeping servo on channel 0...")
 for us in [600, 1500, 2000, 2400, 1500]:
