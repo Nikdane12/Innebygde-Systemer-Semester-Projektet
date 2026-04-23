@@ -1,58 +1,18 @@
+import sys, os
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
+
 from tkinter import *
-import smbus2
-import time
+from tkinter import simpledialog
+import hx711 as hx
+import i2c as i2c
 
-# PCA9685 setup
-# Pins: SDA = GPIO 4 (pin 7), SCL = GPIO 3 (pin 5)
-# Requires in /boot/firmware/config.txt:
-#   dtoverlay=i2c-gpio,bus=4,i2c_gpio_sda=4,i2c_gpio_scl=3
-
-I2C_BUS  = 4
-PCA_ADDR = 0x40
-
-bus = smbus2.SMBus(I2C_BUS)
-
-# Sleep -> set prescaler (50 Hz) -> wake up
-bus.write_byte_data(PCA_ADDR, 0x00, 0x10)
-bus.write_byte_data(PCA_ADDR, 0xFE, 0x79)   # 0x79 = 121 ≈ 50 Hz
-bus.write_byte_data(PCA_ADDR, 0x00, 0x00)
-time.sleep(0.01)
-print("PCA9685 ready, MODE1 =", hex(bus.read_byte_data(PCA_ADDR, 0x00)))
-
-# PCA9685 channel assignments
-CH_MIDJE   = 0
-CH_SKULDER = 1
-CH_ALBUE   = 2
-CH_WRIST   = 3
-CH_PUMP    = 4
-
-def set_pwm(channel, pulse_us):
-    ticks = round(pulse_us / 20000 * 4096)
-    off_l = ticks & 0xFF
-    off_h = (ticks >> 8) & 0x0F
-    reg   = 0x06 + channel * 4
-    bus.write_byte_data(PCA_ADDR, reg + 0, 0x00)
-    bus.write_byte_data(PCA_ADDR, reg + 1, 0x00)
-    bus.write_byte_data(PCA_ADDR, reg + 2, off_l)
-    bus.write_byte_data(PCA_ADDR, reg + 3, off_h)
-
-# Servo config
-CENTER_US    = 1500
-US_PER_DEG   = 1000 / 90
-SERVO_MIN_US = 800
-SERVO_MAX_US = 2200
-
-PUMP_MIN_US  = 500
-PUMP_MAX_US  = 2500
-
-def angle_to_us(angle_deg):
-    pulse = CENTER_US + angle_deg * US_PER_DEG
-    return max(SERVO_MIN_US, min(SERVO_MAX_US, int(pulse)))
+# HX711 — using shared module
+sensors = [hx.sensor1, hx.sensor2, hx.sensor3]
 
 # Tkinter setup
 root = Tk()
 root.title("Benchmark")
-root.geometry("500x700")
+root.geometry("500x750")
 
 def gap():
     Label(root, text="").pack()
@@ -64,8 +24,8 @@ midje_label.pack()
 
 def set_midje(value):
     angle = int(float(value))
-    pulse = angle_to_us(angle)
-    set_pwm(CH_MIDJE, pulse)
+    pulse = i2c.midje_to_us(angle)
+    i2c.set_pwm(i2c.CH_MIDJE, pulse)
     midje_label.config(text=f"Angle: {angle:+d}° | Pulse: {pulse} µs")
     print(f"[MIDJE] Angle={angle}, Pulse={pulse} µs")
 
@@ -81,46 +41,46 @@ skulder_label.pack()
 
 def set_skulder(value):
     angle = int(float(value))
-    pulse = angle_to_us(angle)
-    set_pwm(CH_SKULDER, pulse)
+    pulse = i2c.angle_to_us(angle)
+    i2c.set_pwm(i2c.CH_SKULDER, pulse)
     skulder_label.config(text=f"Angle: {angle:+d}° | Pulse: {pulse} µs")
     print(f"[SKULDER] Angle={angle}, Pulse={pulse} µs")
 
-skulder_scale = Scale(root, from_=-90, to=90, orient=HORIZONTAL, command=set_skulder)
+skulder_scale = Scale(root, from_=-45, to=45, orient=HORIZONTAL, command=set_skulder)
 skulder_scale.set(0)
 skulder_scale.pack(fill="x", padx=20)
 gap()
 
-# Albue 
+# Albue
 Label(root, text="Albue").pack()
 albue_label = Label(root, text="Angle: 0° | Pulse: 1500 µs")
 albue_label.pack()
 
 def set_albue(value):
     angle = int(float(value))
-    pulse = angle_to_us(angle)
-    set_pwm(CH_ALBUE, pulse)
+    pulse = i2c.angle_to_us(angle)
+    i2c.set_pwm(i2c.CH_ALBUE, pulse)
     albue_label.config(text=f"Angle: {angle:+d}° | Pulse: {pulse} µs")
     print(f"[ALBUE] Angle={angle}, Pulse={pulse} µs")
 
-albue_scale = Scale(root, from_=-90, to=90, orient=HORIZONTAL, command=set_albue)
+albue_scale = Scale(root, from_=-45, to=45, orient=HORIZONTAL, command=set_albue)
 albue_scale.set(0)
 albue_scale.pack(fill="x", padx=20)
 gap()
 
-# Wrist 
+# Wrist
 Label(root, text="Wrist").pack()
 wrist_label = Label(root, text="Angle: 0° | Pulse: 1500 µs")
 wrist_label.pack()
 
 def set_wrist(value):
     angle = int(float(value))
-    pulse = angle_to_us(angle)
-    set_pwm(CH_WRIST, pulse)
+    pulse = i2c.angle_to_us(angle)
+    i2c.set_pwm(i2c.CH_WRIST, pulse)
     wrist_label.config(text=f"Angle: {angle:+d}° | Pulse: {pulse} µs")
     print(f"[WRIST] Angle={angle}, Pulse={pulse} µs")
 
-wrist_scale = Scale(root, from_=-90, to=90, orient=HORIZONTAL, command=set_wrist)
+wrist_scale = Scale(root, from_=-45, to=45, orient=HORIZONTAL, command=set_wrist)
 wrist_scale.set(0)
 wrist_scale.pack(fill="x", padx=20)
 gap()
@@ -132,8 +92,8 @@ pump_label.pack()
 
 def set_pump(value):
     power = int(float(value))
-    pulse = int(PUMP_MIN_US + (power * (PUMP_MAX_US - PUMP_MIN_US) / 100))
-    set_pwm(CH_PUMP, pulse)
+    pulse = i2c.pump_to_us(power)
+    i2c.set_pwm(i2c.CH_PUMP, pulse)
     pump_label.config(text=f"Power: {power}% | Pulse: {pulse} µs")
     print(f"[PUMP] Power={power}%, Pulse={pulse} µs")
 
@@ -156,30 +116,60 @@ Label(root, text="Weight").pack()
 display = Text(root, height=1, width=10, font=("Segoe UI", 36, "bold"),
                bd=3, relief="sunken")
 display.pack(padx=20, pady=10)
-display.insert(END, "0.0 g")
+display.insert(END, "-- g")
 display.config(state=DISABLED)
 
-tare_offset    = 0.0
-current_weight = 0.0
-
-def set_weight(value):
-    global current_weight
-    current_weight = value
-    shown = current_weight - tare_offset
+def update_display(grams: float):
     display.config(state=NORMAL)
     display.delete("1.0", END)
-    display.insert(END, f"{shown:.1f} g")
+    display.insert(END, f"{grams:.1f} g")
     display.config(state=DISABLED)
 
-def tare():
-    global tare_offset
-    tare_offset = current_weight
-    set_weight(current_weight)
+def do_tare():
+    for s in sensors:
+        s.tare()
+    print("[TARE] all sensors")
 
-Button(root, text="Set 25 g (test)", command=lambda: set_weight(25)).pack()
-Button(root, text="Tare", command=tare).pack()
+def do_calibrate():
+    known = simpledialog.askfloat("Calibrate", "Weight of object on scale (grams):", minvalue=1, parent=root)
+    if known is None:
+        return
+    for s in sensors:
+        s.calibrate(known)
+    print(f"[CALIBRATE] known={known}g")
+
+Button(root, text="Tare",      command=do_tare).pack()
+Button(root, text="Calibrate", command=do_calibrate).pack()
+
+use_median = False
+
+mode_btn = Button(root, text="Mode: Live", width=14)
+mode_btn.pack(pady=4)
+
+def toggle_mode():
+    global use_median
+    use_median = not use_median
+    mode_btn.config(text="Mode: Median" if use_median else "Mode: Live")
+
+mode_btn.config(command=toggle_mode)
+
+def poll_hx711():
+    try:
+        if use_median:
+            grams = (sensors[0].read_median() - sensors[0].hx_offset) / sensors[0].scale_factor
+        else:
+            grams = sensors[0].read_grams()
+        update_display(grams)
+    except Exception as e:
+        print(f"[HX711] {e}")
+    interval = 500 if use_median else 200
+    root.after(interval, poll_hx711)
 
 reset_all()
+poll_hx711()
 root.mainloop()
 
-bus.close()
+for s in sensors:
+    s.close()
+hx.sck.close()
+i2c.bus.close()
