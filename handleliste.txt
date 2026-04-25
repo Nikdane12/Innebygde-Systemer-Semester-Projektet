@@ -1,7 +1,0 @@
-Trykksensor: https://www.electrokit.com/tryck-sensor-grove-modul-analog-ut
-Trykksensor: https://www.electrokit.com/lastcell-5kg
-Trykksensor: https://www.electrokit.com/lastcell-50kg
-
-Pumpe:https://www.electrokit.com/vattenpump-12v-240l/h
-
-Color sensor: https://www.electrokit.com/kolorimeter-fargsensormodul-tcs3200
