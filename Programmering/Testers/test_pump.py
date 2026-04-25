@@ -1,27 +1,27 @@
-# L298N motor driver via PCA9685 (I2C) + GPIO
-# IN1 → GPIO 19  (forward enable, set HIGH)
-# IN2 → GND      (hardwired LOW = backward disabled)
-# ENA → PCA9685 CH_PUMP (PWM speed via duty cycle)
+# L298N motor driver
+# IN1 (forward)  → GPIO 21
+# IN2 (backward) → GND (hardwired, always forward)
+# ENA (speed)    → PCA9685 CH_PUMP (duty cycle via I2C)
 
 import sys, os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), ".."))
 
 import i2c
-from gpiozero import Motor
+from gpiozero import OutputDevice
 from time import sleep
 
-motor = Motor(forward=19, backward=None, enable=None, pwm=True)
-motor.forward()   # set IN1 HIGH — direction always forward
+forward_pin = OutputDevice(21)
+forward_pin.on()   # IN1 HIGH — forward direction always on
 
-print("Full speed (100%) for 30s")
+print("Full speed (100%) for 5s")
 i2c.set_duty(i2c.CH_PUMP, 100)
-sleep(30)
+sleep(5)
 
-print("Half speed (50%) for 2s")
+print("Half speed (50%) for 5s")
 i2c.set_duty(i2c.CH_PUMP, 50)
-sleep(2)
+sleep(5)
 
 print("Stop")
 i2c.set_duty(i2c.CH_PUMP, 0)
-motor.close()
+forward_pin.close()
 i2c.bus.close()
