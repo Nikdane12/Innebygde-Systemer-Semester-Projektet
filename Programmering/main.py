@@ -82,6 +82,23 @@ root = Tk()
 root.title("Arm Controller")
 root.geometry("800x800")
 
+# Scrollable main frame
+_canvas  = Canvas(root)
+_vscroll = Scrollbar(root, orient=VERTICAL, command=_canvas.yview)
+_canvas.configure(yscrollcommand=_vscroll.set)
+_vscroll.pack(side=RIGHT, fill=Y)
+_canvas.pack(side=LEFT, fill=BOTH, expand=True)
+main = Frame(_canvas)
+_canvas_window = _canvas.create_window((0, 0), window=main, anchor="nw")
+
+def _on_frame_configure(_):
+    _canvas.configure(scrollregion=_canvas.bbox("all"))
+def _on_canvas_configure(e):
+    _canvas.itemconfig(_canvas_window, width=e.width)
+main.bind("<Configure>", _on_frame_configure)
+_canvas.bind("<Configure>", _on_canvas_configure)
+root.bind_all("<MouseWheel>", lambda e: _canvas.yview_scroll(-1*(e.delta//120), "units"))
+
 # Joint variables (degrees / percent)
 midje_var   = DoubleVar(value=0)
 skulder_var = DoubleVar(value=0)
@@ -101,7 +118,7 @@ def set_joints(values):
 
 # Sliders
 
-Label(root, text=" Joint Control ", font=("Segoe UI", 11, "bold")).pack(pady=(10, 2))
+Label(main, text=" Joint Control ", font=("Segoe UI", 11, "bold")).pack(pady=(10, 2))
 
 def make_slider(label, var, from_, to):
     f = Frame(root)
@@ -121,7 +138,7 @@ make_slider("Pump",    pump_var,      0, 100)
 def reset_all():
     set_joints([0, 0, 0, 0, 0])
 
-Button(root, text="Reset", command=reset_all).pack(pady=4)
+Button(main, text="Reset", command=reset_all).pack(pady=4)
 
 def toggle_activate():
     global activate
@@ -131,14 +148,14 @@ def toggle_activate():
         bg="red" if activate else _activate_btn_default_bg
     )
 
-activate_btn = Button(root, text="Activate Main Program", command=toggle_activate,
+activate_btn = Button(main, text="Activate Main Program", command=toggle_activate,
                       font=("Segoe UI", 10, "bold"), width=24)
 activate_btn.pack(pady=6)
 _activate_btn_default_bg = activate_btn.cget("bg")
 
 # Inverse kinematics input 
 
-Label(root, text=" Inverse Kinematics ", font=("Segoe UI", 11, "bold")).pack(pady=(14, 2))
+Label(main, text=" Inverse Kinematics ", font=("Segoe UI", 11, "bold")).pack(pady=(14, 2))
 
 ik_frame = Frame(root)
 ik_frame.pack(padx=20, fill="x")
@@ -158,7 +175,7 @@ ik_phi            = _entry_row(ik_frame, "φ orient°",        0.0)
 ik_zbase          = _entry_row(ik_frame, "Base ht (cm)",   Z_BASE)
 ik_mount_skulder  = _entry_row(ik_frame, "Skulder mount°", MOUNT_SKULDER)
 
-ik_status = Label(root, text="", fg="red")
+ik_status = Label(main, text="", fg="red")
 ik_status.pack()
 
 def run_ik():
@@ -178,10 +195,10 @@ def run_ik():
     except Exception as e:
         ik_status.config(text=str(e), fg="red")
 
-Button(root, text="Move to IK target", command=run_ik).pack(pady=4)
+Button(main, text="Move to IK target", command=run_ik).pack(pady=4)
 
 # Saved positions 
-Label(root, text=" Saved Positions ", font=("Segoe UI", 11, "bold")).pack(pady=(14, 2))
+Label(main, text=" Saved Positions ", font=("Segoe UI", 11, "bold")).pack(pady=(14, 2))
 
 NUM_POS = 3
 saved   = [None] * NUM_POS
@@ -219,7 +236,7 @@ pos_labels = []
 go_btns    = []
 
 for i in range(NUM_POS):
-    f = Frame(root, relief="groove", bd=1)
+    f = Frame(main, relief="groove", bd=1)
     f.pack(fill="x", padx=20, pady=3)
     Label(f, text=f"Position {i+1}", font=("Segoe UI", 9, "bold"), width=10).pack(side=LEFT, padx=4)
     lbl = Label(f, text="(empty)", anchor="w", width=32)
@@ -231,21 +248,21 @@ for i in range(NUM_POS):
     go_btns.append(go)
 
 # Load cell
-Label(root, text=" Load Cell ", font=("Segoe UI", 11, "bold")).pack(pady=(14, 2))
+Label(main, text=" Load Cell ", font=("Segoe UI", 11, "bold")).pack(pady=(14, 2))
 
 use_median = False
 
 for lbl_text, lbl_var in [("Sensor 1", None), ("Sensor 2", None), ("Sensor 3", None)]:
-    Label(root, text=lbl_text, font=("Segoe UI", 9)).pack()
+    Label(main, text=lbl_text, font=("Segoe UI", 9)).pack()
 
-weight_lbl1 = Label(root, text="-- g", font=("Segoe UI", 24, "bold"))
-weight_lbl2 = Label(root, text="-- g", font=("Segoe UI", 24, "bold"))
-weight_lbl3 = Label(root, text="-- g", font=("Segoe UI", 24, "bold"))
+weight_lbl1 = Label(main, text="-- g", font=("Segoe UI", 24, "bold"))
+weight_lbl2 = Label(main, text="-- g", font=("Segoe UI", 24, "bold"))
+weight_lbl3 = Label(main, text="-- g", font=("Segoe UI", 24, "bold"))
 weight_lbl1.pack()
 weight_lbl2.pack()
 weight_lbl3.pack()
 
-mode_btn = Button(root, text="Mode: Live", width=16)
+mode_btn = Button(main, text="Mode: Live", width=16)
 mode_btn.pack(pady=4)
 
 def toggle_mode():
@@ -314,7 +331,7 @@ def open_calibration():
 
         Button(frame, text="Calibrate", width=9, command=do_cal).pack(side=LEFT, padx=2)
 
-Button(root, text="Tare & Calibrate", command=open_calibration).pack(pady=4)
+Button(main, text="Tare & Calibrate", command=open_calibration).pack(pady=4)
 
 FILL_THRESHOLD_G = 150   # fill glass if sensor reads below this
 FILL_TIME_MS     = 5000  # how long to run pump per glass
@@ -357,7 +374,7 @@ def _main_loop():
 # Water level display
 GLASS_MAX_G = 500
 
-Label(root, text=" Water Level ", font=("Segoe UI", 11, "bold")).pack(pady=(10, 2))
+Label(main, text=" Water Level ", font=("Segoe UI", 11, "bold")).pack(pady=(10, 2))
 
 _bar_vars  = []
 _bar_grams = []
@@ -386,7 +403,7 @@ def _update_bars():
     root.after(300, _update_bars)
 
 # Benchmark launcher 
-Button(root, text="Open Benchmark GUI",
+Button(main, text="Open Benchmark GUI",
        command=lambda: subprocess.Popen(["python", "GUI/GUI_benchmark.py"])
        ).pack(pady=10)
 
