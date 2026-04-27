@@ -80,7 +80,7 @@ def solve_ik(x, y, z, phi_deg, elbow_up=True):
 
 root = Tk()
 root.title("Arm Controller")
-root.geometry("1000x1000")
+root.geometry("800x800")
 
 # Joint variables (degrees / percent)
 midje_var   = DoubleVar(value=0)
