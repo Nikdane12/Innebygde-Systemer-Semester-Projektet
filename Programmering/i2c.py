@@ -48,12 +48,34 @@ def midje_to_us(deg):
 def pump_to_us(pct):
     return int(PUMP_MIN_US + pct * (PUMP_MAX_US - PUMP_MIN_US) / 100)
 
+def set_duty(channel, pct):
+    # Driver is active-LOW: invert so slider 100% = always LOW = full power
+    reg = 0x06 + channel * 4
+    if pct <= 0:
+        # FULL_ON: always HIGH = 0 power on active-LOW driver
+        bus.write_byte_data(PCA_ADDR, reg + 0, 0x00)
+        bus.write_byte_data(PCA_ADDR, reg + 1, 0x10)
+        bus.write_byte_data(PCA_ADDR, reg + 2, 0x00)
+        bus.write_byte_data(PCA_ADDR, reg + 3, 0x00)
+    elif pct >= 100:
+        # FULL_OFF: always LOW = full power on active-LOW driver
+        bus.write_byte_data(PCA_ADDR, reg + 0, 0x00)
+        bus.write_byte_data(PCA_ADDR, reg + 1, 0x00)
+        bus.write_byte_data(PCA_ADDR, reg + 2, 0x00)
+        bus.write_byte_data(PCA_ADDR, reg + 3, 0x10)
+    else:
+        ticks = round((100 - pct) / 100 * 4096)  # inverted
+        bus.write_byte_data(PCA_ADDR, reg + 0, 0x00)
+        bus.write_byte_data(PCA_ADDR, reg + 1, 0x00)
+        bus.write_byte_data(PCA_ADDR, reg + 2, ticks & 0xFF)
+        bus.write_byte_data(PCA_ADDR, reg + 3, (ticks >> 8) & 0x0F)
+
 def drive(midje, skulder, albue, wrist, pump):
     set_pwm(CH_MIDJE,   midje_to_us(midje))
     set_pwm(CH_SKULDER, angle_to_us(skulder))
     set_pwm(CH_ALBUE,   angle_to_us(albue))
     set_pwm(CH_WRIST,   angle_to_us(wrist))
-    set_pwm(CH_PUMP,   pump_to_us(pump))
+    set_duty(CH_PUMP, pump)
 
 
 if __name__ == "__main__":

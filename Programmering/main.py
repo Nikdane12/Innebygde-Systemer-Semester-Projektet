@@ -1,8 +1,16 @@
 from tkinter import *
+from tkinter import ttk
 import subprocess
 import math
 import i2c
 import hx711
+
+from gpiozero import OutputDevice
+_pump_fwd = OutputDevice(21, initial_value=False)
+
+# Main program state machine
+activate     = False
+_fill_state  = "idle"   # idle | moving | filling
 
 # Arm geometry (measure in cm)
 L1     = 15.0   # Skulder -> Albue
@@ -72,7 +80,7 @@ def solve_ik(x, y, z, phi_deg, elbow_up=True):
 
 root = Tk()
 root.title("Arm Controller")
-root.geometry("540x900")
+root.geometry("1000x1000")
 
 # Joint variables (degrees / percent)
 midje_var   = DoubleVar(value=0)
@@ -114,6 +122,19 @@ def reset_all():
     set_joints([0, 0, 0, 0, 0])
 
 Button(root, text="Reset", command=reset_all).pack(pady=4)
+
+def toggle_activate():
+    global activate
+    activate = not activate
+    activate_btn.config(
+        text="Deactivate" if activate else "Activate Main Program",
+        bg="red" if activate else _activate_btn_default_bg
+    )
+
+activate_btn = Button(root, text="Activate Main Program", command=toggle_activate,
+                      font=("Segoe UI", 10, "bold"), width=24)
+activate_btn.pack(pady=6)
+_activate_btn_default_bg = activate_btn.cget("bg")
 
 # Inverse kinematics input 
 
@@ -250,28 +271,119 @@ def poll_hx711():
             lbl.config(text="err")
     root.after(interval, poll_hx711)
 
-def calibrate_hx711():
-    def do_calibrate():
+_sensors = [hx711.sensor1, hx711.sensor2, hx711.sensor3]
+
+def open_calibration():
+    win = Toplevel(root)
+    win.title("Load Cell Calibration")
+    win.resizable(False, False)
+
+    for i, sensor in enumerate(_sensors):
+        frame = LabelFrame(win, text=f"Sensor {i+1}", padx=10, pady=6)
+        frame.pack(fill="x", padx=12, pady=6)
+
+        reading_lbl = Label(frame, text="-- g", font=("Segoe UI", 13, "bold"), width=10)
+        reading_lbl.pack(side=RIGHT)
+
+        def refresh(lbl=reading_lbl, s=sensor):
+            try:
+                lbl.config(text=f"{s.read_grams():.1f} g")
+            except Exception:
+                lbl.config(text="err")
+            win.after(300, lambda: refresh(lbl, s))
+
+        refresh()
+
+        Button(frame, text="Tare", width=8,
+               command=lambda s=sensor: s.tare()).pack(side=LEFT, padx=4)
+
+        cal_entry = Entry(frame, width=7)
+        cal_entry.insert(0, "200")
+        cal_entry.pack(side=LEFT, padx=4)
+        Label(frame, text="g").pack(side=LEFT)
+
+        status_lbl = Label(frame, text="", fg="green", width=10)
+        status_lbl.pack(side=LEFT, padx=4)
+
+        def do_cal(s=sensor, e=cal_entry, lbl=status_lbl):
+            try:
+                s.calibrate(float(e.get()))
+                lbl.config(text="OK")
+            except Exception as ex:
+                lbl.config(text=str(ex), fg="red")
+
+        Button(frame, text="Calibrate", width=9, command=do_cal).pack(side=LEFT, padx=2)
+
+Button(root, text="Tare & Calibrate", command=open_calibration).pack(pady=4)
+
+FILL_THRESHOLD_G = 150   # fill glass if sensor reads below this
+FILL_TIME_MS     = 5000  # how long to run pump per glass
+
+def _start_fill(idx):
+    global _fill_state
+    _fill_state = "moving"
+    go_to(idx)
+    root.after(MOVE_STEPS * MOVE_MS + 500, _begin_pump)
+
+def _begin_pump():
+    global _fill_state
+    _pump_fwd.on()
+    i2c.set_duty(i2c.CH_PUMP, 100)
+    _fill_state = "filling"
+    root.after(FILL_TIME_MS, _stop_pump)
+
+def _stop_pump():
+    global _fill_state
+    i2c.set_duty(i2c.CH_PUMP, 0)
+    _pump_fwd.off()
+    _fill_state = "idle"
+    root.after(1000, _main_loop)
+
+def _main_loop():
+    if not activate or _fill_state != "idle":
+        root.after(500, _main_loop)
+        return
+    sensors = [hx711.sensor1, hx711.sensor2, hx711.sensor3]
+    for idx, sensor in enumerate(sensors):
         try:
-            hx711.sensor1.calibrate(float(cal_entry.get()))
-            hx711.sensor2.calibrate(float(cal_entry.get()))
-            hx711.sensor3.calibrate(float(cal_entry.get()))
-            cal_window.destroy()
-        except Exception as e:
-            cal_status.config(text=str(e), fg="red")
+            if sensor.read_grams() < FILL_THRESHOLD_G:
+                _start_fill(idx)
+                return
+        except Exception:
+            pass
+    root.after(500, _main_loop)
 
-    cal_window = Toplevel(root)
-    cal_window.title("Calibrate Load Cell")
-    Label(cal_window, text="Place known weight on scale, enter grams:").pack(padx=20, pady=10)
-    cal_entry = Entry(cal_window)
-    cal_entry.pack(padx=20, pady=5)
-    cal_entry.focus()
-    cal_status = Label(cal_window, text="", fg="red")
-    cal_status.pack()
-    Button(cal_window, text="Calibrate", command=do_calibrate).pack(pady=10)
 
-Button(root, text="Tare",      command=hx711.sensor1.tare).pack(pady=2)
-Button(root, text="Calibrate", command=calibrate_hx711).pack(pady=2)
+# Water level display
+GLASS_MAX_G = 500
+
+Label(root, text=" Water Level ", font=("Segoe UI", 11, "bold")).pack(pady=(10, 2))
+
+_bar_vars  = []
+_bar_grams = []
+
+for name in ["Glass 1", "Glass 2", "Glass 3"]:
+    f = Frame(root)
+    f.pack(fill="x", padx=20, pady=3)
+    Label(f, text=name, width=8, anchor="w").pack(side=LEFT)
+    var = IntVar(value=0)
+    bar = ttk.Progressbar(f, variable=var, maximum=GLASS_MAX_G, length=300)
+    bar.pack(side=LEFT, fill="x", expand=True, padx=4)
+    g_lbl = Label(f, text="-- g", width=8, anchor="e")
+    g_lbl.pack(side=LEFT)
+    _bar_vars.append(var)
+    _bar_grams.append(g_lbl)
+
+def _update_bars():
+    for var, lbl, sensor in zip(_bar_vars, _bar_grams,
+                                [hx711.sensor1, hx711.sensor2, hx711.sensor3]):
+        try:
+            g = sensor.read_grams()
+            var.set(max(0, min(GLASS_MAX_G, int(g))))
+            lbl.config(text=f"{g:.0f} g")
+        except Exception:
+            lbl.config(text="err")
+    root.after(300, _update_bars)
 
 # Benchmark launcher 
 Button(root, text="Open Benchmark GUI",
@@ -282,10 +394,13 @@ Button(root, text="Open Benchmark GUI",
 
 reset_all()
 poll_hx711()
+_update_bars()
+_main_loop()
 root.mainloop()
 
 hx711.sensor1.close()
 hx711.sensor2.close()
 hx711.sensor3.close()
 hx711.sck.close()
+_pump_fwd.close()
 i2c.bus.close()

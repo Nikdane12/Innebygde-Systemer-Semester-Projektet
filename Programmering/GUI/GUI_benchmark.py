@@ -91,32 +91,21 @@ pump_label = Label(root, text="Power: 0% | Pulse: 500 µs")
 pump_label.pack()
 
 from gpiozero import OutputDevice
-_pump_fwd_pin = OutputDevice(21)
-_pump_enabled = False
+_pump_in1 = OutputDevice(21, initial_value=False)
 
 def set_pump(value):
     power = int(float(value))
-    i2c.set_pwm(i2c.CH_PUMP, i2c.pump_to_us(power))
-    pump_label.config(text=f"Power: {power}%")
-    print(f"[PUMP] Power={power}%")
-
-def toggle_pump_enable():
-    global _pump_enabled
-    _pump_enabled = not _pump_enabled
-    if _pump_enabled:
-        _pump_fwd_pin.on()
-        pump_enable_btn.config(text="IN1: ON", relief="sunken", bg="green")
+    if power == 0:
+        _pump_in1.off()
     else:
-        _pump_fwd_pin.off()
-        pump_enable_btn.config(text="IN1: OFF", relief="raised", bg="SystemButtonFace")
+        _pump_in1.on()
+    i2c.set_duty(i2c.CH_PUMP, power)
+    pump_label.config(text=f"Power: {power}% | IN1: {'ON' if power > 0 else 'OFF'}")
+    print(f"[PUMP] Power={power}%, IN1={'ON' if power > 0 else 'OFF'}")
 
-pump_row = Frame(root)
-pump_row.pack(fill="x", padx=20)
-pump_scale = Scale(pump_row, from_=0, to=100, orient=HORIZONTAL, command=set_pump, length=360)
+pump_scale = Scale(root, from_=0, to=100, orient=HORIZONTAL, command=set_pump)
 pump_scale.set(0)
-pump_scale.pack(side=LEFT, fill="x", expand=True)
-pump_enable_btn = Button(pump_row, text="IN1: OFF", width=8, command=toggle_pump_enable)
-pump_enable_btn.pack(side=LEFT, padx=4)
+pump_scale.pack(fill="x", padx=20)
 
 # Reset
 def reset_all():
