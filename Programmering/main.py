@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import ttk
+import time
 import subprocess
 import math
 import i2c
@@ -76,8 +77,31 @@ def solve_ik(x, y, z, phi_deg, elbow_up=True):
         math.degrees(theta3) - MOUNT_WRIST,
     )
 
-# GUI
+#PID-controller
+kp = 0.5
+ki = 0.1
+kd = 0.05
 
+integral = 0
+prev_error = 0
+prev_time = time.time()
+
+def pid_control(setpoint, measurement, integral, prev_error, prev_time):
+    error = setpoint - measurement
+    current_time = time.time()
+    dt = current_time - prev_time
+
+    if dt <= 0:
+        return 0, integral, error, current_time
+
+    integral += error * dt
+    derivative = (error - prev_error) / dt
+
+    output = kp * error + ki * integral + kd * derivative
+
+    return output, integral, error, current_time
+
+# GUI
 root = Tk()
 root.title("Arm Controller")
 root.geometry("800x800")
@@ -117,11 +141,10 @@ def set_joints(values):
     i2c.drive(*values)
 
 # Sliders
-
 Label(main, text=" Joint Control ", font=("Segoe UI", 11, "bold")).pack(pady=(10, 2))
 
 def make_slider(label, var, from_, to):
-    f = Frame(root)
+    f = Frame(main)
     f.pack(fill="x", padx=20, pady=1)
     Label(f, text=label, width=8, anchor="w").pack(side=LEFT)
     s = Scale(f, variable=var, from_=from_, to=to, orient=HORIZONTAL,
@@ -133,7 +156,23 @@ make_slider("Midje",   midje_var,   -90, 90)
 make_slider("Skulder", skulder_var, -45, 45)
 make_slider("Albue",   albue_var,   -45, 45)
 make_slider("Wrist",   wrist_var,   -45, 45)
-make_slider("Pump",    pump_var,      0, 100)
+
+# Pump slider — auto-controls IN1 (GPIO 21) based on value
+def _on_pump_slider(_):
+    pct = int(pump_var.get())
+    if pct == 0:
+        _pump_fwd.off()
+    else:
+        _pump_fwd.on()
+    i2c.drive(*get_joints())
+
+f_pump = Frame(main)
+f_pump.pack(fill="x", padx=20, pady=1)
+Label(f_pump, text="Pump", width=8, anchor="w").pack(side=LEFT)
+pump_scale = Scale(f_pump, variable=pump_var, from_=0, to=100,
+                   orient=HORIZONTAL, length=380, resolution=1,
+                   command=_on_pump_slider)
+pump_scale.pack(side=LEFT, fill="x", expand=True)
 
 def reset_all():
     set_joints([0, 0, 0, 0, 0])
@@ -154,7 +193,6 @@ activate_btn.pack(pady=6)
 _activate_btn_default_bg = activate_btn.cget("bg")
 
 # Inverse kinematics input 
-
 Label(main, text=" Inverse Kinematics ", font=("Segoe UI", 11, "bold")).pack(pady=(14, 2))
 
 ik_frame = Frame(root)
@@ -197,16 +235,32 @@ def run_ik():
 
 Button(main, text="Move to IK target", command=run_ik).pack(pady=4)
 
-# Saved positions 
+# Movement speed
+_move_start  = [0.0] * 5
+_move_target = [0.0] * 5
+MOVE_STEPS   = 40
+MOVE_MS      = 15   # ms per step — lower = faster
+
+f_speed = Frame(main)
+f_speed.pack(fill="x", padx=20, pady=(4, 0))
+Label(f_speed, text="Speed", width=8, anchor="w").pack(side=LEFT)
+_speed_var = IntVar(value=MOVE_MS)
+Label(f_speed, text="Fast", width=4).pack(side=LEFT)
+Scale(f_speed, variable=_speed_var, from_=5, to=80,
+      orient=HORIZONTAL, length=300, resolution=5,
+      command=lambda v: _set_speed(int(v))
+      ).pack(side=LEFT)
+
+def _set_speed(v):
+    global MOVE_MS
+    MOVE_MS = v
+Label(f_speed, text="Slow").pack(side=LEFT)
+
+# Saved positions
 Label(main, text=" Saved Positions ", font=("Segoe UI", 11, "bold")).pack(pady=(14, 2))
 
 NUM_POS = 3
 saved   = [None] * NUM_POS
-
-_move_start  = [0.0] * 5
-_move_target = [0.0] * 5
-MOVE_STEPS   = 40
-MOVE_MS      = 15
 
 def _smooth_step(step):
     t = step / MOVE_STEPS
@@ -333,27 +387,95 @@ def open_calibration():
 
 Button(main, text="Tare & Calibrate", command=open_calibration).pack(pady=4)
 
-FILL_THRESHOLD_G = 150   # fill glass if sensor reads below this
-FILL_TIME_MS     = 5000  # how long to run pump per glass
+FILL_THRESHOLD_G = 150   # start filling if glass is below this
+FILL_TARGET_G    = 400   # stop filling when glass reaches this
+PID_POLL_MS      = 200   # sensor read interval during fill (ms)
+
+_fill_sensor_idx = 0
+
+# Fill settings — editable from GUI
+Label(main, text=" Fill Settings ", font=("Segoe UI", 11, "bold")).pack(pady=(14, 2))
+_fill_frame = Frame(main)
+_fill_frame.pack(padx=20, fill="x")
+
+def _fill_row(parent, label, default):
+    f = Frame(parent)
+    f.pack(fill="x", pady=1)
+    Label(f, text=label, width=16, anchor="w").pack(side=LEFT)
+    var = DoubleVar(value=default)
+    Entry(f, textvariable=var, width=8).pack(side=LEFT)
+    Label(f, text="g").pack(side=LEFT)
+    return var
+
+_threshold_var = _fill_row(_fill_frame, "Start below (g)",  FILL_THRESHOLD_G)
+_target_var    = _fill_row(_fill_frame, "Fill target (g)",  FILL_TARGET_G)
+
+fill_status = Label(main, text="", fg="gray")
+fill_status.pack()
+
+def _apply_fill_settings():
+    global FILL_THRESHOLD_G, FILL_TARGET_G
+    FILL_THRESHOLD_G = _threshold_var.get()
+    FILL_TARGET_G    = _target_var.get()
+    fill_status.config(text=f"Threshold={FILL_THRESHOLD_G:.0f}g  Target={FILL_TARGET_G:.0f}g", fg="green")
+
+Button(main, text="Apply Fill Settings", command=_apply_fill_settings).pack(pady=4)
 
 def _start_fill(idx):
-    global _fill_state
-    _fill_state = "moving"
+    global _fill_state, _fill_sensor_idx
+    _fill_state      = "moving"
+    _fill_sensor_idx = idx
     go_to(idx)
     root.after(MOVE_STEPS * MOVE_MS + 500, _begin_pump)
 
 def _begin_pump():
-    global _fill_state
-    _pump_fwd.on()
-    i2c.set_duty(i2c.CH_PUMP, 100)
+    global _fill_state, integral, prev_error, prev_time
     _fill_state = "filling"
-    root.after(FILL_TIME_MS, _stop_pump)
+    _pump_fwd.on()
+    integral   = 0
+    prev_error = 0
+    prev_time  = time.time()
+    fill_status.config(text="Filling...", fg="blue")
+    _pid_fill_loop()
+
+def _pid_fill_loop():
+    global integral, prev_error, prev_time
+    if _fill_state != "filling":
+        return
+    try:
+        sensors = [hx711.sensor1, hx711.sensor2, hx711.sensor3]
+        grams   = sensors[_fill_sensor_idx].read_grams()
+
+        if grams < 0:
+            _stop_pump()
+            fill_status.config(text="Glass lifted — fill cancelled", fg="orange")
+            return
+
+        if grams >= FILL_TARGET_G:
+            _stop_pump()
+            return
+
+        output, integral, prev_error, prev_time = pid_control(
+            FILL_TARGET_G, grams, integral, prev_error, prev_time
+        )
+        power = max(5, min(100, int(output)))
+        _pump_fwd.on()
+        i2c.set_duty(i2c.CH_PUMP, power)
+        pump_var.set(power)
+        fill_status.config(text=f"Filling: {grams:.0f} / {FILL_TARGET_G:.0f} g  |  pump {power}%", fg="blue")
+
+    except Exception as ex:
+        fill_status.config(text=f"Sensor error: {ex}", fg="red")
+
+    root.after(PID_POLL_MS, _pid_fill_loop)
 
 def _stop_pump():
     global _fill_state
     i2c.set_duty(i2c.CH_PUMP, 0)
     _pump_fwd.off()
+    pump_var.set(0)
     _fill_state = "idle"
+    fill_status.config(text=f"Done — {FILL_TARGET_G:.0f} g reached", fg="green")
     root.after(1000, _main_loop)
 
 def _main_loop():
@@ -363,7 +485,10 @@ def _main_loop():
     sensors = [hx711.sensor1, hx711.sensor2, hx711.sensor3]
     for idx, sensor in enumerate(sensors):
         try:
-            if sensor.read_grams() < FILL_THRESHOLD_G:
+            grams = sensor.read_grams()
+            if grams < 0:
+                continue   # glass lifted from coaster — skip
+            if grams < FILL_THRESHOLD_G:
                 _start_fill(idx)
                 return
         except Exception:
@@ -402,13 +527,45 @@ def _update_bars():
             lbl.config(text="err")
     root.after(300, _update_bars)
 
-# Benchmark launcher 
+# PID tuning
+Label(main, text=" PID Controller ", font=("Segoe UI", 11, "bold")).pack(pady=(14, 2))
+
+pid_frame = Frame(main)
+pid_frame.pack(padx=20, fill="x")
+
+def _pid_row(parent, label, default):
+    f = Frame(parent)
+    f.pack(fill="x", pady=1)
+    Label(f, text=label, width=6, anchor="w").pack(side=LEFT)
+    var = DoubleVar(value=default)
+    Entry(f, textvariable=var, width=8).pack(side=LEFT)
+    return var
+
+pid_kp_var = _pid_row(pid_frame, "Kp", kp)
+pid_ki_var = _pid_row(pid_frame, "Ki", ki)
+pid_kd_var = _pid_row(pid_frame, "Kd", kd)
+
+pid_status = Label(main, text=f"Active: Kp={kp}  Ki={ki}  Kd={kd}", fg="gray")
+pid_status.pack()
+
+def apply_pid():
+    global kp, ki, kd, integral, prev_error, prev_time
+    kp = pid_kp_var.get()
+    ki = pid_ki_var.get()
+    kd = pid_kd_var.get()
+    integral   = 0
+    prev_error = 0
+    prev_time  = time.time()
+    pid_status.config(text=f"Active: Kp={kp}  Ki={ki}  Kd={kd}", fg="green")
+
+Button(main, text="Apply PID", command=apply_pid).pack(pady=4)
+
+# Benchmark launcher
 Button(main, text="Open Benchmark GUI",
        command=lambda: subprocess.Popen(["python", "GUI/GUI_benchmark.py"])
        ).pack(pady=10)
 
 # Start
-
 reset_all()
 poll_hx711()
 _update_bars()
