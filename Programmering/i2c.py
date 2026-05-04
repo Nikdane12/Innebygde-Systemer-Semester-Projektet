@@ -28,7 +28,6 @@ PUMP_MAX_US  = 2500
 bus = smbus2.SMBus(I2C_BUS)
 bus.write_byte_data(PCA_ADDR, 0x00, 0x10)   # sleep
 bus.write_byte_data(PCA_ADDR, 0xFE, 0x79)   # ~50 Hz
-bus.write_byte_data(PCA_ADDR, 0x01, 0x10)   # MODE2: INVRT bit — invert all outputs
 bus.write_byte_data(PCA_ADDR, 0x00, 0x00)   # wake
 time.sleep(0.01)
 
@@ -50,22 +49,22 @@ def pump_to_us(pct):
     return int(PUMP_MIN_US + pct * (PUMP_MAX_US - PUMP_MIN_US) / 100)
 
 def set_duty(channel, pct):
-    # INVRT bit in MODE2 handles inversion at hardware level
+    # Active-LOW pump driver: invert in software
     reg = 0x06 + channel * 4
     if pct <= 0:
-        # FULL_OFF: always LOW before inversion → always HIGH after = 0% power
-        bus.write_byte_data(PCA_ADDR, reg + 0, 0x00)
-        bus.write_byte_data(PCA_ADDR, reg + 1, 0x00)
-        bus.write_byte_data(PCA_ADDR, reg + 2, 0x00)
-        bus.write_byte_data(PCA_ADDR, reg + 3, 0x10)
-    elif pct >= 100:
-        # FULL_ON: always HIGH before inversion → always LOW after = full power
+        # FULL_ON: always HIGH = 0% power on active-LOW driver
         bus.write_byte_data(PCA_ADDR, reg + 0, 0x00)
         bus.write_byte_data(PCA_ADDR, reg + 1, 0x10)
         bus.write_byte_data(PCA_ADDR, reg + 2, 0x00)
         bus.write_byte_data(PCA_ADDR, reg + 3, 0x00)
+    elif pct >= 100:
+        # FULL_OFF: always LOW = full power on active-LOW driver
+        bus.write_byte_data(PCA_ADDR, reg + 0, 0x00)
+        bus.write_byte_data(PCA_ADDR, reg + 1, 0x00)
+        bus.write_byte_data(PCA_ADDR, reg + 2, 0x00)
+        bus.write_byte_data(PCA_ADDR, reg + 3, 0x10)
     else:
-        ticks = round(pct / 100 * 4096)
+        ticks = round((100 - pct) / 100 * 4096)  # inverted for active-LOW
         bus.write_byte_data(PCA_ADDR, reg + 0, 0x00)
         bus.write_byte_data(PCA_ADDR, reg + 1, 0x00)
         bus.write_byte_data(PCA_ADDR, reg + 2, ticks & 0xFF)
