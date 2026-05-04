@@ -32,14 +32,11 @@ bus.write_byte_data(PCA_ADDR, 0x00, 0x00)   # wake
 time.sleep(0.01)
 
 def set_pwm(channel, pulse_us):
-    ticks  = round(pulse_us / 20000 * 4096)
-    offset = channel * 256
-    off_at = offset
-    on_at  = (offset + ticks) % 4096
-    reg    = 0x06 + channel * 4
+    ticks = round(pulse_us / 20000 * 4096)
+    reg   = 0x06 + channel * 4
     bus.write_i2c_block_data(PCA_ADDR, reg, [
-        on_at  & 0xFF, (on_at  >> 8) & 0x0F,
-        off_at & 0xFF, (off_at >> 8) & 0x0F,
+        ticks & 0xFF, (ticks >> 8) & 0x0F,  # ON  = ticks (goes HIGH after pulse)
+        0x00, 0x00,                           # OFF = 0     (goes LOW at tick 0)
     ])
 
 def angle_to_us(deg):
