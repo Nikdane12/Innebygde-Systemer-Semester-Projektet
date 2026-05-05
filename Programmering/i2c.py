@@ -34,10 +34,10 @@ time.sleep(0.01)
 def set_pwm(channel, pulse_us):
     ticks = round(pulse_us / 20000 * 4096)
     reg   = 0x06 + channel * 4
-    bus.write_byte_data(PCA_ADDR, reg + 0, ticks & 0xFF)        # ON_L  — goes HIGH at tick N
-    bus.write_byte_data(PCA_ADDR, reg + 1, (ticks >> 8) & 0x0F) # ON_H
-    bus.write_byte_data(PCA_ADDR, reg + 2, 0x00)                 # OFF_L — goes LOW at tick 0
-    bus.write_byte_data(PCA_ADDR, reg + 3, 0x00)                 # OFF_H
+    bus.write_byte_data(PCA_ADDR, reg + 0, 0x00)
+    bus.write_byte_data(PCA_ADDR, reg + 1, 0x00)
+    bus.write_byte_data(PCA_ADDR, reg + 2, ticks & 0xFF)
+    bus.write_byte_data(PCA_ADDR, reg + 3, (ticks >> 8) & 0x0F)
 
 def angle_to_us(deg):
     return max(SERVO_MIN_US, min(SERVO_MAX_US, int(CENTER_US + deg * US_PER_DEG)))
@@ -49,22 +49,22 @@ def pump_to_us(pct):
     return int(PUMP_MIN_US + pct * (PUMP_MAX_US - PUMP_MIN_US) / 100)
 
 def set_duty(channel, pct):
-    # Active-HIGH driver: pulse HIGH = power on
+    # Driver is active-LOW: invert so slider 100% = always LOW = full power
     reg = 0x06 + channel * 4
     if pct <= 0:
-        # FULL_OFF: always LOW = 0% power
-        bus.write_byte_data(PCA_ADDR, reg + 0, 0x00)
-        bus.write_byte_data(PCA_ADDR, reg + 1, 0x00)
-        bus.write_byte_data(PCA_ADDR, reg + 2, 0x00)
-        bus.write_byte_data(PCA_ADDR, reg + 3, 0x10)
-    elif pct >= 100:
-        # FULL_ON: always HIGH = full power
+        # FULL_ON: always HIGH = 0 power on active-LOW driver
         bus.write_byte_data(PCA_ADDR, reg + 0, 0x00)
         bus.write_byte_data(PCA_ADDR, reg + 1, 0x10)
         bus.write_byte_data(PCA_ADDR, reg + 2, 0x00)
         bus.write_byte_data(PCA_ADDR, reg + 3, 0x00)
+    elif pct >= 100:
+        # FULL_OFF: always LOW = full power on active-LOW driver
+        bus.write_byte_data(PCA_ADDR, reg + 0, 0x00)
+        bus.write_byte_data(PCA_ADDR, reg + 1, 0x00)
+        bus.write_byte_data(PCA_ADDR, reg + 2, 0x00)
+        bus.write_byte_data(PCA_ADDR, reg + 3, 0x10)
     else:
-        ticks = round(pct / 100 * 4096)
+        ticks = round((100 - pct) / 100 * 4096)  # inverted
         bus.write_byte_data(PCA_ADDR, reg + 0, 0x00)
         bus.write_byte_data(PCA_ADDR, reg + 1, 0x00)
         bus.write_byte_data(PCA_ADDR, reg + 2, ticks & 0xFF)
