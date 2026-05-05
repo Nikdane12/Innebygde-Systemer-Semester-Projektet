@@ -34,10 +34,10 @@ time.sleep(0.01)
 def set_pwm(channel, pulse_us):
     ticks = round(pulse_us / 20000 * 4096)
     reg   = 0x06 + channel * 4
-    bus.write_byte_data(PCA_ADDR, reg + 0, 0x00)
-    bus.write_byte_data(PCA_ADDR, reg + 1, 0x00)
-    bus.write_byte_data(PCA_ADDR, reg + 2, ticks & 0xFF)
-    bus.write_byte_data(PCA_ADDR, reg + 3, (ticks >> 8) & 0x0F)
+    bus.write_byte_data(PCA_ADDR, reg + 0, ticks & 0xFF)
+    bus.write_byte_data(PCA_ADDR, reg + 1, (ticks >> 8) & 0x0F)
+    bus.write_byte_data(PCA_ADDR, reg + 2, 0x00)
+    bus.write_byte_data(PCA_ADDR, reg + 3, 0x00)
 
 def angle_to_us(deg):
     return max(SERVO_MIN_US, min(SERVO_MAX_US, int(CENTER_US + deg * US_PER_DEG)))
