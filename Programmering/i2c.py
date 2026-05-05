@@ -32,12 +32,14 @@ bus.write_byte_data(PCA_ADDR, 0x00, 0x00)   # wake
 time.sleep(0.01)
 
 def set_pwm(channel, pulse_us):
-    ticks = round(pulse_us / 20000 * 4096)
-    reg   = 0x06 + channel * 4
-    bus.write_byte_data(PCA_ADDR, reg + 0, 0x00)
-    bus.write_byte_data(PCA_ADDR, reg + 1, 0x00)
-    bus.write_byte_data(PCA_ADDR, reg + 2, ticks & 0xFF)
-    bus.write_byte_data(PCA_ADDR, reg + 3, (ticks >> 8) & 0x0F)
+    ticks  = round(pulse_us / 20000 * 4096)
+    on_at  = channel * 256                    # stagger start of HIGH pulse
+    off_at = (on_at + ticks) % 4096           # end of HIGH pulse
+    reg    = 0x06 + channel * 4
+    bus.write_i2c_block_data(PCA_ADDR, reg, [
+        on_at  & 0xFF, (on_at  >> 8) & 0x0F,
+        off_at & 0xFF, (off_at >> 8) & 0x0F,
+    ])
 
 def angle_to_us(deg):
     return max(SERVO_MIN_US, min(SERVO_MAX_US, int(CENTER_US + deg * US_PER_DEG)))
@@ -49,26 +51,16 @@ def pump_to_us(pct):
     return int(PUMP_MIN_US + pct * (PUMP_MAX_US - PUMP_MIN_US) / 100)
 
 def set_duty(channel, pct):
-    # Driver is active-LOW: invert so slider 100% = always LOW = full power
     reg = 0x06 + channel * 4
     if pct <= 0:
-        # FULL_ON: always HIGH = 0 power on active-LOW driver
-        bus.write_byte_data(PCA_ADDR, reg + 0, 0x00)
-        bus.write_byte_data(PCA_ADDR, reg + 1, 0x10)
-        bus.write_byte_data(PCA_ADDR, reg + 2, 0x00)
-        bus.write_byte_data(PCA_ADDR, reg + 3, 0x00)
+        bus.write_i2c_block_data(PCA_ADDR, reg, [0x00, 0x00, 0x00, 0x10])  # FULL_OFF
     elif pct >= 100:
-        # FULL_OFF: always LOW = full power on active-LOW driver
-        bus.write_byte_data(PCA_ADDR, reg + 0, 0x00)
-        bus.write_byte_data(PCA_ADDR, reg + 1, 0x00)
-        bus.write_byte_data(PCA_ADDR, reg + 2, 0x00)
-        bus.write_byte_data(PCA_ADDR, reg + 3, 0x10)
+        bus.write_i2c_block_data(PCA_ADDR, reg, [0x00, 0x10, 0x00, 0x00])  # FULL_ON
     else:
-        ticks = round((100 - pct) / 100 * 4096)  # inverted
-        bus.write_byte_data(PCA_ADDR, reg + 0, 0x00)
-        bus.write_byte_data(PCA_ADDR, reg + 1, 0x00)
-        bus.write_byte_data(PCA_ADDR, reg + 2, ticks & 0xFF)
-        bus.write_byte_data(PCA_ADDR, reg + 3, (ticks >> 8) & 0x0F)
+        ticks = round(pct / 100 * 4096)
+        bus.write_i2c_block_data(PCA_ADDR, reg, [
+            0x00, 0x00, ticks & 0xFF, (ticks >> 8) & 0x0F,
+        ])
 
 def drive(midje, skulder, albue, wrist, pump):
     set_pwm(CH_MIDJE,   midje_to_us(midje))
