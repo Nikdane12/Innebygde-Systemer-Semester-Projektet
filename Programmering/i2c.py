@@ -33,13 +33,13 @@ time.sleep(0.01)
 
 def set_pwm(channel, pulse_us):
     ticks  = round(pulse_us / 20000 * 4096)
-    on_at  = channel * 256                    # stagger start of HIGH pulse
-    off_at = (on_at + ticks) % 4096           # end of HIGH pulse
+    on_at  = channel * 256          # stagger start of HIGH pulse
+    off_at = (on_at + ticks) % 4096 # end of HIGH pulse
     reg    = 0x06 + channel * 4
-    bus.write_i2c_block_data(PCA_ADDR, reg, [
-        on_at  & 0xFF, (on_at  >> 8) & 0x0F,
-        off_at & 0xFF, (off_at >> 8) & 0x0F,
-    ])
+    bus.write_byte_data(PCA_ADDR, reg + 0, on_at  & 0xFF)
+    bus.write_byte_data(PCA_ADDR, reg + 1, (on_at  >> 8) & 0x0F)
+    bus.write_byte_data(PCA_ADDR, reg + 2, off_at & 0xFF)
+    bus.write_byte_data(PCA_ADDR, reg + 3, (off_at >> 8) & 0x0F)
 
 def angle_to_us(deg):
     return max(SERVO_MIN_US, min(SERVO_MAX_US, int(CENTER_US + deg * US_PER_DEG)))
