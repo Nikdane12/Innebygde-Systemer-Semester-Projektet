@@ -143,6 +143,19 @@ def set_joints(values):
 # Sliders
 Label(main, text=" Joint Control ", font=("Segoe UI", 11, "bold")).pack(pady=(10, 2))
 
+_drive_pending = False
+
+def _throttled_drive():
+    global _drive_pending
+    _drive_pending = False
+    i2c.drive(*get_joints())
+
+def _request_drive():
+    global _drive_pending
+    if not _drive_pending:
+        _drive_pending = True
+        root.after(50, _throttled_drive)  # max 20 Hz
+
 def make_slider(label, var, from_, to):
     f = Frame(main)
     f.pack(fill="x", padx=20, pady=1)
@@ -150,7 +163,7 @@ def make_slider(label, var, from_, to):
     s = Scale(f, variable=var, from_=from_, to=to, orient=HORIZONTAL,
               length=380, resolution=1)
     s.pack(side=LEFT, fill="x", expand=True)
-    s.config(command=lambda _: i2c.drive(*get_joints()))
+    s.config(command=lambda _: _request_drive())
 
 make_slider("Midje",   midje_var,   -90, 90)
 make_slider("Skulder", skulder_var, -45, 45)

@@ -63,10 +63,10 @@ def set_duty(channel, pct):
         ])
 
 def drive(midje, skulder, albue, wrist, pump):
-    set_pwm(CH_MIDJE,   midje_to_us(midje))
-    set_pwm(CH_SKULDER, angle_to_us(skulder))
-    set_pwm(CH_ALBUE,   angle_to_us(albue))
-    set_pwm(CH_WRIST,   angle_to_us(wrist))
+    set_pwm(CH_MIDJE,   midje_to_us(midje));   time.sleep(0.005)
+    set_pwm(CH_SKULDER, angle_to_us(skulder)); time.sleep(0.005)
+    set_pwm(CH_ALBUE,   angle_to_us(albue));   time.sleep(0.005)
+    set_pwm(CH_WRIST,   angle_to_us(wrist));   time.sleep(0.005)
     set_duty(CH_PUMP, pump)
 
 
