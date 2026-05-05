@@ -62,11 +62,21 @@ def set_duty(channel, pct):
             0x00, 0x00, ticks & 0xFF, (ticks >> 8) & 0x0F,
         ])
 
+_current_us = [1500, 1500, 1500, 1500]  # last sent pulse per servo channel
+MAX_STEP_US = 30  # max µs change per drive() call — lower = slower/safer
+
+def _ramp(channel, target_us):
+    last = _current_us[channel]
+    step = max(-MAX_STEP_US, min(MAX_STEP_US, target_us - last))
+    new_us = last + step
+    _current_us[channel] = new_us
+    set_pwm(channel, new_us)
+
 def drive(midje, skulder, albue, wrist, pump):
-    set_pwm(CH_MIDJE,   midje_to_us(midje));   time.sleep(0.005)
-    set_pwm(CH_SKULDER, angle_to_us(skulder)); time.sleep(0.005)
-    set_pwm(CH_ALBUE,   angle_to_us(albue));   time.sleep(0.005)
-    set_pwm(CH_WRIST,   angle_to_us(wrist));   time.sleep(0.005)
+    _ramp(CH_MIDJE,   midje_to_us(midje));   time.sleep(0.005)
+    _ramp(CH_SKULDER, angle_to_us(skulder)); time.sleep(0.005)
+    _ramp(CH_ALBUE,   angle_to_us(albue));   time.sleep(0.005)
+    _ramp(CH_WRIST,   angle_to_us(wrist));   time.sleep(0.005)
     set_duty(CH_PUMP, pump)
 
 
