@@ -44,12 +44,11 @@ time.sleep(0.01)
 # to 5 V whenever any servo moved).
 
 def _servo_payload(pulse_us):
-    """4-byte LED_ON/OFF payload for an inverted servo pulse."""
+
     ticks = round(pulse_us / 20000 * 4096)
     return [ticks & 0xFF, (ticks >> 8) & 0x0F, 0x00, 0x00]
 
 def _duty_payload(pct):
-    """4-byte payload for pump duty (non-inverted)."""
     if pct <= 0:
         return [0x00, 0x00, 0x00, 0x10]   # FULL_OFF -> always LOW
     elif pct >= 100:
