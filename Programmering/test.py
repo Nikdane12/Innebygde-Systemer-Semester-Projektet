@@ -23,8 +23,8 @@ def drive(midje, skulder, albue, wrist, pump):
     kit.servo[2].angle = albue + 45
     kit.servo[3].angle = wrist + 45
     desired_duty = int(pump / 100 * 65535)
-    kit._pca.channels[4].duty_cycle = desired_duty
-
+    kit._pca.channels[4].duty_cycle = 65535 - desired_duty
+ 
 # Main program state machine
 activate     = False
 _fill_state  = "idle"   # idle | moving | filling
