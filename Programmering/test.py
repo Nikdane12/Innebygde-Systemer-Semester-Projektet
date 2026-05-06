@@ -24,7 +24,7 @@ def drive(midje, skulder, albue, wrist, pump):
 
 
     def angle_to_us(deg):
-        return int(((max-min)*(deg/90)) + min)
+        return int(max - ((max - min) * (deg / 90)))
 
     # def midje_to_us(deg):
     #     return int(((max-min)*(deg/90)) + min)
