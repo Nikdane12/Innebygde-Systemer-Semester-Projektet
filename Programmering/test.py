@@ -4,13 +4,20 @@ from adafruit_servokit import ServoKit
 import time
 import subprocess
 import math
-import i2c
 import hx711
 
 from gpiozero import OutputDevice
 _pump_fwd = OutputDevice(21, initial_value=False)
 
 kit = ServoKit(channels=16)
+
+def drive(midje, skulder, albue, wrist, pump):
+    kit.servo[0].angle = midje
+    kit.servo[1].angle = skulder
+    kit.servo[2].angle = albue
+    kit.servo[3].angle = wrist
+    desired_duty = int(pump / 100 * 65535)
+    kit._pca.channels[4].duty_cycle = desired_duty
 
 # Main program state machine
 activate     = False
@@ -141,7 +148,7 @@ def get_joints():
 def set_joints(values):
     for var, val in zip(JOINT_VARS, values):
         var.set(val)
-    i2c.drive(*values)
+    drive(*values)
 
 # Sliders
 Label(main, text=" Joint Control ", font=("Segoe UI", 11, "bold")).pack(pady=(10, 2))
@@ -153,9 +160,9 @@ def make_slider(label, var, from_, to):
     s = Scale(f, variable=var, from_=from_, to=to, orient=HORIZONTAL,
               length=380, resolution=1)
     s.pack(side=LEFT, fill="x", expand=True)
-    s.config(command=lambda _: i2c.drive(*get_joints()))
+    s.config(command=lambda _: drive(*get_joints()))
 
-make_slider("Midje",   midje_var,   -90, 90)
+make_slider("Midje",   midje_var,   -45, 45)
 make_slider("Skulder", skulder_var, -45, 45)
 make_slider("Albue",   albue_var,   -45, 45)
 make_slider("Wrist",   wrist_var,   -45, 45)
@@ -167,7 +174,7 @@ def _on_pump_slider(_):
         _pump_fwd.off()
     else:
         _pump_fwd.on()
-    i2c.drive(*get_joints())
+    drive(*get_joints())
 
 f_pump = Frame(main)
 f_pump.pack(fill="x", padx=20, pady=1)
@@ -463,7 +470,7 @@ def _pid_fill_loop():
         )
         power = max(5, min(100, int(output)))
         _pump_fwd.on()
-        i2c.set_duty(i2c.CH_PUMP, power)
+        kit._pca.channels[4].duty_cycle = int(power / 100 * 65535)
         pump_var.set(power)
         fill_status.config(text=f"Filling: {grams:.0f} / {FILL_TARGET_G:.0f} g  |  pump {power}%", fg="blue")
 
@@ -474,7 +481,7 @@ def _pid_fill_loop():
 
 def _stop_pump():
     global _fill_state
-    i2c.set_duty(i2c.CH_PUMP, 0)
+    kit._pca.channels[4].duty_cycle = 0
     _pump_fwd.off()
     pump_var.set(0)
     _fill_state = "idle"
@@ -580,4 +587,3 @@ hx711.sensor2.close()
 hx711.sensor3.close()
 hx711.sck.close()
 _pump_fwd.close()
-i2c.bus.close()
