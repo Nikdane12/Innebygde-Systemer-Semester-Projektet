@@ -38,8 +38,8 @@ def drive(midje, skulder, albue, wrist, pump):
     kit._pca.channels[3].duty_cycle = 65535 - angle_to_us(wrist)
     
     # Set duty cycle for pump (inverted as in your example)
-    # desired_duty = int(pump / 100 * 65535)
-    kit._pca.channels[4].duty_cycle = 65535 - angle_to_us(pump)
+    desired_duty = int(pump / 100 * 65535)
+    kit._pca.channels[4].duty_cycle = 65535 - desired_duty
  
 # Main program state machine
 activate     = False
@@ -63,8 +63,8 @@ MOUNT_WRIST   =  0.0
 #  Planar IK in vertical plane (r = horizontal reach, z = height):
 #
 #    Wrist point:
-#      xw = r - L3·cos(φ)
-#      yw = z - L3·sin(φ)
+#      xw = r - L3·cos(phi)
+#      yw = z - L3·sin(phi)
 #
 #    Albue (θ2) via cosine rule:
 #      cos(θ2) = (xw² + yw² - L1² - L2²) / (2·L1·L2)
@@ -74,7 +74,7 @@ MOUNT_WRIST   =  0.0
 #      θ1 = atan2(yw, xw) - atan2(L2·sin θ2, L1 + L2·cos θ2)
 #
 #    Wrist (θ3):
-#      θ3 = φ - θ1 - θ2
+#      θ3 = phi - θ1 - θ2
 
 def solve_ik(x, y, z, phi_deg, elbow_up=True):
     phi = math.radians(phi_deg)
