@@ -7,7 +7,7 @@ import i2c
 import hx711
 
 from gpiozero import OutputDevice
-_pump_fwd = OutputDevice(21, initial_value=False)
+_pump_fwd = OutputDevice(i2c.PIN_PUMP_FWD, initial_value=False)
 
 # Main program state machine
 activate     = False
@@ -123,6 +123,25 @@ main.bind("<Configure>", _on_frame_configure)
 _canvas.bind("<Configure>", _on_canvas_configure)
 root.bind_all("<MouseWheel>", lambda e: _canvas.yview_scroll(-1*(e.delta//120), "units"))
 
+# I2C drive debounce — slider drags fire one callback per integer step.
+# Coalesce them so we send at most one i2c.drive() per DRIVE_DEBOUNCE_MS;
+# the latest joint values always win.
+DRIVE_DEBOUNCE_MS = 25
+_drive_after_id = None
+
+def _drive_now():
+    global _drive_after_id
+    _drive_after_id = None
+    try:
+        i2c.drive(*get_joints())
+    except Exception as e:
+        print("i2c.drive error:", e)
+
+def schedule_drive():
+    global _drive_after_id
+    if _drive_after_id is None:
+        _drive_after_id = root.after(DRIVE_DEBOUNCE_MS, _drive_now)
+
 # Joint variables (degrees / percent)
 midje_var   = DoubleVar(value=0)
 skulder_var = DoubleVar(value=0)
@@ -138,7 +157,7 @@ def get_joints():
 def set_joints(values):
     for var, val in zip(JOINT_VARS, values):
         var.set(val)
-    i2c.drive(*values)
+    schedule_drive()
 
 # Sliders
 Label(main, text=" Joint Control ", font=("Segoe UI", 11, "bold")).pack(pady=(10, 2))
@@ -150,7 +169,7 @@ def make_slider(label, var, from_, to):
     s = Scale(f, variable=var, from_=from_, to=to, orient=HORIZONTAL,
               length=380, resolution=1)
     s.pack(side=LEFT, fill="x", expand=True)
-    s.config(command=lambda _: i2c.drive(*get_joints()))
+    s.config(command=lambda _: schedule_drive())
 
 make_slider("Midje",   midje_var,   -90, 90)
 make_slider("Skulder", skulder_var, -45, 45)
@@ -164,7 +183,7 @@ def _on_pump_slider(_):
         _pump_fwd.off()
     else:
         _pump_fwd.on()
-    i2c.drive(*get_joints())
+    schedule_drive()
 
 f_pump = Frame(main)
 f_pump.pack(fill="x", padx=20, pady=1)
@@ -195,7 +214,7 @@ _activate_btn_default_bg = activate_btn.cget("bg")
 # Inverse kinematics input 
 Label(main, text=" Inverse Kinematics ", font=("Segoe UI", 11, "bold")).pack(pady=(14, 2))
 
-ik_frame = Frame(root)
+ik_frame = Frame(main)
 ik_frame.pack(padx=20, fill="x")
 
 def _entry_row(parent, label, default):
@@ -460,8 +479,8 @@ def _pid_fill_loop():
         )
         power = max(5, min(100, int(output)))
         _pump_fwd.on()
-        i2c.set_duty(i2c.CH_PUMP, power)
         pump_var.set(power)
+        i2c.drive(*get_joints())
         fill_status.config(text=f"Filling: {grams:.0f} / {FILL_TARGET_G:.0f} g  |  pump {power}%", fg="blue")
 
     except Exception as ex:
@@ -471,9 +490,9 @@ def _pid_fill_loop():
 
 def _stop_pump():
     global _fill_state
-    i2c.set_duty(i2c.CH_PUMP, 0)
     _pump_fwd.off()
     pump_var.set(0)
+    i2c.drive(*get_joints())
     _fill_state = "idle"
     fill_status.config(text=f"Done — {FILL_TARGET_G:.0f} g reached", fg="green")
     root.after(1000, _main_loop)
@@ -505,7 +524,7 @@ _bar_vars  = []
 _bar_grams = []
 
 for name in ["Glass 1", "Glass 2", "Glass 3"]:
-    f = Frame(root)
+    f = Frame(main)
     f.pack(fill="x", padx=20, pady=3)
     Label(f, text=name, width=8, anchor="w").pack(side=LEFT)
     var = IntVar(value=0)
