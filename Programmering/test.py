@@ -11,11 +11,17 @@ _pump_fwd = OutputDevice(21, initial_value=False)
 
 kit = ServoKit(channels=16)
 
+# Set servo actuation ranges to match the slider ranges
+kit.servo[0].actuation_range = 180  # midje: -90 to 90 -> 0 to 180
+kit.servo[1].actuation_range = 90   # skulder: -45 to 45 -> 0 to 90
+kit.servo[2].actuation_range = 90   # albue: -45 to 45 -> 0 to 90
+kit.servo[3].actuation_range = 90   # wrist: -45 to 45 -> 0 to 90
+
 def drive(midje, skulder, albue, wrist, pump):
-    kit.servo[0].angle = midje
-    kit.servo[1].angle = skulder
-    kit.servo[2].angle = albue
-    kit.servo[3].angle = wrist
+    kit.servo[0].angle = midje + 90
+    kit.servo[1].angle = skulder + 45
+    kit.servo[2].angle = albue + 45
+    kit.servo[3].angle = wrist + 45
     desired_duty = int(pump / 100 * 65535)
     kit._pca.channels[4].duty_cycle = desired_duty
 
