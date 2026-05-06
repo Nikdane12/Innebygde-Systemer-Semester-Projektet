@@ -33,8 +33,8 @@ time.sleep(0.01)
 
 def set_pwm(channel, pulse_us):
     ticks  = round(pulse_us / 20000 * 4096)
-    on_at  = channel * 256          # stagger start of HIGH pulse
-    off_at = (on_at + ticks) % 4096 # end of HIGH pulse
+    off_at = channel * 256           # stagger start of LOW pulse
+    on_at  = (off_at + ticks) % 4096 # end of LOW pulse
     reg    = 0x06 + channel * 4
     bus.write_byte_data(PCA_ADDR, reg + 0, on_at  & 0xFF)
     bus.write_byte_data(PCA_ADDR, reg + 1, (on_at  >> 8) & 0x0F)
