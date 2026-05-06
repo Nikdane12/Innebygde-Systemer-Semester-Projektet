@@ -11,17 +11,28 @@ _pump_fwd = OutputDevice(21, initial_value=False)
 
 kit = ServoKit(channels=16)
 
-# Set servo actuation ranges to match the slider ranges
-kit.servo[0].actuation_range = 180  # midje: -90 to 90 -> 0 to 180
-kit.servo[1].actuation_range = 90   # skulder: -45 to 45 -> 0 to 90
-kit.servo[2].actuation_range = 90   # albue: -45 to 45 -> 0 to 90
-kit.servo[3].actuation_range = 90   # wrist: -45 to 45 -> 0 to 90
-
 def drive(midje, skulder, albue, wrist, pump):
-    kit.servo[0].angle = midje + 90
-    kit.servo[1].angle = skulder + 45
-    kit.servo[2].angle = albue + 45
-    kit.servo[3].angle = wrist + 45
+    # Constants from original i2c.py
+    center_us = 1500
+    us_per_deg = 1000 / 90
+    servo_min_us = 800
+    servo_max_us = 2200
+    midje_min_us = 500
+    midje_max_us = 2500
+
+    def angle_to_us(deg):
+        return max(servo_min_us, min(servo_max_us, int(center_us + deg * us_per_deg)))
+
+    def midje_to_us(deg):
+        return max(midje_min_us, min(midje_max_us, int(center_us + deg * us_per_deg)))
+
+    # Set duty cycles for servos based on pulse width
+    kit._pca.channels[0].duty_cycle = round(midje_to_us(midje) * 4096 / 20000)
+    kit._pca.channels[1].duty_cycle = round(angle_to_us(skulder) * 4096 / 20000)
+    kit._pca.channels[2].duty_cycle = round(angle_to_us(albue) * 4096 / 20000)
+    kit._pca.channels[3].duty_cycle = round(angle_to_us(wrist) * 4096 / 20000)
+    
+    # Set duty cycle for pump (inverted as in your example)
     desired_duty = int(pump / 100 * 65535)
     kit._pca.channels[4].duty_cycle = 65535 - desired_duty
  
