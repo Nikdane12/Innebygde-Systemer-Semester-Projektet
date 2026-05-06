@@ -30,7 +30,7 @@ MIDJE_MAX_US = 2500
 bus = smbus2.SMBus(I2C_BUS)
 bus.write_byte_data(PCA_ADDR, 0x00, 0x10)   # sleep
 bus.write_byte_data(PCA_ADDR, 0xFE, 0x79)   # ~50 Hz
-bus.write_byte_data(PCA_ADDR, 0x00, 0x00)   # wake
+bus.write_byte_data(PCA_ADDR, 0x00, 0x20)   # wake + auto-increment (AI=1)
 time.sleep(0.01)
 
 # ---------- low-level helpers ----------
@@ -65,12 +65,10 @@ def midje_to_us(deg):
     return max(MIDJE_MIN_US, min(MIDJE_MAX_US, int(CENTER_US + deg * US_PER_DEG)))
 
 def set_pwm(channel, pulse_us):
-    """Single-channel servo write — one I2C transaction (4-byte block)."""
     reg = 0x06 + channel * 4
     bus.write_i2c_block_data(PCA_ADDR, reg, _servo_payload(pulse_us))
 
 def set_duty(channel, pct):
-    """Single-channel duty write — one I2C transaction (4-byte block)."""
     reg = 0x06 + channel * 4
     bus.write_i2c_block_data(PCA_ADDR, reg, _duty_payload(pct))
 
