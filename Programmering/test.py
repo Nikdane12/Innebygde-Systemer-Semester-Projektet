@@ -13,19 +13,20 @@ kit = ServoKit(channels=16)
 
 def drive(midje, skulder, albue, wrist, pump):
     # Constants from original i2c.py
-    center_us = 6554/2
-    us_per_deg = 1000 / 90
+    # center_us = 6554/2
+    # us_per_deg = 1000 / 90
 
-    midje_min_duty_cycle = 3277
-    midje_max_duty_cycle = 6554
+    # midje_min_duty_cycle = 3277
+    # midje_max_duty_cycle = 6554
 
-    max = 6554
-    min = 3277
+    # max = 6554
+    # min = 3277
+    min = 2350
+    max = 5650
 
 
     def angle_to_us(deg):
-        value = int(((max - min) * (deg / 90)) + min)
-        return max(min, min(value, max))
+        return int(max - ((max - min) * (deg / 90)))
 
     # def midje_to_us(deg):
     #     return int(((max-min)*(deg/90)) + min)
