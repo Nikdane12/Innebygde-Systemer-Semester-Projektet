@@ -492,7 +492,8 @@ def _pid_fill_loop():
         )
         power = max(5, min(100, int(output)))
         _pump_fwd.on()
-        kit._pca.channels[4].duty_cycle = int(power / 100 * 65535)
+        desired_duty = int(power / 100 * 65535)
+        kit._pca.channels[4].duty_cycle = 65535 - desired_duty
         pump_var.set(power)
         fill_status.config(text=f"Filling: {grams:.0f} / {FILL_TARGET_G:.0f} g  |  pump {power}%", fg="blue")
 
