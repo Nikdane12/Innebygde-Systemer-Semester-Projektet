@@ -13,24 +13,25 @@ kit = ServoKit(channels=16)
 
 def drive(midje, skulder, albue, wrist, pump):
     # Constants from original i2c.py
-    center_us = 1500
+    center_us = 6554/2
     us_per_deg = 1000 / 90
-    servo_min_us = 800
-    servo_max_us = 2200
-    midje_min_us = 500
-    midje_max_us = 2500
+    servo_min_duty_cycle = 3277
+    servo_max_duty_cycle = 6554
+    midje_min_duty_cycle = 3277
+    midje_max_duty_cycle = 6554
+
 
     def angle_to_us(deg):
-        return max(servo_min_us, min(servo_max_us, int(center_us + deg * us_per_deg)))
+        return max(servo_min_duty_cycle, min(servo_max_duty_cycle, int(center_us + deg * us_per_deg)))
 
     def midje_to_us(deg):
-        return max(midje_min_us, min(midje_max_us, int(center_us + deg * us_per_deg)))
+        return max(midje_min_duty_cycle, min(midje_max_duty_cycle, int(center_us + deg * us_per_deg)))
 
     # Set duty cycles for servos based on pulse width
-    kit._pca.channels[0].duty_cycle = round(midje_to_us(midje) * 4096 / 20000)
-    kit._pca.channels[1].duty_cycle = round(angle_to_us(skulder) * 4096 / 20000)
-    kit._pca.channels[2].duty_cycle = round(angle_to_us(albue) * 4096 / 20000)
-    kit._pca.channels[3].duty_cycle = round(angle_to_us(wrist) * 4096 / 20000)
+    kit._pca.channels[0].duty_cycle = 65535 - midje_to_us(midje)
+    kit._pca.channels[1].duty_cycle = 65535 - angle_to_us(skulder)  # Inverted direction
+    kit._pca.channels[2].duty_cycle = 65535 - angle_to_us(albue)    # Inverted direction
+    kit._pca.channels[3].duty_cycle = 65535 - angle_to_us(wrist)    # Inverted direction
     
     # Set duty cycle for pump (inverted as in your example)
     desired_duty = int(pump / 100 * 65535)
