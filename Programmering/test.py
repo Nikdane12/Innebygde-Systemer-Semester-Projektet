@@ -184,10 +184,10 @@ def make_slider(label, var, from_, to):
     s.pack(side=LEFT, fill="x", expand=True)
     s.config(command=lambda _: drive(*get_joints()))
 
-make_slider("Midje",   midje_var,   -45, 45)
-make_slider("Skulder", skulder_var, -45, 45)
-make_slider("Albue",   albue_var,   -45, 45)
-make_slider("Wrist",   wrist_var,   -45, 45)
+make_slider("Midje",   midje_var,  45, -45)
+make_slider("Skulder", skulder_var, 45, -45)
+make_slider("Albue",   albue_var,   45, -45)
+make_slider("Wrist",   wrist_var,   45, -45)
 
 # Pump slider — auto-controls IN1 (GPIO 21) based on value
 def _on_pump_slider(_):
