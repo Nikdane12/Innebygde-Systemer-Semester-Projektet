@@ -24,10 +24,10 @@ def drive(midje, skulder, albue, wrist, pump):
 
 
     def angle_to_us(deg):
-        return int(((max-min)*(deg/360)) + min)
+        return int(((max-min)*(deg/90)) + min)
 
     # def midje_to_us(deg):
-    #     return max(midje_min_duty_cycle, min(midje_max_duty_cycle, int(center_us + deg * us_per_deg)))
+    #     return int(((max-min)*(deg/90)) + min)
 
     # Set duty cycles for servos based on pulse width
     kit._pca.channels[0].duty_cycle = 65535 - angle_to_us(midje)
