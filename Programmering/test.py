@@ -154,7 +154,19 @@ def _on_canvas_configure(e):
     _canvas.itemconfig(_canvas_window, width=e.width)
 main.bind("<Configure>", _on_frame_configure)
 _canvas.bind("<Configure>", _on_canvas_configure)
-root.bind_all("<MouseWheel>", lambda e: _canvas.yview_scroll(-1*(e.delta//120), "units"))
+
+def _on_mousewheel(e):
+    # Windows/macOS deliver <MouseWheel> with e.delta; X11 delivers Button-4/5.
+    if e.num == 4:
+        _canvas.yview_scroll(-1, "units")
+    elif e.num == 5:
+        _canvas.yview_scroll(1, "units")
+    elif e.delta:
+        _canvas.yview_scroll(-1 * (e.delta // 120), "units")
+
+root.bind_all("<MouseWheel>", _on_mousewheel)
+root.bind_all("<Button-4>", _on_mousewheel)
+root.bind_all("<Button-5>", _on_mousewheel)
 
 # Joint variables (degrees / percent)
 midje_var   = DoubleVar(value=0)
@@ -228,7 +240,7 @@ _activate_btn_default_bg = activate_btn.cget("bg")
 # Inverse kinematics input 
 Label(main, text=" Inverse Kinematics ", font=("Segoe UI", 11, "bold")).pack(pady=(14, 2))
 
-ik_frame = Frame(root)
+ik_frame = Frame(main)
 ik_frame.pack(padx=20, fill="x")
 
 def _entry_row(parent, label, default):
@@ -539,7 +551,7 @@ _bar_vars  = []
 _bar_grams = []
 
 for name in ["Glass 1", "Glass 2", "Glass 3"]:
-    f = Frame(root)
+    f = Frame(main)
     f.pack(fill="x", padx=20, pady=3)
     Label(f, text=name, width=8, anchor="w").pack(side=LEFT)
     var = IntVar(value=0)
