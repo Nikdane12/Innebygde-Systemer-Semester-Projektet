@@ -2,7 +2,7 @@ from gpiozero import Button
 from signal import pause
 
 # Initialize the button (connects to GPIO 2 and pulls up internally)
-button = Button(2, pull_up=True)
+button = Button(1, pull_up=True)
 
 # Function to run when pressed
 def button_pressed():

@@ -8,6 +8,7 @@ import i2c
 import hx711
 
 from gpiozero import OutputDevice
+from gpiozero import Button as GPIOButton
 _pump_fwd = OutputDevice(21, initial_value=False)
 
 kit = ServoKit(channels=16)
@@ -399,6 +400,31 @@ def open_calibration():
         Button(frame, text="Calibrate", width=9, command=do_cal).pack(side=LEFT, padx=2)
 
 Button(main, text="Tare & Calibrate", command=open_calibration).pack(pady=4)
+
+# physical button tareing
+TARE_BUTTON_PINS = {
+    1: 2,   # GPIO1 tares sensor 3 (_sensors[2])
+    7: 1,   # GPIO7 tares sensor 2 (_sensors[1])
+    8: 0,   # GPIO8 tares sensor 1 (_sensors[0])
+}
+
+def make_tare_handler(idx):
+    def handler():
+        try:
+            _sensors[idx].tare()
+            print(f"[GPIO] Tared sensor {idx + 1}")
+        except IndexError:
+            print(f"[GPIO] No sensor at index {idx}")
+        except Exception as e:
+            print(f"[GPIO] Tare failed for sensor {idx + 1}: {e}")
+    return handler
+
+tare_buttons = [] #keep ref to buttons
+for pin, sensor_idx in TARE_BUTTON_PINS.items():
+    if sensor_idx < len(_sensors):
+        btn = GPIOButton(pin, pull_up=True)
+        btn.when_pressed = make_tare_handler(sensor_idx)
+        tare_buttons.append(btn)
 
 FILL_THRESHOLD_G = 150   # start filling if glass is below threshhold
 FILL_TARGET_G    = 400   # stop filling when glass reaches threshhold
