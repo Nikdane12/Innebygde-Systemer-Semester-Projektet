@@ -240,7 +240,7 @@ _activate_btn_default_bg = activate_btn.cget("bg")
 # Inverse kinematics input 
 Label(main, text=" Inverse Kinematics ", font=("Segoe UI", 11, "bold")).pack(pady=(14, 2))
 
-ik_frame = Frame(main)
+ik_frame = Frame(root)
 ik_frame.pack(padx=20, fill="x")
 
 def _entry_row(parent, label, default):
@@ -551,7 +551,7 @@ _bar_vars  = []
 _bar_grams = []
 
 for name in ["Glass 1", "Glass 2", "Glass 3"]:
-    f = Frame(main)
+    f = Frame(root)
     f.pack(fill="x", padx=20, pady=3)
     Label(f, text=name, width=8, anchor="w").pack(side=LEFT)
     var = IntVar(value=0)
