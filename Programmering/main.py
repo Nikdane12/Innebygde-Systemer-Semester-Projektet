@@ -13,6 +13,10 @@ pump_fwd = OutputDevice(21, initial_value=False)
 
 kit = ServoKit(channels=16)
 
+hx711.sensor1.start_background(interval=0.1)
+hx711.sensor2.start_background(interval=0.1)
+hx711.sensor3.start_background(interval=0.1)
+
 def drive(midje, skulder, albue, wrist, pump):
     min = 2350
     max = 5650
