@@ -9,7 +9,7 @@ import hx711
 
 from gpiozero import OutputDevice
 from gpiozero import Button as GPIOButton
-_pump_fwd = OutputDevice(21, initial_value=False)
+pump_fwd = OutputDevice(21, initial_value=False)
 
 kit = ServoKit(channels=16)
 
@@ -126,21 +126,21 @@ root.title("Arm Controller")
 root.geometry("800x800")
 
 #main window
-_canvas  = Canvas(root)
-_vscroll = Scrollbar(root, orient=VERTICAL, command=_canvas.yview)
-_canvas.configure(yscrollcommand=_vscroll.set)
-_vscroll.pack(side=RIGHT, fill=Y)
-_canvas.pack(side=LEFT, fill=BOTH, expand=True)
-main = Frame(_canvas)
-_canvas_window = _canvas.create_window((0, 0), window=main, anchor="nw")
+canvas  = Canvas(root)
+vscroll = Scrollbar(root, orient=VERTICAL, command=canvas.yview)
+canvas.configure(yscrollcommand=vscroll.set)
+vscroll.pack(side=RIGHT, fill=Y)
+canvas.pack(side=LEFT, fill=BOTH, expand=True)
+main = Frame(canvas)
+canvas_window = canvas.create_window((0, 0), window=main, anchor="nw")
 
-def _on_frame_configure(_):
-    _canvas.configure(scrollregion=_canvas.bbox("all"))
-def _on_canvas_configure(e):
-    _canvas.itemconfig(_canvas_window, width=e.width)
-main.bind("<Configure>", _on_frame_configure)
-_canvas.bind("<Configure>", _on_canvas_configure)
-root.bind_all("<MouseWheel>", lambda e: _canvas.yview_scroll(-1*(e.delta//120), "units"))
+def on_frame_configure(_):
+    canvas.configure(scrollregion=canvas.bbox("all"))
+def on_canvas_configure(e):
+    canvas.itemconfig(canvas_window, width=e.width)
+main.bind("<Configure>", on_frame_configure)
+canvas.bind("<Configure>", on_canvas_configure)
+root.bind_all("<MouseWheel>", lambda e: canvas.yview_scroll(-1*(e.delta//120), "units"))
 
 midje_var   = DoubleVar(value=0)
 skulder_var = DoubleVar(value=0)
@@ -174,12 +174,12 @@ make_slider("Skulder", skulder_var, 45, -45)
 make_slider("Albue",   albue_var,   45, -45)
 make_slider("Wrist",   wrist_var,   45, -45)
 
-def _on_pump_slider(_):
+def on_pump_slider(_):
     pct = int(pump_var.get())
     if pct == 0:
-        _pump_fwd.off()
+        pump_fwd.off()
     else:
-        _pump_fwd.on()
+        pump_fwd.on()
     drive(*get_joints())
 
 f_pump = Frame(main)
@@ -187,7 +187,7 @@ f_pump.pack(fill="x", padx=20, pady=1)
 Label(f_pump, text="Pump", width=8, anchor="w").pack(side=LEFT)
 pump_scale = Scale(f_pump, variable=pump_var, from_=0, to=100,
                    orient=HORIZONTAL, length=380, resolution=1,
-                   command=_on_pump_slider)
+                   command=on_pump_slider)
 pump_scale.pack(side=LEFT, fill="x", expand=True)
 
 def reset_all():
@@ -200,13 +200,13 @@ def toggle_activate():
     activate = not activate
     activate_btn.config(
         text="Deactivate" if activate else "Activate Main Program",
-        bg="red" if activate else _activate_btn_default_bg
+        bg="red" if activate else activate_btn_default_bg
     )
 
 activate_btn = Button(main, text="Activate Main Program", command=toggle_activate,
                       font=("Segoe UI", 10, "bold"), width=24)
 activate_btn.pack(pady=6)
-_activate_btn_default_bg = activate_btn.cget("bg")
+activate_btn_default_bg = activate_btn.cget("bg")
 
 #IK input 
 Label(main, text=" Inverse Kinematics ", font=("Segoe UI", 11, "bold")).pack(pady=(14, 2))
@@ -214,7 +214,7 @@ Label(main, text=" Inverse Kinematics ", font=("Segoe UI", 11, "bold")).pack(pad
 ik_frame = Frame(root)
 ik_frame.pack(padx=20, fill="x")
 
-def _entry_row(parent, label, default):
+def entry_row(parent, label, default):
     f = Frame(parent)
     f.pack(fill="x", pady=1)
     Label(f, text=label, width=12, anchor="w").pack(side=LEFT)
@@ -222,12 +222,12 @@ def _entry_row(parent, label, default):
     Entry(f, textvariable=var, width=8).pack(side=LEFT)
     return var
 
-ik_x              = _entry_row(ik_frame, "X (cm)",          15.0)
-ik_y              = _entry_row(ik_frame, "Y (cm)",           0.0)
-ik_z              = _entry_row(ik_frame, "Z (cm)",          10.0)
-ik_phi            = _entry_row(ik_frame, "φ orient°",        0.0)
-ik_zbase          = _entry_row(ik_frame, "Base ht (cm)",   Z_BASE)
-ik_mount_skulder  = _entry_row(ik_frame, "Skulder mount°", MOUNT_SKULDER)
+ik_x              = entry_row(ik_frame, "X (cm)",          15.0)
+ik_y              = entry_row(ik_frame, "Y (cm)",           0.0)
+ik_z              = entry_row(ik_frame, "Z (cm)",          10.0)
+ik_phi            = entry_row(ik_frame, "φ orient°",        0.0)
+ik_zbase          = entry_row(ik_frame, "Base ht (cm)",   Z_BASE)
+ik_mount_skulder  = entry_row(ik_frame, "Skulder mount°", MOUNT_SKULDER)
 
 ik_status = Label(main, text="", fg="red")
 ik_status.pack()
@@ -241,10 +241,10 @@ def run_ik():
             ik_x.get(), ik_y.get(), ik_z.get(), ik_phi.get()
         )
         target = [base, t1, t2, t3, pump_var.get()]
-        global _move_start, _move_target
-        _move_start  = get_joints()
-        _move_target = target
-        _smooth_step(0)
+        global move_start, move_target
+        move_start  = get_joints()
+        move_target = target
+        smooth_step(0)
         ik_status.config(text=f"M:{base:+.1f}°  S:{t1:+.1f}°  A:{t2:+.1f}°  W:{t3:+.1f}°", fg="green")
     except Exception as e:
         ik_status.config(text=str(e), fg="red")
@@ -262,10 +262,10 @@ _speed_var = IntVar(value=MOVE_MS)
 Label(f_speed, text="Fast", width=4).pack(side=LEFT)
 Scale(f_speed, variable=_speed_var, from_=5, to=80,
       orient=HORIZONTAL, length=300, resolution=5,
-      command=lambda v: _set_speed(int(v))
+      command=lambda v: set_speed(int(v))
       ).pack(side=LEFT)
 
-def _set_speed(v):
+def set_speed(v):
     global MOVE_MS
     MOVE_MS = v
 Label(f_speed, text="Slow").pack(side=LEFT)
@@ -276,21 +276,21 @@ Label(main, text=" Saved Positions ", font=("Segoe UI", 11, "bold")).pack(pady=(
 NUM_POS = 3
 saved   = [None] * NUM_POS
 
-def _smooth_step(step):
+def smooth_step(step):
     t = step / MOVE_STEPS
     t = t * t * (3 - 2 * t)
-    interp = [_move_start[i] + (_move_target[i] - _move_start[i]) * t for i in range(5)]
+    interp = [_move_start[i] + (_move_target[i] - move_start[i]) * t for i in range(5)]
     set_joints(interp)
     if step < MOVE_STEPS:
-        root.after(MOVE_MS, lambda: _smooth_step(step + 1))
+        root.after(MOVE_MS, lambda: smooth_step(step + 1))
 
 def go_to(idx):
     if saved[idx] is None:
         return
-    global _move_start, _move_target
-    _move_start  = get_joints()
-    _move_target = list(saved[idx])
-    _smooth_step(0)
+    global move_start, move_target
+    move_start  = get_joints()
+    move_target = list(saved[idx])
+    smooth_step(0)
 
 def save_pos(idx):
     saved[idx] = get_joints()
@@ -340,7 +340,7 @@ def toggle_mode():
 
 mode_btn.config(command=toggle_mode)
 
-def _read(sensor):
+def read(sensor):
     if use_median:
         return (sensor.read_median() - sensor.hx_offset) / sensor.scale_factor
     return sensor.read_grams()
@@ -351,19 +351,19 @@ def poll_hx711():
                         (hx711.sensor2, weight_lbl2),
                         (hx711.sensor3, weight_lbl3)]:
         try:
-            lbl.config(text=f"{_read(sensor):.1f} g")
+            lbl.config(text=f"{read(sensor):.1f} g")
         except Exception:
             lbl.config(text="err")
     root.after(interval, poll_hx711)
 
-_sensors = [hx711.sensor1, hx711.sensor2, hx711.sensor3]
+sensors = [hx711.sensor1, hx711.sensor2, hx711.sensor3]
 
 def open_calibration():
     win = Toplevel(root)
     win.title("Load Cell Calibration")
     win.resizable(False, False)
 
-    for i, sensor in enumerate(_sensors):
+    for i, sensor in enumerate(sensors):
         frame = LabelFrame(win, text=f"Sensor {i+1}", padx=10, pady=6)
         frame.pack(fill="x", padx=12, pady=6)
 
@@ -403,16 +403,15 @@ Button(main, text="Tare & Calibrate", command=open_calibration).pack(pady=4)
 
 # physical button tareing
 TARE_BUTTON_PINS = {
-    1: 2,   # GPIO1 tares sensor 3 (_sensors[2])
-    7: 1,   # GPIO7 tares sensor 2 (_sensors[1])
-    8: 0,   # GPIO8 tares sensor 1 (_sensors[0])
+    1: 2,   # GPIO1 tares sensor 3 (sensors[2])
+    7: 1,   # GPIO7 tares sensor 2 (sensors[1])
+    8: 0,   # GPIO8 tares sensor 1 (sensors[0])
 }
 
 def make_tare_handler(idx):
     def handler():
         try:
-            _sensors[idx].tare()
-            print(f"[GPIO] Tared sensor {idx + 1}")
+            sensors[idx].tare()
         except IndexError:
             print(f"[GPIO] No sensor at index {idx}")
         except Exception as e:
@@ -421,14 +420,14 @@ def make_tare_handler(idx):
 
 tare_buttons = [] #keep ref to buttons
 for pin, sensor_idx in TARE_BUTTON_PINS.items():
-    if sensor_idx < len(_sensors):
+    if sensor_idx < len(sensors):
         btn = GPIOButton(pin, pull_up=True)
         btn.when_pressed = make_tare_handler(sensor_idx)
         tare_buttons.append(btn)
 
 FILL_THRESHOLD_G = 150   # start filling if glass is below threshhold
 FILL_TARGET_G    = 400   # stop filling when glass reaches threshhold
-PID_POLL_MS      = 200   # sensor read interval (ms)
+PID_POLL_MS      = 500   # sensor read interval (ms)
 
 _fill_sensor_idx = 0
 
@@ -437,7 +436,7 @@ Label(main, text=" Fill Settings ", font=("Segoe UI", 11, "bold")).pack(pady=(14
 _fill_frame = Frame(main)
 _fill_frame.pack(padx=20, fill="x")
 
-def _fill_row(parent, label, default):
+def fill_row(parent, label, default):
     f = Frame(parent)
     f.pack(fill="x", pady=1)
     Label(f, text=label, width=16, anchor="w").pack(side=LEFT)
@@ -446,38 +445,38 @@ def _fill_row(parent, label, default):
     Label(f, text="g").pack(side=LEFT)
     return var
 
-_threshold_var = _fill_row(_fill_frame, "Start below (g)",  FILL_THRESHOLD_G)
-_target_var    = _fill_row(_fill_frame, "Fill target (g)",  FILL_TARGET_G)
+threshold_var = fill_row(_fill_frame, "Start below (g)",  FILL_THRESHOLD_G)
+target_var    = fill_row(_fill_frame, "Fill target (g)",  FILL_TARGET_G)
 
 fill_status = Label(main, text="", fg="gray")
 fill_status.pack()
 
-def _apply_fill_settings():
+def apply_fill_settings():
     global FILL_THRESHOLD_G, FILL_TARGET_G
-    FILL_THRESHOLD_G = _threshold_var.get()
-    FILL_TARGET_G    = _target_var.get()
+    FILL_THRESHOLD_G = threshold_var.get()
+    FILL_TARGET_G    = target_var.get()
     fill_status.config(text=f"Threshold={FILL_THRESHOLD_G:.0f}g  Target={FILL_TARGET_G:.0f}g", fg="green")
 
-Button(main, text="Apply Fill Settings", command=_apply_fill_settings).pack(pady=4)
+Button(main, text="Apply Fill Settings", command=apply_fill_settings).pack(pady=4)
 
-def _start_fill(idx):
-    global fill_state, _fill_sensor_idx
+def start_fill(idx):
+    global fill_state, fill_sensor_idx
     fill_state      = "moving"
-    _fill_sensor_idx = idx
+    fill_sensor_idx = idx
     go_to(idx)
-    root.after(MOVE_STEPS * MOVE_MS + 500, _begin_pump)
+    root.after(MOVE_STEPS * MOVE_MS + 500, begin_pump)
 
-def _begin_pump():
+def begin_pump():
     global fill_state, integral, prev_error, prev_time
     fill_state = "filling"
-    _pump_fwd.on()
+    pump_fwd.on()
     integral   = 0
     prev_error = 0
     prev_time  = time.time()
     fill_status.config(text="Filling...", fg="blue")
-    _pid_fill_loop()
+    pid_fill_loop()
 
-def _pid_fill_loop():
+def pid_fill_loop():
     global integral, prev_error, prev_time
     if fill_state != "filling":
         return
@@ -486,19 +485,19 @@ def _pid_fill_loop():
         grams   = sensors[_fill_sensor_idx].read_grams()
 
         if grams < 0:
-            _stop_pump()
+            stop_pump()
             fill_status.config(text="Glass lifted — fill cancelled", fg="orange")
             return
 
         if grams >= FILL_TARGET_G:
-            _stop_pump()
+            stop_pump()
             return
 
         output, integral, prev_error, prev_time = pid_control(
             FILL_TARGET_G, grams, integral, prev_error, prev_time
         )
         power = max(5, min(100, int(output)))
-        _pump_fwd.on()
+        pump_fwd.on()
         desired_duty = int(power / 100 * 65535)
         kit._pca.channels[4].duty_cycle = 65535 - desired_duty
         pump_var.set(power)
@@ -507,20 +506,20 @@ def _pid_fill_loop():
     except Exception as ex:
         fill_status.config(text=f"Sensor error: {ex}", fg="red")
 
-    root.after(PID_POLL_MS, _pid_fill_loop)
+    root.after(PID_POLL_MS, pid_fill_loop)
 
-def _stop_pump():
+def stop_pump():
     global fill_state
     kit._pca.channels[4].duty_cycle = 0
-    _pump_fwd.off()
+    pump_fwd.off()
     pump_var.set(0)
     fill_state = "idle"
     fill_status.config(text=f"Done — {FILL_TARGET_G:.0f} g reached", fg="green")
-    root.after(1000, _main_loop)
+    root.after(1000, main_loop)
 
-def _main_loop():
+def main_loop():
     if not activate or fill_state != "idle":
-        root.after(500, _main_loop)
+        root.after(500, main_loop)
         return
     sensors = [hx711.sensor1, hx711.sensor2, hx711.sensor3]
     for idx, sensor in enumerate(sensors):
@@ -529,11 +528,11 @@ def _main_loop():
             if grams < 0:
                 continue   #løftet glass
             if grams < FILL_THRESHOLD_G:
-                _start_fill(idx) #fyll glass
+                start_fill(idx) #fyll glass
                 return
         except Exception:
             pass
-    root.after(500, _main_loop)
+    root.after(500, main_loop)
 
 
 #water level
@@ -541,8 +540,8 @@ GLASS_MAX_G = 500
 
 Label(main, text=" Water Level ", font=("Segoe UI", 11, "bold")).pack(pady=(10, 2))
 
-_bar_vars  = []
-_bar_grams = []
+bar_vars  = []
+bar_grams = []
 
 for name in ["Glass 1", "Glass 2", "Glass 3"]:
     f = Frame(root)
@@ -553,11 +552,11 @@ for name in ["Glass 1", "Glass 2", "Glass 3"]:
     bar.pack(side=LEFT, fill="x", expand=True, padx=4)
     g_lbl = Label(f, text="-- g", width=8, anchor="e")
     g_lbl.pack(side=LEFT)
-    _bar_vars.append(var)
-    _bar_grams.append(g_lbl)
+    bar_vars.append(var)
+    bar_grams.append(g_lbl)
 
-def _update_bars():
-    for var, lbl, sensor in zip(_bar_vars, _bar_grams,
+def update_bars():
+    for var, lbl, sensor in zip(bar_vars, bar_grams,
                                 [hx711.sensor1, hx711.sensor2, hx711.sensor3]):
         try:
             g = sensor.read_grams()
@@ -565,7 +564,7 @@ def _update_bars():
             lbl.config(text=f"{g:.0f} g")
         except Exception:
             lbl.config(text="err")
-    root.after(300, _update_bars)
+    root.after(300, update_bars)
 
 #PID verdier
 Label(main, text=" PID Controller ", font=("Segoe UI", 11, "bold")).pack(pady=(14, 2))
@@ -573,7 +572,7 @@ Label(main, text=" PID Controller ", font=("Segoe UI", 11, "bold")).pack(pady=(1
 pid_frame = Frame(main)
 pid_frame.pack(padx=20, fill="x")
 
-def _pid_row(parent, label, default):
+def pid_row(parent, label, default):
     f = Frame(parent)
     f.pack(fill="x", pady=1)
     Label(f, text=label, width=6, anchor="w").pack(side=LEFT)
@@ -581,9 +580,9 @@ def _pid_row(parent, label, default):
     Entry(f, textvariable=var, width=8).pack(side=LEFT)
     return var
 
-pid_kp_var = _pid_row(pid_frame, "Kp", kp)
-pid_ki_var = _pid_row(pid_frame, "Ki", ki)
-pid_kd_var = _pid_row(pid_frame, "Kd", kd)
+pid_kp_var = pid_row(pid_frame, "Kp", kp)
+pid_ki_var = pid_row(pid_frame, "Ki", ki)
+pid_kd_var = pid_row(pid_frame, "Kd", kd)
 
 pid_status = Label(main, text=f"Active: Kp={kp}  Ki={ki}  Kd={kd}", fg="gray")
 pid_status.pack()
@@ -603,13 +602,13 @@ Button(main, text="Apply PID", command=apply_pid).pack(pady=4)
 #start
 reset_all()
 poll_hx711()
-_update_bars()
-_main_loop()
+update_bars()
+main_loop()
 root.mainloop()
 
 hx711.sensor1.close()
 hx711.sensor2.close()
 hx711.sensor3.close()
 hx711.sck.close()
-_pump_fwd.close()
+pump_fwd.close()
 # i2c.bus.close()
