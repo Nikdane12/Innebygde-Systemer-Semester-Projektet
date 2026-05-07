@@ -111,9 +111,9 @@ def solve_ik(x, y, z, phi_deg, elbow_up=True):
     )
 
 #PID-controller
-kp = 0.5
-ki = 0.1
-kd = 0.05
+kp = 0.15
+ki = 0.01
+kd = 0.00
 
 integral = 0
 prev_error = 0
@@ -593,11 +593,6 @@ def apply_pid():
     pid_status.config(text=f"Active: Kp={kp}  Ki={ki}  Kd={kd}", fg="green")
 
 Button(main, text="Apply PID", command=apply_pid).pack(pady=4)
-
-# Benchmark launcher
-Button(main, text="Open Benchmark GUI",
-       command=lambda: subprocess.Popen(["python", "GUI/GUI_benchmark.py"])
-       ).pack(pady=10)
 
 # Start
 reset_all()
