@@ -111,9 +111,9 @@ def solve_ik(x, y, z, phi_deg, elbow_up=True):
     )
 
 #PID-controller
-kp = 0.5
-ki = 0.1
-kd = 0.05
+kp = 0.15
+ki = 0.01
+kd = 0.00
 
 integral = 0
 prev_error = 0
@@ -154,7 +154,19 @@ def _on_canvas_configure(e):
     _canvas.itemconfig(_canvas_window, width=e.width)
 main.bind("<Configure>", _on_frame_configure)
 _canvas.bind("<Configure>", _on_canvas_configure)
-root.bind_all("<MouseWheel>", lambda e: _canvas.yview_scroll(-1*(e.delta//120), "units"))
+
+def _on_mousewheel(e):
+    # Windows/macOS deliver <MouseWheel> with e.delta; X11 delivers Button-4/5.
+    if e.num == 4:
+        _canvas.yview_scroll(-1, "units")
+    elif e.num == 5:
+        _canvas.yview_scroll(1, "units")
+    elif e.delta:
+        _canvas.yview_scroll(-1 * (e.delta // 120), "units")
+
+root.bind_all("<MouseWheel>", _on_mousewheel)
+root.bind_all("<Button-4>", _on_mousewheel)
+root.bind_all("<Button-5>", _on_mousewheel)
 
 # Joint variables (degrees / percent)
 midje_var   = DoubleVar(value=0)
@@ -593,11 +605,6 @@ def apply_pid():
     pid_status.config(text=f"Active: Kp={kp}  Ki={ki}  Kd={kd}", fg="green")
 
 Button(main, text="Apply PID", command=apply_pid).pack(pady=4)
-
-# Benchmark launcher
-Button(main, text="Open Benchmark GUI",
-       command=lambda: subprocess.Popen(["python", "GUI/GUI_benchmark.py"])
-       ).pack(pady=10)
 
 # Start
 reset_all()
