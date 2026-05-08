@@ -14,8 +14,8 @@ PIN_DT2     = 13
 PIN_DT3     = 19
 PIN_SCK     = 5
 GAIN_PULSES = 25   # 25 = Channel A, gain 128 (default)
-                   # 26 = Channel B, gain 32
-                   # 27 = Channel A, gain 64
+                # 26 = Channel B, gain 32
+                # 27 = Channel A, gain 64
 
 def _open_device(pin):
     try:
