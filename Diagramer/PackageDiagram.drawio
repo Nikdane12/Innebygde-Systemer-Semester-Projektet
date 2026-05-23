@@ -1,65 +1,67 @@
-<mxfile host="app.diagrams.net" agent="Claude" version="24.7.17">
+<mxfile host="app.diagrams.net" agent="Claude">
   <diagram id="pkgDiagram1" name="Package Diagram">
-    <mxGraphModel dx="1100" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="1143" dy="709" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="cell2" value="Application Layer" style="shape=folder;fontStyle=1;tabWidth=120;tabHeight=22;tabPosition=left;html=1;verticalAlign=top;align=left;spacingLeft=10;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
-          <mxGeometry x="80" y="60" width="420" height="420" as="geometry" />
+        <mxCell id="cell2" parent="1" style="shape=folder;fontStyle=1;tabWidth=120;tabHeight=22;tabPosition=left;html=1;verticalAlign=top;align=left;spacingLeft=10;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Application Layer" vertex="1">
+          <mxGeometry height="420" width="420" x="50" y="40" as="geometry" />
         </mxCell>
-        <mxCell id="cell3" value="main.py" style="shape=folder;fontStyle=1;tabWidth=80;tabHeight=20;tabPosition=left;html=1;verticalAlign=top;align=left;spacingLeft=10;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
-          <mxGeometry x="100" y="100" width="380" height="360" as="geometry" />
+        <mxCell id="cell3" parent="1" style="shape=folder;fontStyle=1;tabWidth=80;tabHeight=20;tabPosition=left;html=1;verticalAlign=top;align=left;spacingLeft=10;fillColor=#d5e8d4;strokeColor=#82b366;" value="main.py" vertex="1">
+          <mxGeometry height="360" width="380" x="70" y="80" as="geometry" />
         </mxCell>
-        <mxCell id="cell4" value="GUI&#10;(tkinter widgets)" style="shape=folder;tabWidth=100;tabHeight=18;tabPosition=left;html=1;verticalAlign=top;align=left;spacingLeft=8;fillColor=#ffffff;strokeColor=#82b366;" vertex="1" parent="1">
-          <mxGeometry x="120" y="140" width="160" height="70" as="geometry" />
+        <mxCell id="cell4" parent="1" style="shape=folder;tabWidth=100;tabHeight=18;tabPosition=left;html=1;verticalAlign=top;align=left;spacingLeft=8;fillColor=#ffffff;strokeColor=#82b366;" value="GUI&#xa;(tkinter widgets)" vertex="1">
+          <mxGeometry height="70" width="160" x="90" y="120" as="geometry" />
         </mxCell>
-        <mxCell id="cell5" value="State machine&#10;(idle / moving / filling)" style="shape=folder;tabWidth=100;tabHeight=18;tabPosition=left;html=1;verticalAlign=top;align=left;spacingLeft=8;fillColor=#ffffff;strokeColor=#82b366;" vertex="1" parent="1">
-          <mxGeometry x="300" y="140" width="160" height="70" as="geometry" />
+        <mxCell id="cell5" parent="1" style="shape=folder;tabWidth=100;tabHeight=18;tabPosition=left;html=1;verticalAlign=top;align=left;spacingLeft=8;fillColor=#ffffff;strokeColor=#82b366;" value="State machine&#xa;(idle / moving / filling)" vertex="1">
+          <mxGeometry height="70" width="160" x="270" y="120" as="geometry" />
         </mxCell>
-        <mxCell id="cell6" value="Inverse kinematics&#10;solve_ik()" style="shape=folder;tabWidth=100;tabHeight=18;tabPosition=left;html=1;verticalAlign=top;align=left;spacingLeft=8;fillColor=#ffffff;strokeColor=#82b366;" vertex="1" parent="1">
-          <mxGeometry x="120" y="240" width="160" height="70" as="geometry" />
+        <mxCell id="cell6" parent="1" style="shape=folder;tabWidth=100;tabHeight=18;tabPosition=left;html=1;verticalAlign=top;align=left;spacingLeft=8;fillColor=#ffffff;strokeColor=#82b366;" value="Inverse kinematics&#xa;solve_ik()" vertex="1">
+          <mxGeometry height="70" width="160" x="90" y="220" as="geometry" />
         </mxCell>
-        <mxCell id="cell7" value="PID regulator&#10;pid_control()" style="shape=folder;tabWidth=100;tabHeight=18;tabPosition=left;html=1;verticalAlign=top;align=left;spacingLeft=8;fillColor=#ffffff;strokeColor=#82b366;" vertex="1" parent="1">
-          <mxGeometry x="300" y="240" width="160" height="70" as="geometry" />
+        <mxCell id="cell7" parent="1" style="shape=folder;tabWidth=100;tabHeight=18;tabPosition=left;html=1;verticalAlign=top;align=left;spacingLeft=8;fillColor=#ffffff;strokeColor=#82b366;" value="PID regulator&#xa;pid_control()" vertex="1">
+          <mxGeometry height="70" width="160" x="270" y="220" as="geometry" />
         </mxCell>
-        <mxCell id="cell8" value="Fill process&#10;start_fill / begin_pump /&#10;pid_fill_loop / stop_pump" style="shape=folder;tabWidth=100;tabHeight=18;tabPosition=left;html=1;verticalAlign=top;align=left;spacingLeft=8;fillColor=#ffffff;strokeColor=#82b366;" vertex="1" parent="1">
-          <mxGeometry x="210" y="340" width="200" height="80" as="geometry" />
+        <mxCell id="cell8" parent="1" style="shape=folder;tabWidth=100;tabHeight=18;tabPosition=left;html=1;verticalAlign=top;align=left;spacingLeft=8;fillColor=#ffffff;strokeColor=#82b366;" value="Fill process&#xa;start_fill / begin_pump /&#xa;pid_fill_loop / stop_pump" vertex="1">
+          <mxGeometry height="80" width="200" x="180" y="320" as="geometry" />
         </mxCell>
-        <mxCell id="cell9" value="Driver Layer" style="shape=folder;fontStyle=1;tabWidth=120;tabHeight=22;tabPosition=left;html=1;verticalAlign=top;align=left;spacingLeft=10;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
-          <mxGeometry x="80" y="540" width="420" height="160" as="geometry" />
+        <mxCell id="cell9" parent="1" style="shape=folder;fontStyle=1;tabWidth=120;tabHeight=22;tabPosition=left;html=1;verticalAlign=top;align=left;spacingLeft=10;fillColor=#ffe6cc;strokeColor=#d79b00;" value="Driver Layer" vertex="1">
+          <mxGeometry height="160" width="290" x="500" y="290" as="geometry" />
         </mxCell>
-        <mxCell id="cell10" value="i2c&#10;(servo control via PCA9685)" style="shape=folder;tabWidth=80;tabHeight=20;tabPosition=left;html=1;verticalAlign=top;align=left;spacingLeft=10;fillColor=#ffffff;strokeColor=#d79b00;" vertex="1" parent="1">
-          <mxGeometry x="110" y="580" width="180" height="90" as="geometry" />
+        <mxCell id="cell10" parent="1" style="shape=folder;tabWidth=80;tabHeight=20;tabPosition=left;html=1;verticalAlign=top;align=left;spacingLeft=10;fillColor=#ffffff;strokeColor=#d79b00;" value="i2c&lt;br&gt;&lt;div&gt;(servo control&amp;nbsp;&lt;/div&gt;&lt;div&gt;via PCA9685)&lt;/div&gt;" vertex="1">
+          <mxGeometry height="90" width="100" x="530" y="330" as="geometry" />
         </mxCell>
-        <mxCell id="cell11" value="hx711&#10;(load-cell reading)" style="shape=folder;tabWidth=80;tabHeight=20;tabPosition=left;html=1;verticalAlign=top;align=left;spacingLeft=10;fillColor=#ffffff;strokeColor=#d79b00;" vertex="1" parent="1">
-          <mxGeometry x="310" y="580" width="180" height="90" as="geometry" />
+        <mxCell id="cell11" parent="1" style="shape=folder;tabWidth=80;tabHeight=20;tabPosition=left;html=1;verticalAlign=top;align=left;spacingLeft=10;fillColor=#ffffff;strokeColor=#d79b00;" value="hx711&#xa;(load-cell reading)" vertex="1">
+          <mxGeometry height="90" width="115" x="645" y="330" as="geometry" />
         </mxCell>
-        <mxCell id="cell12" value="External Libraries (Python standard library)" style="shape=folder;fontStyle=1;tabWidth=260;tabHeight=22;tabPosition=left;html=1;verticalAlign=top;align=left;spacingLeft=10;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="1">
-          <mxGeometry x="560" y="60" width="230" height="240" as="geometry" />
+        <mxCell id="cell12" parent="1" style="shape=folder;fontStyle=1;tabWidth=260;tabHeight=22;tabPosition=left;html=1;verticalAlign=top;align=left;spacingLeft=10;fillColor=#f5f5f5;strokeColor=#666666;" value="External Libraries (Python standard library)" vertex="1">
+          <mxGeometry height="240" width="230" x="530" y="40" as="geometry" />
         </mxCell>
-        <mxCell id="cell13" value="tkinter" style="shape=folder;tabWidth=70;tabHeight=18;tabPosition=left;html=1;verticalAlign=top;align=left;spacingLeft=8;fillColor=#ffffff;strokeColor=#666666;" vertex="1" parent="1">
-          <mxGeometry x="585" y="105" width="80" height="50" as="geometry" />
+        <mxCell id="cell13" parent="1" style="shape=folder;tabWidth=70;tabHeight=18;tabPosition=left;html=1;verticalAlign=top;align=left;spacingLeft=8;fillColor=#ffffff;strokeColor=#666666;" value="tkinter" vertex="1">
+          <mxGeometry height="50" width="80" x="555" y="85" as="geometry" />
         </mxCell>
-        <mxCell id="cell14" value="time" style="shape=folder;tabWidth=70;tabHeight=18;tabPosition=left;html=1;verticalAlign=top;align=left;spacingLeft=8;fillColor=#ffffff;strokeColor=#666666;" vertex="1" parent="1">
-          <mxGeometry x="685" y="105" width="80" height="50" as="geometry" />
+        <mxCell id="cell14" parent="1" style="shape=folder;tabWidth=70;tabHeight=18;tabPosition=left;html=1;verticalAlign=top;align=left;spacingLeft=8;fillColor=#ffffff;strokeColor=#666666;" value="time" vertex="1">
+          <mxGeometry height="50" width="80" x="655" y="85" as="geometry" />
         </mxCell>
-        <mxCell id="cell15" value="subprocess" style="shape=folder;tabWidth=70;tabHeight=18;tabPosition=left;html=1;verticalAlign=top;align=left;spacingLeft=8;fillColor=#ffffff;strokeColor=#666666;" vertex="1" parent="1">
-          <mxGeometry x="585" y="195" width="90" height="50" as="geometry" />
+        <mxCell id="cell15" parent="1" style="shape=folder;tabWidth=70;tabHeight=18;tabPosition=left;html=1;verticalAlign=top;align=left;spacingLeft=8;fillColor=#ffffff;strokeColor=#666666;" value="subprocess" vertex="1">
+          <mxGeometry height="50" width="90" x="555" y="175" as="geometry" />
         </mxCell>
-        <mxCell id="cell16" value="math" style="shape=folder;tabWidth=70;tabHeight=18;tabPosition=left;html=1;verticalAlign=top;align=left;spacingLeft=8;fillColor=#ffffff;strokeColor=#666666;" vertex="1" parent="1">
-          <mxGeometry x="685" y="195" width="80" height="50" as="geometry" />
+        <mxCell id="cell16" parent="1" style="shape=folder;tabWidth=70;tabHeight=18;tabPosition=left;html=1;verticalAlign=top;align=left;spacingLeft=8;fillColor=#ffffff;strokeColor=#666666;" value="math" vertex="1">
+          <mxGeometry height="50" width="80" x="655" y="175" as="geometry" />
         </mxCell>
-        <mxCell id="cell17" value="&#171;import&#187;" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="cell3" target="cell10">
+        <mxCell id="cell17" edge="1" parent="1" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;entryX=0;entryY=0;entryDx=0;entryDy=55;entryPerimeter=0;" target="cell10" value="«import»">
+          <mxGeometry relative="1" x="-0.0319" y="-13" as="geometry">
+            <mxPoint as="offset" />
+            <mxPoint x="450" y="385" as="sourcePoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="cell18" edge="1" parent="1" source="cell3" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;entryX=-0.013;entryY=0.87;entryDx=0;entryDy=0;exitX=1.003;exitY=0.911;exitDx=0;exitDy=0;exitPerimeter=0;entryPerimeter=0;" target="cell11" value="«import»">
+          <mxGeometry relative="1" x="-0.5967" y="38" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="cell19" edge="1" parent="1" source="cell3" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;exitX=1;exitY=0.2;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="cell12" value="«import»">
           <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="cell18" value="&#171;import&#187;" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;exitX=0.7;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="cell3" target="cell11">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="cell19" value="&#171;import&#187;" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;exitX=1;exitY=0.2;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="cell3" target="cell12">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="cell20" value="Note: i2c and hx711 communicate with hardware (PCA9685, HX711 chips, GPIO) but do not import each other, so there is no dependency between them. Hardware devices are not packages; they belong in a deployment or component diagram." style="text;html=1;align=left;verticalAlign=top;fillColor=#fff2cc;strokeColor=#d6b656;spacing=8;fontSize=10;whiteSpace=wrap;" vertex="1" parent="1">
-          <mxGeometry x="560" y="540" width="230" height="160" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
