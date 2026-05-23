@@ -1,0 +1,82 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:132.0) Gecko/20100101 Firefox/132.0">
+  <diagram name="Page-1" id="Pa4TokQVo0JDLYvEYI5i">
+    <mxGraphModel dx="1086" dy="674" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="EydhDh2xQKz4oqD-8NKw-1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Rasberry Pi" vertex="1">
+          <mxGeometry height="60" width="120" x="20" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="EydhDh2xQKz4oqD-8NKw-2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="PCA9685" vertex="1">
+          <mxGeometry height="60" width="120" x="200" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="EydhDh2xQKz4oqD-8NKw-3" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="H-Bridge L298N" vertex="1">
+          <mxGeometry height="60" width="120" x="380" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="EydhDh2xQKz4oqD-8NKw-4" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Pumpe" vertex="1">
+          <mxGeometry height="60" width="120" x="560" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="EydhDh2xQKz4oqD-8NKw-5" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Servo Motor" vertex="1">
+          <mxGeometry height="60" width="120" x="560" y="240" as="geometry" />
+        </mxCell>
+        <mxCell id="EydhDh2xQKz4oqD-8NKw-6" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="HX711" vertex="1">
+          <mxGeometry height="60" width="120" x="380" y="320" as="geometry" />
+        </mxCell>
+        <mxCell id="EydhDh2xQKz4oqD-8NKw-7" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Loadcell" vertex="1">
+          <mxGeometry height="60" width="120" x="560" y="320" as="geometry" />
+        </mxCell>
+        <mxCell id="EydhDh2xQKz4oqD-8NKw-8" edge="1" parent="1" source="EydhDh2xQKz4oqD-8NKw-1" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="EydhDh2xQKz4oqD-8NKw-2" value="I2C">
+          <mxGeometry height="50" relative="1" width="50" y="10" as="geometry">
+            <mxPoint as="offset" />
+            <mxPoint x="170" y="350" as="sourcePoint" />
+            <mxPoint x="220" y="300" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="EydhDh2xQKz4oqD-8NKw-9" edge="1" parent="1" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1;exitY=0;exitDx=0;exitDy=0;" target="EydhDh2xQKz4oqD-8NKw-3" value="PWM">
+          <mxGeometry height="50" relative="1" width="50" x="0.5385" y="10" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="330" y="260" />
+              <mxPoint x="330" y="190" />
+            </Array>
+            <mxPoint x="319.9999999999999" y="260" as="sourcePoint" />
+            <mxPoint x="380" y="210" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="EydhDh2xQKz4oqD-8NKw-10" edge="1" parent="1" source="EydhDh2xQKz4oqD-8NKw-3" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="EydhDh2xQKz4oqD-8NKw-4" value="DC">
+          <mxGeometry height="50" relative="1" width="50" y="10" as="geometry">
+            <mxPoint as="offset" />
+            <mxPoint x="480" y="320" as="sourcePoint" />
+            <mxPoint x="530" y="270" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="EydhDh2xQKz4oqD-8NKw-12" edge="1" parent="1" source="EydhDh2xQKz4oqD-8NKw-2" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="EydhDh2xQKz4oqD-8NKw-5" value="PWM">
+          <mxGeometry height="50" relative="1" width="50" y="10" as="geometry">
+            <mxPoint as="offset" />
+            <mxPoint x="370" y="310" as="sourcePoint" />
+            <mxPoint x="420" y="260" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="EydhDh2xQKz4oqD-8NKw-13" edge="1" parent="1" source="EydhDh2xQKz4oqD-8NKw-6" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="EydhDh2xQKz4oqD-8NKw-7" value="ADC">
+          <mxGeometry height="50" relative="1" width="50" y="10" as="geometry">
+            <mxPoint as="offset" />
+            <mxPoint x="430" y="310" as="sourcePoint" />
+            <mxPoint x="480" y="260" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="EydhDh2xQKz4oqD-8NKw-14" edge="1" parent="1" style="endArrow=classic;html=1;rounded=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="EydhDh2xQKz4oqD-8NKw-6" value="Bit-Bang">
+          <mxGeometry height="50" relative="1" width="50" x="0.2903" y="10" as="geometry">
+            <mxPoint as="offset" />
+            <Array as="points">
+              <mxPoint x="150" y="280" />
+              <mxPoint x="150" y="350" />
+              <mxPoint x="340" y="350" />
+            </Array>
+            <mxPoint x="140" y="280" as="sourcePoint" />
+            <mxPoint x="380" y="330.00000000000006" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
