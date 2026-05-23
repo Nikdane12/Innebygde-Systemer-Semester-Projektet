@@ -1,0 +1,38 @@
+<mxfile host="app.diagrams.net" agent="Claude" version="24.7.17">
+  <diagram id="stateDiagram1" name="Tilstandsdiagram">
+    <mxGraphModel dx="900" dy="700" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="600" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="start" value="" style="ellipse;html=1;fillColor=#000000;strokeColor=#000000;" vertex="1" parent="1">
+          <mxGeometry x="100" y="160" width="30" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="idle" value="idle&#10;&#10;Venter og overvåker&#10;vektcellene" style="rounded=1;arcSize=30;html=1;whiteSpace=wrap;fillColor=#dae8fc;strokeColor=#6c8ebf;verticalAlign=middle;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="200" y="130" width="170" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="moving" value="moving&#10;&#10;Armen beveger seg&#10;mot riktig glass" style="rounded=1;arcSize=30;html=1;whiteSpace=wrap;fillColor=#d5e8d4;strokeColor=#82b366;verticalAlign=middle;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="460" y="130" width="170" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="filling" value="filling&#10;&#10;Pumpen aktiv,&#10;PID-regulator styrer" style="rounded=1;arcSize=30;html=1;whiteSpace=wrap;fillColor=#ffe6cc;strokeColor=#d79b00;verticalAlign=middle;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="460" y="330" width="170" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="e0" value="" style="endArrow=block;html=1;rounded=0;" edge="1" parent="1" source="start" target="idle">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e1" value="glass under terskel&#10;(FILL_THRESHOLD_G)" style="endArrow=block;html=1;rounded=0;fontSize=11;exitX=1;exitY=0.5;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="idle" target="moving">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2" value="arm fremme ved glass" style="endArrow=block;html=1;rounded=0;fontSize=11;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="moving" target="filling">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e3" value="målvekt nådd&#10;eller glass løftet bort" style="endArrow=block;html=1;rounded=0;fontSize=11;exitX=0;exitY=0.5;exitDx=0;exitDy=0;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="filling" target="idle">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="285" y="375" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
