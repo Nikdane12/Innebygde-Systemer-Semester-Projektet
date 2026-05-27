@@ -1,0 +1,6 @@
+\section{Konklusjon}
+I dette prosjektet ble det laget en automatisk refill arm som fyller glass med væske når en vektsensor registrerer at de er tomme. Systemet ble bygget opp av en Raspberry Pi med egendesignede PCB-er, 3D-printede deler og øvrige elektronikkomponenter, og programvare som håndterer PID-regulering og invers kinematikk.
+
+Prosjektet nådde hovedmålet sitt. Den ferdige armen klarte å registrere tomme kopper og bevege seg til riktig posisjon og fylle dem med et avvik på omtrent 10g som blir vurdert som tilstrekkelig presist for formålet. 
+
+For videre arbeid bør de tre feilene som ble oppdaget under testing: manglende jording av OE-pinnen på PCA9685, ombyttede I2C-pinner, og manglende styringspinne for pumpen, rettes direkte i designet i en ny revisjon av kortet, slik at de ikke lenger må utbedres med loddebroer og kabling. Videre bør servoene byttes ut med motorer med metallgir i stedet for plastgir for å gjøre armen mer robust. På lengre sikt kan systemet integreres med trådløs kommunikasjon mellom lastcellene og RPi-en, noe som ville gjort oppsettet mer fleksibelt og redusert behovet for kabling.

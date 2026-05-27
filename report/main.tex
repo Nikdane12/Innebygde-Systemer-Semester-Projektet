@@ -1,0 +1,61 @@
+\documentclass[3p]{elsarticle}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{float}
+\usepackage[norsk]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{tabularx}
+\usepackage{tikz}
+\usepackage{svg}
+\usetikzlibrary{arrows.meta, positioning, shapes.geometric}
+\usepackage{xcolor}
+\usepackage{soul}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{hanging}
+
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{ltxtable}
+
+
+\makeatletter
+\long\def\MaketitleBox{%
+  \resetTitleCounters
+  \def\baselinestretch{1}%
+  \begin{center}%
+    \def\baselinestretch{1}%
+    \Large\@title\par\vskip18pt
+    \normalsize\elsauthors\par\vskip10pt
+    \footnotesize\itshape\elsaddress\par\vskip36pt
+  \end{center}%
+}
+\makeatother
+
+\begin{document}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{1em}
+\begin{frontmatter}
+\include{framside bacheloroppgave.tex}
+\setcounter{page}{0}
+\pagenumbering{roman}
+\tableofcontents
+\listoffigures
+\listoftables
+\end{frontmatter}
+
+\clearpage
+\setcounter{page}{1}
+\pagenumbering{arabic}
+
+\input{sammendrag}
+\input{introduksjon}
+\input{teori}
+\input{metode}
+\input{resultat}
+\input{diskusjon}
+\input{konklusjon}
+\input{kildehenvisning}
+\input{vedlegg}
+\end{document}

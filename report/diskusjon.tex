@@ -1,0 +1,20 @@
+\section{Diskusjon}
+Resultatene viser at systemet fungerte etter hensikten. Armen klarte å registrere når en kopp kom under den gitte terskelverdien, bevege seg til riktig posisjon og fylle koppen til eller over målnivået.
+
+Som nevnt i resultatene var det et avvik under fylleprosessen. Avviket vurderes som akseptabelt for fylling av et glass, men kan reduseres ved å forbedre målingene fra loadcellene. En feilkilde her var drift i verdiene fra HX711, der avlesningene endret seg gradvis over tid uten endring i vekt. Denne driften er en av årsakene til det varierende avviket etter fylling. Effekten av driften kan reduseres ved jevnlig nullstilling (tare), filtrering av avlesningene gjennom median- eller gjennomsnittsmodus, og bedre skjerming av kabler for å redusere støy.
+
+At reguleringen fungerte tilfredsstillende med så lite tuning av PID-verdiene tyder på at de valgte standardverdiene var godt egnet for systemet.
+ 
+Likevel, selv om systemet nådde hensikten, var det noen svakheter og feilkilder i dette systemet.
+
+En mekanisk svakhet var at de interne tannhjulene i servoene var laget av plast. Som beskrevet i resultatene førte dette til at servoen på skulderen sluttet å rotere etter høyt stress. Årsaken er at servoene som ble brukt ikke er dimensjonert for de kreftene armen utsettes for, noe som er en kjent svakhet ved billigere servoer med plastgir. Bytte til en servomotor med metallgir løste problemet, og er også å foretrekke på lengre sikt for å sikre armens presisjon og levetid. 
+
+Problemet med ''brownout'' på RPi-en skyldtes ikke selve strømforsyningen, men ledningene mellom strømforsyningen og hoved-PCB-en. Opprinnelig var det brukt tynne kabler som var ''daisychained'' videre til kortet, noe som ga for stort spenningsfall ved høyt strømtrekk, særlig når servoene og pumpen var aktive samtidig. En ''brownout'' kan føre til ustabil oppførsel eller at Pi-en restarter. Problemet ble løst ved å bytte til kraftigere kabler koblet direkte fra strømforsyningen til hoved-PCB-en. Dette reduserte spenningsfallet, og strømforsyningen leverte deretter stabil spenning også under høy belastning.
+
+De tre feilene som ble oppdaget på hoved-IO-kortet lot seg fikse med loddebroer og kabling, og bør rettes opp i designet i en eventuell ny revisjon av kortet.
+
+Noen tekniske valg ble gjort under dette prosjektet. Det ble valgt å bruke en egen PSU i stedet for en laboratorie strømforsyningen. Dette var fordi at systemet hadde behov for en strømforsyning som kunne levere nok amper til alle komponentene samtidig (kan se i POR-vedlegget). Det som er beskrevet over viste det seg likevel at strømforsyningen ikke var godt nok dimensjonert noe som førte til ''brownout'' ved høyt strømtrekk. Varselmeldingen på RPi-en om at det var for lite strøm kan være fordi PSU-en leverte 4,9V i stedet for 5V eller helst 5,1 V til RPi-en. Dette valget bør derfor revurderes med tanke på en annen PSU.
+
+For å styre pumpen med PWM-signaler ble det valgt å bruke en ekstern modul (L298N) i stedet for å integrere H-broen direkte på PCB-en. Dette var fordi det begynte å bli lite plass igjen på PCB-en til alle funksjonene, og for å redusere risikoen for at hovedfunksjonen: å styre pumpen med PWM, ikke skulle fungere. Ved å legge pumpestyringen i en egen modul ble designet enklere og sjansen for feil på selve kortet redusert.
+
+Samlet sett fungerte systemet etter hensikten. Pumpestyringen med PID-regulering ga presis fylling med kun et lite avvik, og robotarmen klarte å bevege seg mellom de forhåndsdefinerte posisjonene som planlagt. Svakhetene som ble avdekket lot seg alle utbedre underveis, og påvirket ikke det endelige resultatet.

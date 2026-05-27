@@ -1,0 +1,26 @@
+\section{Resultat}
+\subsection{PCB}
+Ved testing av PCB-en viste tre punkter som måtte justeres før kortet nådd full funksjonaletet. PCB-en fungerte ellers som planlagt, og justeringer kunne utføres direkte på kortet uten å bestille på nytt. 
+
+Det første punktet var at OE-pinnen på PCA9685 ble latt flytende. Pinnen aktiveres når den er lav, ikke var koblet til jord. Dette løste vi ved å lodde en bru mellom den pinnen og en nærliggende pinne som var koblet til jord.
+
+Det andre punktet var at den SDA ledningen på PCB-en var ikke koblet til SDA pinnen på PI-en. Dette kunne i prinsippet løses ved å konfigurere den ikke-dedikerte pinnen for I2C gjennom programvaren på RPi-en, men siden denne pinnen manglet pull-resistor, valgte vi i stedet å bygge om forbindelsen med en kabel.
+
+Det tredje punktet var at styringen av pumpe motoren krevde en pinne som kunne settes både lav og høy for å aktivere og deaktivere H-broen. Dette ble løst ved å lodde på en ekstra pinne.
+
+Etter at disse justeringene ble gjort, verifiserte vi kortet ved hjelp av enkle testprogrammer som kjører én funksjon om gangen. Deretter kunne vi bekrefte at alle delkomponenter av PCB-en fungerte som de skal.
+
+\hl{[lim inn bilder av pcbene]}
+
+\subsection{Arm}
+Testingen ble gjennomført trinnvis, der de ulike delene av systemet først ble verifisert hver for seg. De tre forhåndsbestemte posisjonene ble testet for å bekrefte at armen klarte å bevege seg mellom de lagrede posisjonene. Deretter ble det verifisert at pumpen startet når loadcellen registrerte at vekten kom under terskelverdien, og stoppet når vekten kom over ønsket mengde, samt at pumpen ikke startet dersom koppen ble tatt av brikken. Til slutt ble systemet testet med vann. Da delfunksjonene ble kombinert, fungerte de sammen som en tilstandsmaskin: tilstandsmaskinen styrer overgangene mellom å bevege armen, fylle glasset og returnere til hviletilstand, mens PID-regulatoren sørger for at fyllingen stoppes ved riktig målvekt uten søl.
+
+Under testingen observerte vi to kontinuerlige avvik. For det første hadde armen i sjeldne tilfeller problemer med å nå posisjonene nøyaktig etter å ha beveget seg til en ny posisjon, og dette skjedde først etter lengre tids bruk. For det andre registrerte vi et konstant avvik i fyllemengden: glasset ble fylt med omtrent 12–20g vann mer enn målet av 100g. Dette skyldes at det fortsatt befinner seg vann i slangen i det øyeblikket pumpen slås av, slik at denne restmengden går ned i glasset etter at PID-regulatoren har stoppet pådraget. Avviket var stabilt fra gang til gang, og kan derfor i prinsippet kompenseres for ved å justere målvekten tilsvarende ned. En til grunn for avviket kan være at Avlesningene fra HX711 chippene endret seg gradvis over tid selv uten endring i vekt. 
+
+Under testing av pumpen ble PID-verdiene justert, der Ki-verdien ble endret til 0.1. Reguleringen fungerte tilfredsstillende med denne ene endringen.
+
+Under testingen sluttet servoen på skulderen å rotere etter å ha blitt utsatt for høyt stress. Ved nærmere undersøkelse viste det seg at de interne tannhjulene av plast var slitt ned. Servoen ble byttet ut med en servomotor med metallgir, og armen fungerte deretter som normalt.
+
+Vi observerte også at RPi-en ga varsel om for lav strømtilførsel, og ved høyt strømtrekk oppstod det av og til ''brownout'', der RPi-en ble ustabil eller restartet. Dette inntraff særlig når servoene og pumpen var aktive samtidig. Problemet forsvant etter at de tynne, ''daisychained''-kablene ble byttet ut med kraftigere kabler koblet direkte fra strømforsyningen til hoved-PCB-en.
+
+Sammensatt har armen fungert som tiltenkt, der alle delfunksjoner kombinert førte til den automatiske påfyllingssekvensen. I vedlegg \hl{[insert vedlegg nr her]} kan man se hvordan påfyllingsprosedyren foregår.
