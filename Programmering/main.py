@@ -2,9 +2,7 @@ from tkinter import *
 from tkinter import ttk
 from adafruit_servokit import ServoKit
 import time
-import subprocess
 import math
-import i2c
 import hx711
 
 from gpiozero import OutputDevice

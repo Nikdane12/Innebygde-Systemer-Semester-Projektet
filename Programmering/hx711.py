@@ -1,6 +1,6 @@
-# HX711 load cell amplifier — multi-sensor
-# Wiring: DT1 → GPIO 6, DT2 → GPIO 13, DT3 → GPIO 19
-#         SCK (shared) → GPIO 5
+# HX711 load cell amplifier
+# Wiring: DT1 -> GPIO 6, DT2 -> GPIO 13, DT3 -> GPIO 19
+#         SCK (shared) -> GPIO 5
 
 from gpiozero import InputDevice, OutputDevice
 from collections import deque
@@ -35,7 +35,7 @@ def _open_output(pin):
         lgpio.gpiochip_close(h)
         return OutputDevice(pin, initial_value=False)
 
-# Shared clock + lock to prevent multiple sensors from interleaving clock pulses
+#Shared clock + lock to prevent multiple sensors from interleaving clock pulses
 sck = _open_output(PIN_SCK)
 sck_lock = threading.Lock()
 
@@ -46,7 +46,7 @@ class HX711:
         self.hx_offset    = 0.0
         self.scale_factor = 1.0
 
-        # Background polling state
+        #Background polling state
         self._latest_grams = 0.0
         self._latest_raw   = 0
         self._data_lock    = threading.Lock()
@@ -57,9 +57,9 @@ class HX711:
         timeout = time.time() + 1.0
         while self.dt.value == 1:
             if time.time() > timeout:
-                raise TimeoutError("HX711 not responding — check wiring")
+                raise TimeoutError("HX711 not responding, check wiring")
         raw = 0
-        # Lock the shared clock so concurrent sensors don't corrupt each other's reads
+        #Lock the shared clock so concurrent sensors dont corrupt each others reads
         with sck_lock:
             for _ in range(24):
                 sck.on()
@@ -77,7 +77,7 @@ class HX711:
         return statistics.median(self._buf)
 
     def read_median(self, samples: int = 10) -> float:
-        # Takes N fresh readings and returns their median
+        #Takes N fresh readings and returns their median
         readings = [self.read_raw() for _ in range(samples)]
         return statistics.median(readings)
 
@@ -94,8 +94,7 @@ class HX711:
         # Blocking read — used during tare/calibrate or if you want a fresh value
         return (self.read_stable() - self.hx_offset) / self.scale_factor
 
-    # ── Background polling ──────────────────────────────────────────────
-
+    #Background polling
     def start_background(self, interval: float = 0.1) -> None:
         """Start polling the sensor in a background thread.
         Main loop can then call get_grams() without blocking."""
@@ -126,31 +125,29 @@ class HX711:
                     self._latest_raw   = raw
                     self._latest_grams = grams
             except TimeoutError:
-                # Sensor not ready this cycle — skip and try again
+                #Sensor not ready this cycle, skip and try again
                 pass
             except Exception:
-                # Don't let the thread die on transient errors
+                #Dont let the thread die on transient errors
                 pass
             time.sleep(interval)
 
     def get_grams(self) -> float:
-        """Non-blocking — returns the most recent cached reading in grams."""
+        #Non-blocking, returns the most recent cached reading in grams
         with self._data_lock:
             return self._latest_grams
 
     def get_raw(self) -> int:
-        """Non-blocking — returns the most recent cached raw value."""
+        #Non-blocking, returns the most recent cached raw value
         with self._data_lock:
             return self._latest_raw
-
-    # ────────────────────────────────────────────────────────────────────
 
     def close(self):
         self.stop_background()
         self.dt.close()
 
 
-# Sensor instances
+#Sensor instances
 sensor1 = HX711(PIN_DT1)
 sensor2 = HX711(PIN_DT2)
 sensor3 = HX711(PIN_DT3)
