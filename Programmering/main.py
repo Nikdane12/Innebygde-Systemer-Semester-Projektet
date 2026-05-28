@@ -112,7 +112,7 @@ canvas.pack(side=LEFT, fill=BOTH, expand=True)
 main = Frame(canvas)
 canvas_window = canvas.create_window((0, 0), window=main, anchor="nw")
 
-def on_frame_configure(_):
+def on_frame_configure():
     canvas.configure(scrollregion=canvas.bbox("all"))
 def on_canvas_configure(e):
     canvas.itemconfig(canvas_window, width=e.width)
@@ -414,7 +414,7 @@ for pin, sensor_idx in TARE_BUTTON_PINS.items():
 
 FILL_THRESHOLD_G = 150   # start filling if glass is below threshhold
 FILL_TARGET_G    = 400   # stop filling when glass reaches threshhold
-PID_POLL_MS      = 500   # sensor read interval (ms)
+PID_POLL_MS      = 200   # sensor read interval (ms)
 
 _fill_sensor_idx = 0
 
