@@ -45,26 +45,6 @@ MOUNT_SKULDER = 45.0
 MOUNT_ALBUE   =  0.0
 MOUNT_WRIST   =  0.0
 
-# Inverse kinematics
-#
-#  Midje  : theta_base = atan2(y, x)          — base rotation on floor plane
-#
-#  Planar IK in vertical plane (r = horizontal reach, z = height):
-#
-#    Wrist point:
-#      xw = r - L3·cos(phi)
-#      yw = z - L3·sin(phi)
-#
-#    Albue (theta2) via cosine rule:
-#      cos(theta2) = (xw² + yw² - L1² - L2²) / (2·L1·L2)
-#      theta2 = atan2(±√(1 - cos²theta2), cos theta2)    [+ = elbow up]
-#
-#    Skulder (theta1):
-#      theta1 = atan2(yw, xw) - atan2(L2·sin theta2, L1 + L2·cos theta2)
-#
-#    Wrist (theta3):
-#      theta3 = phi - theta1 - theta2
-
 def solve_ik(x, y, z, phi_deg, elbow_up=True):
     phi = math.radians(phi_deg)
 
@@ -613,4 +593,3 @@ hx711.sensor2.close()
 hx711.sensor3.close()
 hx711.sck.close()
 pump_fwd.close()
-# i2c.bus.close()

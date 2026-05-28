@@ -13,15 +13,6 @@ _pump_fwd = OutputDevice(21, initial_value=False)
 kit = ServoKit(channels=16)
 
 def drive(midje, skulder, albue, wrist, pump):
-    # Constants from original i2c.py
-    # center_us = 6554/2
-    # us_per_deg = 1000 / 90
-
-    # midje_min_duty_cycle = 3277
-    # midje_max_duty_cycle = 6554
-
-    # max = 6554
-    # min = 3277
     min = 2350
     max = 5650
 
@@ -57,26 +48,6 @@ MOUNT_SKULDER = 45.0
 MOUNT_ALBUE   =  0.0
 MOUNT_WRIST   =  0.0
 
-# Inverse kinematics
-#
-#  Midje  : θ_base = atan2(y, x)          — base rotation on floor plane
-#
-#  Planar IK in vertical plane (r = horizontal reach, z = height):
-#
-#    Wrist point:
-#      xw = r - L3·cos(phi)
-#      yw = z - L3·sin(phi)
-#
-#    Albue (θ2) via cosine rule:
-#      cos(θ2) = (xw² + yw² - L1² - L2²) / (2·L1·L2)
-#      θ2 = atan2(±√(1 - cos²θ2), cos θ2)    [+ = elbow up]
-#
-#    Skulder (θ1):
-#      θ1 = atan2(yw, xw) - atan2(L2·sin θ2, L1 + L2·cos θ2)
-#
-#    Wrist (θ3):
-#      θ3 = phi - θ1 - θ2
-
 def solve_ik(x, y, z, phi_deg, elbow_up=True):
     phi = math.radians(phi_deg)
 
@@ -102,7 +73,7 @@ def solve_ik(x, y, z, phi_deg, elbow_up=True):
     # Wrist
     theta3 = phi - theta1 - theta2
 
-    # Subtract mount offsets to convert world-space angles → servo commands
+    # Subtract mount offsets to convert world-space angles
     return (
         math.degrees(theta_base),
         math.degrees(theta1) - MOUNT_SKULDER,
@@ -156,7 +127,6 @@ main.bind("<Configure>", _on_frame_configure)
 _canvas.bind("<Configure>", _on_canvas_configure)
 
 def _on_mousewheel(e):
-    # Windows/macOS deliver <MouseWheel> with e.delta; X11 delivers Button-4/5.
     if e.num == 4:
         _canvas.yview_scroll(-1, "units")
     elif e.num == 5:
@@ -168,7 +138,7 @@ root.bind_all("<MouseWheel>", _on_mousewheel)
 root.bind_all("<Button-4>", _on_mousewheel)
 root.bind_all("<Button-5>", _on_mousewheel)
 
-# Joint variables (degrees / percent)
+#Joint variables
 midje_var   = DoubleVar(value=0)
 skulder_var = DoubleVar(value=0)
 albue_var   = DoubleVar(value=0)
@@ -202,7 +172,7 @@ make_slider("Skulder", skulder_var, 45, -45)
 make_slider("Albue",   albue_var,   45, -45)
 make_slider("Wrist",   wrist_var,   45, -45)
 
-# Pump slider — auto-controls IN1 (GPIO 21) based on value
+# Pump slider, auto-controls IN1 (GPIO 21) based on value
 def _on_pump_slider(_):
     pct = int(pump_var.get())
     if pct == 0:
@@ -237,7 +207,7 @@ activate_btn = Button(main, text="Activate Main Program", command=toggle_activat
 activate_btn.pack(pady=6)
 _activate_btn_default_bg = activate_btn.cget("bg")
 
-# Inverse kinematics input 
+#Inverse kinematics input 
 Label(main, text=" Inverse Kinematics ", font=("Segoe UI", 11, "bold")).pack(pady=(14, 2))
 
 ik_frame = Frame(root)
@@ -280,11 +250,11 @@ def run_ik():
 
 Button(main, text="Move to IK target", command=run_ik).pack(pady=4)
 
-# Movement speed
+#Movement speed
 _move_start  = [0.0] * 5
 _move_target = [0.0] * 5
 MOVE_STEPS   = 40
-MOVE_MS      = 15   # ms per step — lower = faster
+MOVE_MS      = 15
 
 f_speed = Frame(main)
 f_speed.pack(fill="x", padx=20, pady=(4, 0))
@@ -301,7 +271,7 @@ def _set_speed(v):
     MOVE_MS = v
 Label(f_speed, text="Slow").pack(side=LEFT)
 
-# Saved positions
+#Saved positions
 Label(main, text=" Saved Positions ", font=("Segoe UI", 11, "bold")).pack(pady=(14, 2))
 
 NUM_POS = 3
@@ -432,13 +402,13 @@ def open_calibration():
 
 Button(main, text="Tare & Calibrate", command=open_calibration).pack(pady=4)
 
-FILL_THRESHOLD_G = 150   # start filling if glass is below this
-FILL_TARGET_G    = 400   # stop filling when glass reaches this
-PID_POLL_MS      = 200   # sensor read interval during fill (ms)
+FILL_THRESHOLD_G = 150   #start filling if glass is below this
+FILL_TARGET_G    = 400   #stop filling when glass reaches this
+PID_POLL_MS      = 200   #sensor read interval during filling
 
 _fill_sensor_idx = 0
 
-# Fill settings — editable from GUI
+# Fill settings
 Label(main, text=" Fill Settings ", font=("Segoe UI", 11, "bold")).pack(pady=(14, 2))
 _fill_frame = Frame(main)
 _fill_frame.pack(padx=20, fill="x")
@@ -533,7 +503,7 @@ def _main_loop():
         try:
             grams = sensor.read_grams()
             if grams < 0:
-                continue   # glass lifted from coaster — skip
+                continue   #glass lifted, ignore
             if grams < FILL_THRESHOLD_G:
                 _start_fill(idx)
                 return
@@ -542,7 +512,7 @@ def _main_loop():
     root.after(500, _main_loop)
 
 
-# Water level display
+#Water level display
 GLASS_MAX_G = 500
 
 Label(main, text=" Water Level ", font=("Segoe UI", 11, "bold")).pack(pady=(10, 2))
@@ -573,7 +543,7 @@ def _update_bars():
             lbl.config(text="err")
     root.after(300, _update_bars)
 
-# PID tuning
+#PID tuning
 Label(main, text=" PID Controller ", font=("Segoe UI", 11, "bold")).pack(pady=(14, 2))
 
 pid_frame = Frame(main)
