@@ -11,10 +11,6 @@ pump_fwd = OutputDevice(21, initial_value=False)
 
 kit = ServoKit(channels=16)
 
-hx711.sensor1.start_background(interval=0.1)
-hx711.sensor2.start_background(interval=0.1)
-hx711.sensor3.start_background(interval=0.1)
-
 def drive(midje, skulder, albue, wrist, pump):
     min = 2350
     max = 5650
@@ -81,7 +77,7 @@ def solve_ik(x, y, z, phi_deg, elbow_up=True):
 #PID verdier
 kp = 0.5
 ki = 0.1
-kd = 0.05
+kd = 0.00
 
 integral = 0
 prev_error = 0
@@ -122,8 +118,17 @@ def on_canvas_configure(e):
     canvas.itemconfig(canvas_window, width=e.width)
 main.bind("<Configure>", on_frame_configure)
 canvas.bind("<Configure>", on_canvas_configure)
-root.bind_all("<MouseWheel>", lambda e: canvas.yview_scroll(-1*(e.delta//120), "units"))
+def _on_mousewheel(e):
+    if e.num == 4:
+        canvas.yview_scroll(-1, "units")
+    elif e.num == 5:
+        canvas.yview_scroll(1, "units")
+    elif e.delta:
+        canvas.yview_scroll(-1 * (e.delta // 120), "units")
 
+root.bind_all("<MouseWheel>", _on_mousewheel)
+root.bind_all("<Button-4>", _on_mousewheel)
+root.bind_all("<Button-5>", _on_mousewheel)
 midje_var   = DoubleVar(value=0)
 skulder_var = DoubleVar(value=0)
 albue_var   = DoubleVar(value=0)
@@ -232,17 +237,17 @@ def run_ik():
         ik_status.config(text=str(e), fg="red")
 
 #kontrollere hastigheten
-_move_start  = [0.0] * 5
-_move_target = [0.0] * 5
+move_start  = [0.0] * 5
+move_target = [0.0] * 5
 MOVE_STEPS   = 40
 MOVE_MS      = 15   # ms/step
 
 f_speed = Frame(main)
 f_speed.pack(fill="x", padx=20, pady=(4, 0))
 Label(f_speed, text="Speed", width=8, anchor="w").pack(side=LEFT)
-_speed_var = IntVar(value=MOVE_MS)
+speed_var = IntVar(value=MOVE_MS)
 Label(f_speed, text="Fast", width=4).pack(side=LEFT)
-Scale(f_speed, variable=_speed_var, from_=5, to=80,
+Scale(f_speed, variable=speed_var, from_=5, to=80,
       orient=HORIZONTAL, length=300, resolution=5,
       command=lambda v: set_speed(int(v))
       ).pack(side=LEFT)
@@ -261,7 +266,7 @@ saved   = [None] * NUM_POS
 def smooth_step(step):
     t = step / MOVE_STEPS
     t = t * t * (3 - 2 * t)
-    interp = [_move_start[i] + (_move_target[i] - move_start[i]) * t for i in range(5)]
+    interp = [move_start[i] + (move_target[i] - move_start[i]) * t for i in range(5)]
     set_joints(interp)
     if step < MOVE_STEPS:
         root.after(MOVE_MS, lambda: smooth_step(step + 1))
