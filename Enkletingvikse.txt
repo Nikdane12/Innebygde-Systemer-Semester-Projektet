@@ -1,4 +1,4 @@
 POR: skisse av overordnet skjematikk
-Må ga det i pdf når sendes a
+Må ha det i pdf når sendes inn som vedlegg å istet som en word fil
 
-Og o rapport: Fiks vedlegg video (trenger bare tekst kanskje, men ikke lenke), ha bare video mp4 i zip file når den sendes på wiseflow vedlegg
+Og i rapport: Fiks vedlegg video (trenger bare tekst kanskje, men ikke lenke), ha bare video mp4 i zip file når den sendes på wiseflow vedlegg
