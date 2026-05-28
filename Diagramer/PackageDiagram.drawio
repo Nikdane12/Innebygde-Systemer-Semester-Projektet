@@ -1,67 +1,63 @@
 <mxfile host="app.diagrams.net" agent="Claude">
   <diagram id="pkgDiagram1" name="Package Diagram">
-    <mxGraphModel dx="749" dy="465" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="1086" dy="674" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
         <mxCell id="cell2" parent="1" style="shape=folder;fontStyle=1;tabWidth=120;tabHeight=30;tabPosition=left;html=1;verticalAlign=top;align=left;spacingLeft=10;fillColor=#dae8fc;strokeColor=#6c8ebf;" value="Application Layer" vertex="1">
-          <mxGeometry height="330" width="420" x="50" y="40" as="geometry" />
+          <mxGeometry height="240" width="470" x="50" y="40" as="geometry" />
         </mxCell>
         <mxCell id="cell3" parent="1" style="shape=folder;fontStyle=1;tabWidth=80;tabHeight=30;tabPosition=left;html=1;verticalAlign=top;align=left;spacingLeft=10;fillColor=#d5e8d4;strokeColor=#82b366;" value="main.py" vertex="1">
-          <mxGeometry height="280" width="380" x="70" y="80" as="geometry" />
+          <mxGeometry height="190" width="440" x="70" y="80" as="geometry" />
         </mxCell>
         <mxCell id="cell4" parent="1" style="shape=folder;tabWidth=40;tabHeight=30;tabPosition=left;html=1;verticalAlign=top;align=left;spacingLeft=8;fillColor=#ffffff;strokeColor=#82b366;" value="&lt;div&gt;GUI&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;(tkinter widgets)" vertex="1">
           <mxGeometry height="60" width="100" x="90" y="120" as="geometry" />
         </mxCell>
         <mxCell id="cell5" parent="1" style="shape=folder;tabWidth=100;tabHeight=30;tabPosition=left;html=1;verticalAlign=top;align=left;spacingLeft=8;fillColor=#ffffff;strokeColor=#82b366;" value="&lt;div&gt;State machine&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;(idle / moving / filling)" vertex="1">
-          <mxGeometry height="60" width="130" x="220" y="120" as="geometry" />
+          <mxGeometry height="60" width="130" x="200" y="120" as="geometry" />
         </mxCell>
         <mxCell id="cell6" parent="1" style="shape=folder;tabWidth=120;tabHeight=30;tabPosition=left;html=1;verticalAlign=top;align=left;spacingLeft=8;fillColor=#ffffff;strokeColor=#82b366;" value="&lt;div&gt;Inverse kinematics&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;solve_ik()" vertex="1">
           <mxGeometry height="60" width="130" x="90" y="200" as="geometry" />
         </mxCell>
         <mxCell id="cell7" parent="1" style="shape=folder;tabWidth=90;tabHeight=30;tabPosition=left;html=1;verticalAlign=top;align=left;spacingLeft=8;fillColor=#ffffff;strokeColor=#82b366;" value="&lt;div&gt;PID regulator&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;pid_control()" vertex="1">
-          <mxGeometry height="60" width="100" x="240" y="200" as="geometry" />
+          <mxGeometry height="60" width="100" x="230" y="200" as="geometry" />
         </mxCell>
         <mxCell id="cell8" parent="1" style="shape=folder;tabWidth=80;tabHeight=30;tabPosition=left;html=1;verticalAlign=top;align=left;spacingLeft=8;fillColor=#ffffff;strokeColor=#82b366;" value="&lt;div&gt;Fill process&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;start_fill / begin_pump /&lt;br&gt;pid_fill_loop / stop_pump" vertex="1">
-          <mxGeometry height="70" width="150" x="90" y="280" as="geometry" />
+          <mxGeometry height="70" width="150" x="340" y="120" as="geometry" />
         </mxCell>
         <mxCell id="cell9" parent="1" style="shape=folder;fontStyle=1;tabWidth=120;tabHeight=22;tabPosition=left;html=1;verticalAlign=top;align=left;spacingLeft=10;fillColor=#ffe6cc;strokeColor=#d79b00;" value="Driver Layer" vertex="1">
-          <mxGeometry height="160" width="290" x="500" y="290" as="geometry" />
+          <mxGeometry height="110" width="240" x="550" y="170" as="geometry" />
         </mxCell>
-        <mxCell id="cell10" parent="1" style="shape=folder;tabWidth=80;tabHeight=20;tabPosition=left;html=1;verticalAlign=top;align=left;spacingLeft=10;fillColor=#ffffff;strokeColor=#d79b00;" value="i2c&lt;br&gt;&lt;div&gt;(servo control&amp;nbsp;&lt;/div&gt;&lt;div&gt;via PCA9685)&lt;/div&gt;" vertex="1">
-          <mxGeometry height="90" width="100" x="530" y="330" as="geometry" />
+        <mxCell id="cell10" parent="1" style="shape=folder;tabWidth=40;tabHeight=30;tabPosition=left;html=1;verticalAlign=top;align=left;spacingLeft=10;fillColor=#ffffff;strokeColor=#d79b00;" value="&lt;div&gt;i2c&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;(servo control&amp;nbsp;&lt;/div&gt;&lt;div&gt;via PCA9685)&lt;/div&gt;" vertex="1">
+          <mxGeometry height="70" width="100" x="560" y="200" as="geometry" />
         </mxCell>
-        <mxCell id="cell11" parent="1" style="shape=folder;tabWidth=80;tabHeight=20;tabPosition=left;html=1;verticalAlign=top;align=left;spacingLeft=10;fillColor=#ffffff;strokeColor=#d79b00;" value="hx711&#xa;(load-cell reading)" vertex="1">
-          <mxGeometry height="90" width="115" x="645" y="330" as="geometry" />
+        <mxCell id="cell11" parent="1" style="shape=folder;tabWidth=55;tabHeight=30;tabPosition=left;html=1;verticalAlign=top;align=left;spacingLeft=10;fillColor=#ffffff;strokeColor=#d79b00;" value="&lt;div&gt;hx711&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;(load-cell reading)" vertex="1">
+          <mxGeometry height="60" width="115" x="670" y="210" as="geometry" />
         </mxCell>
-        <mxCell id="cell12" parent="1" style="shape=folder;fontStyle=1;tabWidth=260;tabHeight=22;tabPosition=left;html=1;verticalAlign=top;align=left;spacingLeft=10;fillColor=#f5f5f5;strokeColor=#666666;" value="External Libraries (Python standard library)" vertex="1">
-          <mxGeometry height="240" width="230" x="530" y="40" as="geometry" />
+        <mxCell id="cell12" parent="1" style="shape=folder;fontStyle=1;tabWidth=130;tabHeight=30;tabPosition=left;html=1;verticalAlign=top;align=left;spacingLeft=10;fillColor=#f5f5f5;strokeColor=#666666;" value="External Libraries" vertex="1">
+          <mxGeometry height="120" width="180" x="550" y="40" as="geometry" />
         </mxCell>
-        <mxCell id="cell15" parent="1" style="shape=folder;tabWidth=70;tabHeight=18;tabPosition=left;html=1;verticalAlign=top;align=left;spacingLeft=8;fillColor=#ffffff;strokeColor=#666666;" value="subprocess" vertex="1">
-          <mxGeometry height="50" width="90" x="555" y="175" as="geometry" />
-        </mxCell>
-        <mxCell id="cell16" parent="1" style="shape=folder;tabWidth=70;tabHeight=18;tabPosition=left;html=1;verticalAlign=top;align=left;spacingLeft=8;fillColor=#ffffff;strokeColor=#666666;" value="math" vertex="1">
-          <mxGeometry height="50" width="80" x="655" y="175" as="geometry" />
-        </mxCell>
-        <mxCell id="cell17" edge="1" parent="1" source="cell3" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;entryX=0;entryY=0;entryDx=0;entryDy=55;entryPerimeter=0;exitX=1.002;exitY=0.969;exitDx=0;exitDy=0;exitPerimeter=0;" target="cell10" value="«import»">
-          <mxGeometry relative="1" x="-0.0319" y="-13" as="geometry">
-            <mxPoint as="offset" />
-            <mxPoint x="450" y="385" as="sourcePoint" />
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="cell18" edge="1" parent="1" source="cell3" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;entryX=-0.013;entryY=0.87;entryDx=0;entryDy=0;exitX=1.003;exitY=0.911;exitDx=0;exitDy=0;exitPerimeter=0;entryPerimeter=0;" target="cell11" value="«import»">
-          <mxGeometry relative="1" x="-0.5967" y="38" as="geometry">
+        <mxCell id="cell18" edge="1" parent="1" source="cell3" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;entryX=-0.003;entryY=0.454;entryDx=0;entryDy=0;entryPerimeter=0;exitX=0.995;exitY=0.747;exitDx=0;exitDy=0;exitPerimeter=0;" target="cell9" value="«import»">
+          <mxGeometry relative="1" x="0.1351" y="16" as="geometry">
             <mxPoint as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="cell19" edge="1" parent="1" source="cell3" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;exitX=1;exitY=0.2;exitDx=0;exitDy=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" target="cell12" value="«import»">
-          <mxGeometry relative="1" as="geometry" />
+        <mxCell id="cell19" edge="1" parent="1" source="cell3" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;exitX=1;exitY=0.2;exitDx=0;exitDy=0;entryX=-0.002;entryY=0.661;entryDx=0;entryDy=0;entryPerimeter=0;" target="cell12" value="«import»">
+          <mxGeometry relative="1" x="-0.0055" y="9" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
         </mxCell>
         <mxCell id="Yi9fpbF59c3cKGTSs7ZV-1" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="tkinter" vertex="1">
-          <mxGeometry height="30" width="55" x="555" y="80" as="geometry" />
+          <mxGeometry height="30" width="55" x="575" y="80" as="geometry" />
         </mxCell>
         <mxCell id="Yi9fpbF59c3cKGTSs7ZV-2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="time" vertex="1">
-          <mxGeometry height="30" width="60" x="620" y="80" as="geometry" />
+          <mxGeometry height="30" width="60" x="640" y="80" as="geometry" />
+        </mxCell>
+        <mxCell id="5mmtHOr0yldomKfrusGY-2" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="Button" vertex="1">
+          <mxGeometry height="30" width="55" x="575" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="5mmtHOr0yldomKfrusGY-3" parent="1" style="rounded=0;whiteSpace=wrap;html=1;" value="math" vertex="1">
+          <mxGeometry height="30" width="60" x="640" y="120" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
