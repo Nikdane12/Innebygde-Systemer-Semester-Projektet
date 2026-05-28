@@ -1,153 +1,136 @@
-<mxfile host="app.diagrams.net" agent="Claude" version="24.0.0">
+<mxfile host="app.diagrams.net" agent="Claude">
   <diagram name="Use Case Diagram" id="usecase-refill-arm">
-    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="0">
+    <mxGraphModel dx="1143" dy="709" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-
-        <!-- System boundary -->
-        <mxCell id="boundary" value="Automatisk Refill Arm System" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;fontSize=16;fontStyle=1;fillColor=none;strokeColor=#000000;" vertex="1" parent="1">
-          <mxGeometry x="340" y="60" width="500" height="720" as="geometry" />
+        <mxCell id="boundary" parent="1" style="rounded=0;whiteSpace=wrap;html=1;verticalAlign=top;fontSize=16;fontStyle=1;fillColor=none;strokeColor=#000000;" value="Automatisk Refill Arm System" vertex="1">
+          <mxGeometry height="560" width="630" x="170" y="70" as="geometry" />
         </mxCell>
-
-        <!-- Actors -->
-        <mxCell id="actor-user" value="Bruker / Operatør" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontSize=13;" vertex="1" parent="1">
-          <mxGeometry x="90" y="200" width="50" height="100" as="geometry" />
+        <mxCell id="actor-user" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontSize=13;" value="Bruker / Operatør" vertex="1">
+          <mxGeometry height="100" width="50" x="90" y="200" as="geometry" />
         </mxCell>
-
-        <mxCell id="actor-loadcell" value="Vektsensor&#10;(Lastcelle / HX711)" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontSize=13;" vertex="1" parent="1">
-          <mxGeometry x="90" y="520" width="50" height="100" as="geometry" />
+        <mxCell id="actor-loadcell" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontSize=13;" value="Vektsensor&#xa;(Lastcelle / HX711)" vertex="1">
+          <mxGeometry height="100" width="50" x="90" y="340" as="geometry" />
         </mxCell>
-
-        <mxCell id="actor-arm" value="Robotarm&#10;(Servoer &amp; Pumpe)" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontSize=13;" vertex="1" parent="1">
-          <mxGeometry x="980" y="380" width="50" height="100" as="geometry" />
+        <mxCell id="actor-arm" parent="1" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;fontSize=13;" value="Robotarm&#xa;(Servoer &amp; Pumpe)" vertex="1">
+          <mxGeometry height="100" width="50" x="820" y="330" as="geometry" />
         </mxCell>
-
-        <!-- Use Cases -->
-        <mxCell id="uc-activate" value="Aktiver hovedprogram" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" vertex="1" parent="1">
-          <mxGeometry x="400" y="110" width="160" height="60" as="geometry" />
+        <mxCell id="uc-activate" parent="1" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" value="Aktiver hovedprogram" vertex="1">
+          <mxGeometry height="60" width="160" x="240" y="120" as="geometry" />
         </mxCell>
-
-        <mxCell id="uc-manual" value="Manuell styring av ledd&#10;(Joint Control)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" vertex="1" parent="1">
-          <mxGeometry x="400" y="190" width="160" height="60" as="geometry" />
+        <mxCell id="uc-manual" parent="1" style="rounded=1;;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;rounded=1;align=center;verticalAlign=middle;fontFamily=Helvetica;fontColor=default;" value="Manuell styring av ledd&#xa;(Joint Control)" vertex="1">
+          <mxGeometry height="60" width="160" x="240" y="190" as="geometry" />
         </mxCell>
-
-        <mxCell id="uc-ik" value="Angi posisjon via&#10;invers kinematikk" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" vertex="1" parent="1">
-          <mxGeometry x="620" y="190" width="160" height="60" as="geometry" />
+        <mxCell id="uc-ik" parent="1" style="rounded=1;;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;rounded=1;align=center;verticalAlign=middle;fontFamily=Helvetica;fontColor=default;" value="Angi posisjon via&#xa;invers kinematikk" vertex="1">
+          <mxGeometry height="60" width="160" x="240" y="260" as="geometry" />
         </mxCell>
-
-        <mxCell id="uc-savepos" value="Lagre / spille av&#10;posisjoner" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" vertex="1" parent="1">
-          <mxGeometry x="400" y="270" width="160" height="60" as="geometry" />
+        <mxCell id="uc-savepos" parent="1" style="rounded=1;;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;rounded=1;align=center;verticalAlign=middle;fontFamily=Helvetica;fontColor=default;" value="Lagre / spille av&#xa;posisjoner" vertex="1">
+          <mxGeometry height="60" width="160" x="415" y="190" as="geometry" />
         </mxCell>
-
-        <mxCell id="uc-tare" value="Tare / kalibrer&#10;vektceller" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" vertex="1" parent="1">
-          <mxGeometry x="620" y="270" width="160" height="60" as="geometry" />
+        <mxCell id="uc-tare" parent="1" style="rounded=1;;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;rounded=1;align=center;verticalAlign=middle;fontFamily=Helvetica;fontColor=default;" value="Tare / kalibrer&#xa;vektceller" vertex="1">
+          <mxGeometry height="60" width="160" x="415" y="120" as="geometry" />
         </mxCell>
-
-        <mxCell id="uc-fillsettings" value="Still inn terskel og&#10;målvekt (Fill Settings)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" vertex="1" parent="1">
-          <mxGeometry x="400" y="350" width="160" height="60" as="geometry" />
+        <mxCell id="uc-fillsettings" parent="1" style="rounded=1;;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;rounded=1;align=center;verticalAlign=middle;fontFamily=Helvetica;fontColor=default;" value="Still inn terskel og&#xa;målvekt (Fill Settings)" vertex="1">
+          <mxGeometry height="60" width="160" x="415" y="260" as="geometry" />
         </mxCell>
-
-        <mxCell id="uc-tunepid" value="Juster PID-parametere&#10;(Kp, Ki, Kd)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;" vertex="1" parent="1">
-          <mxGeometry x="620" y="350" width="160" height="60" as="geometry" />
+        <mxCell id="uc-tunepid" parent="1" style="rounded=1;;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=12;rounded=1;align=center;verticalAlign=middle;fontFamily=Helvetica;fontColor=default;" value="Juster PID-parametere&#xa;(Kp, Ki, Kd)" vertex="1">
+          <mxGeometry height="60" width="160" x="590" y="190" as="geometry" />
         </mxCell>
-
-        <mxCell id="uc-monitor" value="Overvåk vekt på glass" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;" vertex="1" parent="1">
-          <mxGeometry x="400" y="440" width="160" height="60" as="geometry" />
+        <mxCell id="uc-monitor" parent="1" style="rounded=1;;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;" value="Overvåk vekt på glass" vertex="1">
+          <mxGeometry height="60" width="160" x="280" y="390" as="geometry" />
         </mxCell>
-
-        <mxCell id="uc-detect" value="Registrer tomt glass" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;" vertex="1" parent="1">
-          <mxGeometry x="620" y="440" width="160" height="60" as="geometry" />
+        <mxCell id="uc-detect" parent="1" style="rounded=1;;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;" value="Registrer tomt glass" vertex="1">
+          <mxGeometry height="60" width="160" x="530" y="390" as="geometry" />
         </mxCell>
-
-        <mxCell id="uc-fill" value="Fyll glass automatisk" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;fontStyle=1;" vertex="1" parent="1">
-          <mxGeometry x="400" y="530" width="160" height="60" as="geometry" />
+        <mxCell id="uc-fill" parent="1" style="rounded=1;;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;fontStyle=1;" value="Fyll glass automatisk" vertex="1">
+          <mxGeometry height="60" width="160" x="280" y="475" as="geometry" />
         </mxCell>
-
-        <mxCell id="uc-move" value="Beveg arm til glass" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;" vertex="1" parent="1">
-          <mxGeometry x="620" y="530" width="160" height="60" as="geometry" />
+        <mxCell id="uc-pidreg" parent="1" style="rounded=1;;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;" value="Reguler fylling&#xa;med PID" vertex="1">
+          <mxGeometry height="60" width="160" x="280" y="560" as="geometry" />
         </mxCell>
-
-        <mxCell id="uc-pidreg" value="Reguler fylling&#10;med PID" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;" vertex="1" parent="1">
-          <mxGeometry x="400" y="610" width="160" height="60" as="geometry" />
+        <mxCell id="uc-stop" parent="1" style="rounded=1;;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;" value="Avbryt fylling&#xa;(glass løftet bort)" vertex="1">
+          <mxGeometry height="60" width="160" x="530" y="560" as="geometry" />
         </mxCell>
-
-        <mxCell id="uc-stop" value="Avbryt fylling&#10;(glass løftet bort)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;" vertex="1" parent="1">
-          <mxGeometry x="620" y="610" width="160" height="60" as="geometry" />
-        </mxCell>
-
-        <mxCell id="uc-return" value="Returner arm&#10;til hviletilstand" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;" vertex="1" parent="1">
-          <mxGeometry x="510" y="690" width="160" height="60" as="geometry" />
-        </mxCell>
-
-        <!-- User associations -->
-        <mxCell id="e1" style="endArrow=none;html=1;fontSize=10;" edge="1" parent="1" source="actor-user" target="uc-activate">
+        <mxCell id="e1" edge="1" parent="1" source="actor-user" style="endArrow=none;html=1;fontSize=10;" target="uc-activate">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e2" style="endArrow=none;html=1;fontSize=10;" edge="1" parent="1" source="actor-user" target="uc-manual">
+        <mxCell id="e2" edge="1" parent="1" source="actor-user" style="endArrow=none;html=1;fontSize=10;" target="uc-manual">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e3" style="endArrow=none;html=1;fontSize=10;" edge="1" parent="1" source="actor-user" target="uc-ik">
+        <mxCell id="e3" edge="1" parent="1" source="actor-user" style="endArrow=none;html=1;fontSize=10;" target="uc-ik">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e4" style="endArrow=none;html=1;fontSize=10;" edge="1" parent="1" source="actor-user" target="uc-savepos">
+        <mxCell id="e4" edge="1" parent="1" source="actor-user" style="endArrow=none;html=1;fontSize=10;" target="uc-savepos">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="410" y="250" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e5" edge="1" parent="1" source="actor-user" style="endArrow=none;html=1;fontSize=10;" target="uc-tare">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="240" y="190" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e6" edge="1" parent="1" source="actor-user" style="endArrow=none;html=1;fontSize=10;" target="uc-fillsettings">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="410" y="260" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e7" edge="1" parent="1" source="actor-user" style="endArrow=none;html=1;fontSize=10;" target="uc-tunepid">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="430" y="260" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="e8" edge="1" parent="1" source="actor-loadcell" style="endArrow=none;html=1;fontSize=10;" target="uc-monitor">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e5" style="endArrow=none;html=1;fontSize=10;" edge="1" parent="1" source="actor-user" target="uc-tare">
+        <mxCell id="e9" edge="1" parent="1" source="actor-loadcell" style="endArrow=none;html=1;fontSize=10;" target="uc-detect">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e6" style="endArrow=none;html=1;fontSize=10;" edge="1" parent="1" source="actor-user" target="uc-fillsettings">
+        <mxCell id="e10" edge="1" parent="1" source="actor-loadcell" style="endArrow=none;html=1;fontSize=10;" target="uc-pidreg">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e7" style="endArrow=none;html=1;fontSize=10;" edge="1" parent="1" source="actor-user" target="uc-tunepid">
+        <mxCell id="e11" edge="1" parent="1" source="actor-loadcell" style="endArrow=none;html=1;fontSize=10;" target="uc-stop">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-
-        <!-- Loadcell associations -->
-        <mxCell id="e8" style="endArrow=none;html=1;fontSize=10;" edge="1" parent="1" source="actor-loadcell" target="uc-monitor">
+        <mxCell id="e12" edge="1" parent="1" source="actor-arm" style="endArrow=none;html=1;fontSize=10;" target="uc-move">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e9" style="endArrow=none;html=1;fontSize=10;" edge="1" parent="1" source="actor-loadcell" target="uc-detect">
+        <mxCell id="e13" edge="1" parent="1" source="uc-move" style="endArrow=none;html=1;fontSize=10;" target="uc-fill">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e10" style="endArrow=none;html=1;fontSize=10;" edge="1" parent="1" source="actor-loadcell" target="uc-pidreg">
+        <mxCell id="inc1" edge="1" parent="1" source="uc-detect" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;" target="uc-fill" value="&lt;&lt;include&gt;&gt;">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e11" style="endArrow=none;html=1;fontSize=10;" edge="1" parent="1" source="actor-loadcell" target="uc-stop">
+        <mxCell id="inc2" edge="1" parent="1" source="uc-fill" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;" target="uc-move" value="&lt;&lt;include&gt;&gt;">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-
-        <!-- Arm associations -->
-        <mxCell id="e12" style="endArrow=none;html=1;fontSize=10;" edge="1" parent="1" source="actor-arm" target="uc-move">
+        <mxCell id="inc3" edge="1" parent="1" source="uc-fill" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;" target="uc-pidreg" value="&lt;&lt;include&gt;&gt;">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e13" style="endArrow=none;html=1;fontSize=10;" edge="1" parent="1" source="actor-arm" target="uc-fill">
+        <mxCell id="ext1" edge="1" parent="1" source="uc-stop" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;" target="uc-fill" value="&lt;&lt;extend&gt;&gt;">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-        <mxCell id="e14" style="endArrow=none;html=1;fontSize=10;" edge="1" parent="1" source="actor-arm" target="uc-return">
+        <mxCell id="inc5" edge="1" parent="1" source="uc-detect" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;" target="uc-monitor" value="&lt;&lt;include&gt;&gt;">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
-
-        <!-- Include / extend relationships -->
-        <mxCell id="inc1" value="&lt;&lt;include&gt;&gt;" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;" edge="1" parent="1" source="uc-detect" target="uc-fill">
-          <mxGeometry relative="1" as="geometry" />
+        <mxCell id="AzWFXTlBz1Rf7-F_x6Ro-3" edge="1" parent="1" source="actor-arm" style="endArrow=none;html=1;fontSize=10;" target="uc-move" value="">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="980" y="429" as="sourcePoint" />
+            <mxPoint x="400" y="399" as="targetPoint" />
+          </mxGeometry>
         </mxCell>
-        <mxCell id="inc2" value="&lt;&lt;include&gt;&gt;" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;" edge="1" parent="1" source="uc-fill" target="uc-move">
-          <mxGeometry relative="1" as="geometry" />
+        <mxCell id="uc-move" parent="1" style="rounded=1;;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=12;" value="Beveg arm til glass" vertex="1">
+          <mxGeometry height="60" width="160" x="530" y="475" as="geometry" />
         </mxCell>
-        <mxCell id="inc3" value="&lt;&lt;include&gt;&gt;" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;" edge="1" parent="1" source="uc-fill" target="uc-pidreg">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="inc4" value="&lt;&lt;include&gt;&gt;" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;" edge="1" parent="1" source="uc-fill" target="uc-return">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="ext1" value="&lt;&lt;extend&gt;&gt;" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;" edge="1" parent="1" source="uc-stop" target="uc-fill">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="inc5" value="&lt;&lt;include&gt;&gt;" style="endArrow=open;endFill=0;dashed=1;html=1;fontSize=10;" edge="1" parent="1" source="uc-detect" target="uc-monitor">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-
       </root>
     </mxGraphModel>
   </diagram>
